@@ -95,12 +95,8 @@ public class Runtime {
     }
 
     public static String getScriptTag(String src, String type, Map<String, String> params, HttpServletRequest request) {
-        if (!enabled) {
-            if (isScriptBundle(src)) {
-                return unbundleScriptBundles(src, type, params, request);
-            } else {
-                return writeScriptTag(src, type, params, request);
-            }
+        if (!enabled && isScriptBundle(src)) {
+            return unbundleScriptBundles(src, type, params, request);          
         }
         return writeScriptTag(src, type, params, request);
     }
@@ -108,7 +104,7 @@ public class Runtime {
     public static String getImageTag(String src, Map<String, String> params, HttpServletRequest request) {
         StringBuilder buffer = new StringBuilder();
         buffer.append("<img src=\"");
-        getLink(src, buffer, imagesDir, request, false);
+        appendLink(src, buffer, imagesDir, request, false);
         buffer.append("\" ");
         for (String key : params.keySet()) {
             buffer.append(key).append("=\"").append(params.get(key)).append("\" ");
@@ -118,12 +114,8 @@ public class Runtime {
     }
 
     public static String getStylesheetTag(String href, String rel, String type, Map<String, String> params, HttpServletRequest request) {
-        if (!enabled) {
-            if (isCssBundle(href)) {
-                return unbundleCssBundles(href, rel, type, params, request);
-            } else {
-                return writeCssTag(href, rel, type, params, request);
-            }
+        if (!enabled && isCssBundle(href)) {
+            return unbundleCssBundles(href, rel, type, params, request);            
         }
         return writeCssTag(href, rel, type, params, request);
     }
@@ -132,7 +124,7 @@ public class Runtime {
     private static String writeCssTag(String href, String rel, String type, Map<String, String> params, HttpServletRequest request) {
         StringBuilder buffer = new StringBuilder();
         buffer.append("<link href=\"");
-        getLink(href, buffer, cssDir, request, true);
+        appendLink(href, buffer, cssDir, request, true);
         buffer.append("\" rel=\"");
         if ("".equals(rel)) {
             buffer.append("stylesheet");
@@ -156,7 +148,7 @@ public class Runtime {
     private static String writeScriptTag(String src, String type, Map<String, String> params, HttpServletRequest request) {
         StringBuilder buffer = new StringBuilder();
         buffer.append("<script src=\"");
-        getLink(src, buffer, jsDir, request, true);
+        appendLink(src, buffer, jsDir, request, true);
 
         buffer.append("\" type=\"");
         if ("".equals(type)) {
@@ -172,7 +164,7 @@ public class Runtime {
         return buffer.toString();
     }
 
-    private static void getLink(String src, StringBuilder buffer, String topLevelDir, HttpServletRequest request, boolean isTextResource) {
+    private static void appendLink(String src, StringBuilder buffer, String topLevelDir, HttpServletRequest request, boolean isTextResource) {
         if (!enabled) {
             buffer.append(request.getContextPath()).append(topLevelDir).append(src);
             return;
@@ -182,7 +174,7 @@ public class Runtime {
         }
         buffer.append(request.getContextPath()).append(topLevelDir);
         String versionedSrc = FilenameUtils.insertVersion(src, version);
-        if (isTextResource && isGzipOK(request)) {
+        if (isTextResource && isGzipAccepted(request)) {
             versionedSrc = FilenameUtils.insertGzipExtension(versionedSrc);
         }
         buffer.append(versionedSrc);
@@ -213,7 +205,7 @@ public class Runtime {
         return builder.toString();
     }
 
-    private static boolean isGzipOK(HttpServletRequest request) {
+    private static boolean isGzipAccepted(HttpServletRequest request) {
         Enumeration acceptEncoding = request.getHeaders("Accept-Encoding");
         boolean gzipAccepted = false;
         boolean qZero = false;

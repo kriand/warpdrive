@@ -30,7 +30,7 @@ import java.text.SimpleDateFormat;
  * User: kriand
  * Date: Mar 3, 2010
  * Time: 9:27:22 PM
- * To change this template use File | Settings | File Templates.
+ * Time: 9:27:22 PM
  */
 public class WarpDriveFilter implements Filter {
 
