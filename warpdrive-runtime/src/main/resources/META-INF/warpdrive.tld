@@ -1,0 +1,45 @@
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd" version="2.0">
+    <description>WarpDrive TagLib</description>
+    <display-name>WarpDrive</display-name>
+    <tlib-version>${project.version}</tlib-version>
+    <uri>http://kristianandersen.net/warpdrive/taglib</uri>
+    <tag-file>
+        <name>stylesheet</name>
+        <path>/META-INF/tags/stylesheet.tag</path>
+    </tag-file>
+    <tag-file>
+        <name>script</name>
+        <path>/META-INF/tags/script.tag</path>
+    </tag-file>
+    <tag-file>
+        <name>image</name>
+        <path>/META-INF/tags/image.tag</path>
+    </tag-file>
+    <tag-file>
+        <name>dependantScripts</name>
+        <path>/META-INF/tags/dependantScripts.tag</path>
+    </tag-file>
+    <tag-file>
+        <name>renderDependantScripts</name>
+        <path>/META-INF/tags/renderDependantScripts.tag</path>
+    </tag-file>
+    <function>
+        <name>getScriptTag</name>
+        <function-class>net.kristianandersen.warpdrive.Runtime</function-class>
+        <function-signature>java.lang.String getScriptTag(java.lang.String, java.lang.String, java.util.Map, javax.servlet.http.HttpServletRequest)
+        </function-signature>
+    </function>
+    <function>
+        <name>getImageTag</name>
+        <function-class>net.kristianandersen.warpdrive.Runtime</function-class>
+        <function-signature>java.lang.String getImageTag(java.lang.String, java.util.Map, javax.servlet.http.HttpServletRequest)
+        </function-signature>
+    </function>
+    <function>
+        <name>getStylesheetTag</name>
+        <function-class>net.kristianandersen.warpdrive.Runtime</function-class>
+        <function-signature>java.lang.String getStylesheetTag(java.lang.String, java.lang.String, java.lang.String, java.util.Map, javax.servlet.http.HttpServletRequest)
+        </function-signature>
+    </function>
+</taglib>

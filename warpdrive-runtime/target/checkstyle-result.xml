@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="5.0">
+<file name="/Users/kriand/dev/IdeaProjects/warpdrive/warpdrive-runtime/src/main/java/net/kristianandersen/warpdrive/filter/WarpDriveFilter.java">
+<error line="0" severity="error" message="Missing package-info.java file." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocPackageCheck"/>
+<error line="20" severity="error" message="Using the &apos;.*&apos; form of import should be avoided - javax.servlet.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+<error line="37" severity="error" message="Line is longer than 80 characters." source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="37" column="5" severity="error" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocVariableCheck"/>
+<error line="37" column="19" severity="error" message="&apos;static&apos; modifier out of order with the JLS suggestions." source="com.puppycrawl.tools.checkstyle.checks.modifier.ModifierOrderCheck"/>
+<error line="39" column="5" severity="error" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocVariableCheck"/>
+<error line="39" column="19" severity="error" message="&apos;static&apos; modifier out of order with the JLS suggestions." source="com.puppycrawl.tools.checkstyle.checks.modifier.ModifierOrderCheck"/>
+<error line="41" column="5" severity="error" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocMethodCheck"/>
+<error line="41" column="22" severity="error" message="Parameter filterConfig should be final." source="com.puppycrawl.tools.checkstyle.checks.FinalParametersCheck"/>
+<error line="45" severity="error" message="Line is longer than 80 characters." source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="45" column="5" severity="error" message="Method &apos;doFilter&apos; is not designed for extension - needs to be abstract, final or empty." source="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck"/>
+<error line="45" column="5" severity="error" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocMethodCheck"/>
+<error line="45" column="26" severity="error" message="Parameter request should be final." source="com.puppycrawl.tools.checkstyle.checks.FinalParametersCheck"/>
+<error line="45" column="50" severity="error" message="Parameter response should be final." source="com.puppycrawl.tools.checkstyle.checks.FinalParametersCheck"/>
+<error line="45" column="76" severity="error" message="Parameter chain should be final." source="com.puppycrawl.tools.checkstyle.checks.FinalParametersCheck"/>
+<error line="46" column="54" severity="error" message="&apos;cast&apos; is not followed by whitespace." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="47" column="57" severity="error" message="&apos;cast&apos; is not followed by whitespace." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="49" column="11" severity="error" message="&apos;if&apos; is not followed by whitespace." source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="53" severity="error" message="Line is longer than 80 characters." source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="57" column="5" severity="error" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocMethodCheck"/>
+<error line="64" column="5" severity="error" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocMethodCheck"/>
+</file>
+<file name="/Users/kriand/dev/IdeaProjects/warpdrive/warpdrive-runtime/src/main/java/net/kristianandersen/warpdrive/Runtime.java">
+<error line="0" severity="error" message="Missing package-info.java file." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocPackageCheck"/>
+<error line="23" severity="error" message="Using the &apos;.*&apos; form of import should be avoided - java.util.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+<error line="32" column="1" severity="error" message="Utility classes should not have a public or default constructor." source="com.puppycrawl.tools.checkstyle.checks.design.HideUtilityClassConstructorCheck"/>
+<error line="34" severity="error" message="Line is longer than 80 characters." source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="34" column="5" severity="error" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocVariableCheck"/>
+<error line="34" column="18" severity="error" message="&apos;static&apos; modifier out of order with the JLS suggestions." source="com.puppycrawl.tools.checkstyle.checks.modifier.ModifierOrderCheck"/>
+<error line="36" column="5" severity="error" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocVariableCheck"/>
+<error line="36" column="18" severity="error" message="&apos;static&apos; modifier out of order with the JLS suggestions." source="com.puppycrawl.tools.checkstyle.checks.modifier.ModifierOrderCheck"/>
+<error line="38" column="5" severity="error" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocVariableCheck"/>
+<error line="38" column="18" severity="error" message="&apos;static&apos; modifier out of order with the JLS suggestions." source="com.puppycrawl.tools.checkstyle.checks.modifier.ModifierOrderCheck"/>
+<error line="39" column="5" severity="error" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocVariableCheck"/>
+<error line="39" column="18" severity="error" message="&apos;static&apos; modifier out of order with the JLS suggestions." source="com.puppycrawl.tools.checkstyle.checks.modifier.ModifierOrderCheck"/>
+<error line="40" column="5" severity="error" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocVariableCheck"/>
+<error line="40" column="18" severity="error" message="&apos;static&apos; modifier out of order with the JLS suggestions." source="com.puppycrawl.tools.checkstyle.checks.modifier.ModifierOrderCheck"/>
+<error line="41" severity="error" message="Line is longer than 80 characters." source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="41" column="5" severity="error" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocVariableCheck"/>
+<error line="41" column="18" severity="error" message="&apos;static&apos; modifier out of order with the JLS suggestions." source="com.puppycrawl.tools.checkstyle.checks.modifier.ModifierOrderCheck"/>
+<error line="42" column="5" severity="error" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocVariableCheck"/>
+<error line="42" column="18" severity="error" message="&apos;static&apos; modifier out of order with the JLS suggestions." source="com.puppycrawl.tools.checkstyle.checks.modifier.ModifierOrderCheck"/>
+<error line="43" column="5" severity="error" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocVariableCheck"/>
+<error line="43" column="18" severity="error" message="&apos;static&apos; modifier out of order with the JLS suggestions." source="com.puppycrawl.tools.checkstyle.checks.modifier.ModifierOrderCheck"/>
+<error line="44" column="5" severity="error" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocVariableCheck"/>
+<error line="44" column="18" severity="error" message="&apos;static&apos; modifier out of order with the JLS suggestions." source="com.puppycrawl.tools.checkstyle.checks.modifier.ModifierOrderCheck"/>
+<error line="45" column="5" severity="error" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocVariableCheck"/>
+<error line="45" column="18" severity="error" message="&apos;static&apos; modifier out of order with the JLS suggestions." source="com.puppycrawl.tools.checkstyle.checks.modifier.ModifierOrderCheck"/>
+<error line="46" column="5" severity="error" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocVariableCheck"/>
+<error line="46" column="18" severity="error" message="&apos;static&apos; modifier out of order with the JLS suggestions." source="com.puppycrawl.tools.checkstyle.checks.modifier.ModifierOrderCheck"/>
+<error line="48" column="5" severity="error" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocVariableCheck"/>
+<error line="48" column="19" severity="error" message="&apos;static&apos; modifier out of order with the JLS suggestions." source="com.puppycrawl.tools.checkstyle.checks.modifier.ModifierOrderCheck"/>
+<error line="48" column="37" severity="error" message="Name &apos;settings&apos; must match pattern &apos;^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.ConstantNameCheck"/>
+<error line="50" column="5" severity="error" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocVariableCheck"/>
+<error line="51" column="5" severity="error" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocVariableCheck"/>
+<error line="52" column="5" severity="error" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocVariableCheck"/>
+<error line="53" column="5" severity="error" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocVariableCheck"/>
+<error line="54" column="5" severity="error" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocVariableCheck"/>
+<error line="55" column="5" severity="error" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocVariableCheck"/>
+<error line="56" severity="error" message="Line is longer than 80 characters." source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="56" column="5" severity="error" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocVariableCheck"/>
+<error line="56" column="45" severity="error" message="Variable &apos;cssBundles&apos; must be private and have accessor methods." source="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"/>
+<error line="57" severity="error" message="Line is longer than 80 characters." source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="57" column="5" severity="error" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocVariableCheck"/>
+<error line="57" column="45" severity="error" message="Variable &apos;jsBundles&apos; must be private and have accessor methods." source="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"/>
+<error line="62" severity="error" message="Line is longer than 80 characters." source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="73" column="9" severity="error" message="&apos;}&apos; should be on the same line." source="com.puppycrawl.tools.checkstyle.checks.blocks.RightCurlyCheck"/>
+<error line="77" column="9" severity="error" message="&apos;}&apos; should be on the same line." source="com.puppycrawl.tools.checkstyle.checks.blocks.RightCurlyCheck"/>
+<error line="82" column="41" severity="error" message="Must have at least one statement." source="com.puppycrawl.tools.checkstyle.checks.blocks.EmptyBlockCheck"/>
+<error line="88" column="5" severity="error" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocMethodCheck"/>
+<error line="88" column="49" severity="error" message="Parameter request should be final." source="com.puppycrawl.tools.checkstyle.checks.FinalParametersCheck"/>
+<error line="89" severity="error" message="Line is longer than 80 characters." source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="97" severity="error" message="Line is longer than 80 characters." source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="97" column="5" severity="error" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocMethodCheck"/>
+<error line="97" column="39" severity="error" message="Parameter src should be final." source="com.puppycrawl.tools.checkstyle.checks.FinalParametersCheck"/>
+<error line="97" column="51" severity="error" message="Parameter type should be final." source="com.puppycrawl.tools.checkstyle.checks.FinalParametersCheck"/>
+<error line="97" column="64" severity="error" message="Parameter params should be final." source="com.puppycrawl.tools.checkstyle.checks.FinalParametersCheck"/>
+<error line="97" column="92" severity="error" message="Parameter request should be final." source="com.puppycrawl.tools.checkstyle.checks.FinalParametersCheck"/>
+<error line="108" severity="error" message="Line is longer than 80 characters." source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="108" column="5" severity="error" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocMethodCheck"/>
+<error line="108" column="38" severity="error" message="Parameter src should be final." source="com.puppycrawl.tools.checkstyle.checks.FinalParametersCheck"/>
+<error line="108" column="50" severity="error" message="Parameter params should be final." source="com.puppycrawl.tools.checkstyle.checks.FinalParametersCheck"/>
+<error line="108" column="78" severity="error" message="Parameter request should be final." source="com.puppycrawl.tools.checkstyle.checks.FinalParametersCheck"/>
+<error line="114" severity="error" message="Line is longer than 80 characters." source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="120" severity="error" message="Line is longer than 80 characters." source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="120" column="5" severity="error" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocMethodCheck"/>
+<error line="120" column="43" severity="error" message="Parameter href should be final." source="com.puppycrawl.tools.checkstyle.checks.FinalParametersCheck"/>
+<error line="120" column="56" severity="error" message="Parameter rel should be final." source="com.puppycrawl.tools.checkstyle.checks.FinalParametersCheck"/>
+<error line="120" column="68" severity="error" message="Parameter type should be final." source="com.puppycrawl.tools.checkstyle.checks.FinalParametersCheck"/>
+<error line="120" column="81" severity="error" message="Parameter params should be final." source="com.puppycrawl.tools.checkstyle.checks.FinalParametersCheck"/>
+<error line="120" column="109" severity="error" message="Parameter request should be final." source="com.puppycrawl.tools.checkstyle.checks.FinalParametersCheck"/>
+<error line="132" severity="error" message="Line is longer than 80 characters." source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="132" column="5" severity="error" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocMethodCheck"/>
+<error line="132" column="39" severity="error" message="Parameter href should be final." source="com.puppycrawl.tools.checkstyle.checks.FinalParametersCheck"/>
+<error line="132" column="52" severity="error" message="Parameter rel should be final." source="com.puppycrawl.tools.checkstyle.checks.FinalParametersCheck"/>
+<error line="132" column="64" severity="error" message="Parameter type should be final." source="com.puppycrawl.tools.checkstyle.checks.FinalParametersCheck"/>
+<error line="132" column="77" severity="error" message="Parameter params should be final." source="com.puppycrawl.tools.checkstyle.checks.FinalParametersCheck"/>
+<error line="132" column="105" severity="error" message="Parameter request should be final." source="com.puppycrawl.tools.checkstyle.checks.FinalParametersCheck"/>
+<error line="150" severity="error" message="Line is longer than 80 characters." source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="156" severity="error" message="Line is longer than 80 characters." source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="156" column="5" severity="error" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocMethodCheck"/>
+<error line="156" column="42" severity="error" message="Parameter src should be final." source="com.puppycrawl.tools.checkstyle.checks.FinalParametersCheck"/>
+<error line="156" column="54" severity="error" message="Parameter type should be final." source="com.puppycrawl.tools.checkstyle.checks.FinalParametersCheck"/>
+<error line="156" column="67" severity="error" message="Parameter params should be final." source="com.puppycrawl.tools.checkstyle.checks.FinalParametersCheck"/>
+<error line="156" column="95" severity="error" message="Parameter request should be final." source="com.puppycrawl.tools.checkstyle.checks.FinalParametersCheck"/>
+<error line="169" severity="error" message="Line is longer than 80 characters." source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="175" severity="error" message="Line is longer than 80 characters." source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="175" column="5" severity="error" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocMethodCheck"/>
+<error line="175" column="33" severity="error" message="Parameter src should be final." source="com.puppycrawl.tools.checkstyle.checks.FinalParametersCheck"/>
+<error line="175" column="45" severity="error" message="Parameter buffer should be final." source="com.puppycrawl.tools.checkstyle.checks.FinalParametersCheck"/>
+<error line="175" column="67" severity="error" message="Parameter topLevelDir should be final." source="com.puppycrawl.tools.checkstyle.checks.FinalParametersCheck"/>
+<error line="175" column="87" severity="error" message="Parameter request should be final." source="com.puppycrawl.tools.checkstyle.checks.FinalParametersCheck"/>
+<error line="175" column="115" severity="error" message="Parameter isTextResource should be final." source="com.puppycrawl.tools.checkstyle.checks.FinalParametersCheck"/>
+<error line="177" severity="error" message="Line is longer than 80 characters." source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="181" severity="error" message="Line is longer than 80 characters." source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="192" column="5" severity="error" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocMethodCheck"/>
+<error line="192" column="40" severity="error" message="Parameter href should be final." source="com.puppycrawl.tools.checkstyle.checks.FinalParametersCheck"/>
+<error line="196" column="5" severity="error" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocMethodCheck"/>
+<error line="196" column="43" severity="error" message="Parameter src should be final." source="com.puppycrawl.tools.checkstyle.checks.FinalParametersCheck"/>
+<error line="200" severity="error" message="Line is longer than 80 characters." source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="200" column="5" severity="error" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocMethodCheck"/>
+<error line="200" column="49" severity="error" message="Parameter src should be final." source="com.puppycrawl.tools.checkstyle.checks.FinalParametersCheck"/>
+<error line="200" column="61" severity="error" message="Parameter type should be final." source="com.puppycrawl.tools.checkstyle.checks.FinalParametersCheck"/>
+<error line="200" column="74" severity="error" message="Parameter params should be final." source="com.puppycrawl.tools.checkstyle.checks.FinalParametersCheck"/>
+<error line="200" column="102" severity="error" message="Parameter request should be final." source="com.puppycrawl.tools.checkstyle.checks.FinalParametersCheck"/>
+<error line="208" severity="error" message="Line is longer than 80 characters." source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="208" column="5" severity="error" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocMethodCheck"/>
+<error line="208" column="46" severity="error" message="Parameter href should be final." source="com.puppycrawl.tools.checkstyle.checks.FinalParametersCheck"/>
+<error line="208" column="59" severity="error" message="Parameter rel should be final." source="com.puppycrawl.tools.checkstyle.checks.FinalParametersCheck"/>
+<error line="208" column="71" severity="error" message="Parameter type should be final." source="com.puppycrawl.tools.checkstyle.checks.FinalParametersCheck"/>
+<error line="208" column="84" severity="error" message="Parameter params should be final." source="com.puppycrawl.tools.checkstyle.checks.FinalParametersCheck"/>
+<error line="208" column="112" severity="error" message="Parameter request should be final." source="com.puppycrawl.tools.checkstyle.checks.FinalParametersCheck"/>
+<error line="216" column="5" severity="error" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocMethodCheck"/>
+<error line="216" column="37" severity="error" message="Parameter request should be final." source="com.puppycrawl.tools.checkstyle.checks.FinalParametersCheck"/>
+<error line="232" column="5" severity="error" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocMethodCheck"/>
+<error line="237" severity="error" message="Line is longer than 80 characters." source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="240" severity="error" message="Line is longer than 80 characters." source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="245" column="5" severity="error" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocMethodCheck"/>
+<error line="251" severity="error" message="Line is longer than 80 characters." source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+</file>
+<file name="/Users/kriand/dev/IdeaProjects/warpdrive/warpdrive-runtime/src/main/java/net/kristianandersen/warpdrive/utils/FilenameUtils.java">
+<error line="0" severity="error" message="Missing package-info.java file." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocPackageCheck"/>
+<error line="27" column="1" severity="error" message="Utility classes should not have a public or default constructor." source="com.puppycrawl.tools.checkstyle.checks.design.HideUtilityClassConstructorCheck"/>
+<error line="29" column="5" severity="error" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocMethodCheck"/>
+<error line="29" column="40" severity="error" message="Parameter file should be final." source="com.puppycrawl.tools.checkstyle.checks.FinalParametersCheck"/>
+<error line="29" column="53" severity="error" message="Parameter version should be final." source="com.puppycrawl.tools.checkstyle.checks.FinalParametersCheck"/>
+<error line="32" severity="error" message="Line is longer than 80 characters." source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="36" column="5" severity="error" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocMethodCheck"/>
+<error line="36" column="46" severity="error" message="Parameter file should be final." source="com.puppycrawl.tools.checkstyle.checks.FinalParametersCheck"/>
+<error line="39" severity="error" message="Line is longer than 80 characters." source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+</file>
+</checkstyle>

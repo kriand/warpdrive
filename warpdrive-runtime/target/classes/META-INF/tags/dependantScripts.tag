@@ -1,0 +1,1 @@
+<%@ tag import="net.kristianandersen.warpdrive.Runtime" body-content="scriptless" %><jsp:doBody scope="request" var="warpdrive_scriptbuffer" /><%Runtime.getScriptBuffer(request).append(request.getAttribute("warpdrive_scriptbuffer").toString().trim()).append('\n');%>
