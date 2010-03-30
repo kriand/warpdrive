@@ -61,8 +61,8 @@ public class FilterConfigurator {
         Element root = doc.getRootElement();
         removeFilterDefinitions(doc, root);
         if (mojo.configureFilter) {
-            if(mojo.externalHosts != null && mojo.externalHosts.size() > 0) {
-                mojo.getLog().warn("Configuring filter even though external hosts are defined. You probably want to set the configureFilter option to false");                
+            if (mojo.externalHosts != null && mojo.externalHosts.size() > 0) {
+                mojo.getLog().warn("Configuring filter even though external hosts are defined. You probably want to set the configureFilter option to false");
             }
             addFilterDefinitions(root);
         }
@@ -75,7 +75,7 @@ public class FilterConfigurator {
         removeMimeMapping("css.gz", doc, root);
         removeMimeMapping("js.gz", doc, root);
         if (mojo.configureFilter) {
-            if(mojo.externalHosts != null && mojo.externalHosts.size() > 0) {
+            if (mojo.externalHosts != null && mojo.externalHosts.size() > 0) {
                 mojo.getLog().warn("Configuring mime-mappings even though external hosts are defined. You probably want to set the configureFilter option to false");
             }
             addMimeMapping(root, "css.gz", "text/css");
@@ -118,7 +118,7 @@ public class FilterConfigurator {
         extension.setText(ext);
         Element mimeType = new Element("mime-type", root.getNamespace());
         mimeType.setText(mType);
-        mimeMapping.addContent(extension).addContent(mimeType);        
+        mimeMapping.addContent(extension).addContent(mimeType);
         root.addContent(mimeMapping);
     }
 
