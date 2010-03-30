@@ -1,0 +1,1 @@
+$(document).ready(function(){$("a.sizeInMem").click(function(A){$.get("/admin/ajaxSizeInMem/"+$(this).attr("id"),function(B){alert(B)})})});

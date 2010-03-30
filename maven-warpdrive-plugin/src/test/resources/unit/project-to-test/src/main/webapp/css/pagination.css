@@ -1,0 +1,20 @@
+span.currentStep, a.step {
+    padding: 0px 3px 3px 3px;
+    margin: 0px 3px 0px 3px;
+    border-color: #aaaaaa;
+    border-style: solid;
+    border-width: 1px;
+}
+
+span.currentStep, a.step:hover {
+    color: #ffffff;
+    background-color: #22a60c;
+}
+
+a.step {
+    background-color: #EBEBEB;
+}
+
+a.nextLink, a.prevLink {
+    margin: 0px 3px 0px 3px;
+}
