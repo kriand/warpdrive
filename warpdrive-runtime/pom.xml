@@ -10,6 +10,7 @@
         <artifactId>warpdrive</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
+    <url>http://kristianandersen.net/warpdrive/warpdrive-runtime/</url>
     <build>
         <resources>
             <resource>
@@ -29,6 +30,11 @@
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
     <reporting>

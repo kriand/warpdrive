@@ -19,6 +19,7 @@
         <jdom.version>1.1</jdom.version>
         <jaxen.version>1.1.1</jaxen.version>
         <maven-plugin-testing-harness.version>1.2</maven-plugin-testing-harness.version>
+        <junit.version>4.8.1</junit.version>
     </properties>
     <modules>
         <module>maven-warpdrive-plugin</module>
@@ -28,17 +29,26 @@
         <developer>
             <name>Kristian Andersen</name>
             <email>kriand@gmail.com</email>
-            <timezone>+0100</timezone>
+            <timezone>+1</timezone>
+            <roles>
+                <role>Developer</role>
+            </roles>
         </developer>
     </developers>
-    <ciManagement>
-
-    </ciManagement>
-    <url></url>
+    <issueManagement>
+        <system>github</system>
+        <url>http://github.com/kriand/warpdrive/issues</url>
+    </issueManagement>
+    <scm>
+        <connection>scm:git:git://github.com/kriand/warpdrive.git</connection>
+        <url>http://github.com/kriand/warpdrive/</url>
+    </scm>
+    <url>http://kristianandersen.net/warpdrive/</url>
     <licenses>
         <license>
             <name>Apache License, Version 2.0</name>
             <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+            <distribution>repo</distribution>
         </license>
     </licenses>
     <inceptionYear>2010</inceptionYear>
@@ -102,11 +112,6 @@
                 <version>${maven.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.maven.plugin-testing</groupId>
-                <artifactId>maven-plugin-testing-harness</artifactId>
-                <version>${maven-plugin-testing-harness.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>javax.servlet</groupId>
                 <artifactId>servlet-api</artifactId>
                 <version>${servlet.api.version}</version>
@@ -130,6 +135,11 @@
                 <groupId>jaxen</groupId>
                 <artifactId>jaxen</artifactId>
                 <version>${jaxen.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
