@@ -22,21 +22,40 @@ import net.kristianandersen.warpdrive.Runtime;
  * User: kriand
  * Date: Mar 3, 2010
  * Time: 6:42:39 PM
- * To change this template use File | Settings | File Templates.
  */
 public class FilenameUtils {
 
     public static String insertVersion(String file, String version) {
+        assert file != null : "File should not be null";
+        assert version != null : "Version should not be null";
         StringBuilder result = new StringBuilder();
-        int lastDot = file.lastIndexOf('.');
-        result.append(file.substring(0, lastDot)).append("_v").append(version).append(file.substring(lastDot));
+        int ext = findExtension(file);
+        result.append(file.substring(0, ext))
+              .append("__v")
+              .append(version)
+              .append(file.substring(ext));
         return result.toString();
     }
 
-    public static String insertGzipExtension(String file) {
+
+    public static String insertVersionAndGzipExtension(String file, String version) {
+        assert file != null : "File should not be null";
+        assert version != null : "Version should not be null";
         StringBuilder result = new StringBuilder();
-        int lastDot = file.lastIndexOf('.');
-        result.append(file.substring(0, lastDot)).append(Runtime.GZIP_EXTENSION).append(file.substring(lastDot));
+        int ext = findExtension(file);
+        result.append(file.substring(0, ext))
+              .append("__v")
+              .append(version)
+              .append(Runtime.GZIP_EXTENSION)
+              .append(file.substring(ext));
         return result.toString();
+    }
+
+    private static int findExtension(String file) {
+        int lastDot = file.lastIndexOf('.');
+        if(lastDot == -1) {
+            lastDot = file.length();
+        }
+        return lastDot;
     }
 }

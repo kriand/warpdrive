@@ -30,7 +30,7 @@
             <name>Kristian Andersen</name>
             <email>kriand@gmail.com</email>
             <timezone>+1</timezone>
-            <roles>
+            <roles>     
                 <role>Developer</role>
             </roles>
         </developer>

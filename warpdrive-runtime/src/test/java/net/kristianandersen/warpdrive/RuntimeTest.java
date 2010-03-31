@@ -19,7 +19,7 @@ public class RuntimeTest {
         Properties props = new Properties();
         props.setProperty("enabled", "false");
         props.setProperty(Runtime.JS_BUNDLE_PREFIX_KEY + "bundle.js", "script1.js, script2.js");
-        Runtime.setConfig(props);
+        Runtime.configure(props);
         assertTrue(Runtime.isScriptBundle("bundle.js"));
         assertFalse(Runtime.isScriptBundle("not.a.bundle.js"));
 
@@ -30,7 +30,7 @@ public class RuntimeTest {
         Properties props = new Properties();
         props.setProperty("enabled", "false");
         props.setProperty(Runtime.CSS_BUNDLE_PREFIX_KEY + "bundle.css", "stylesheet1.css, stylesheet2.css");
-        Runtime.setConfig(props);
+        Runtime.configure(props);
         assertTrue(Runtime.isCssBundle("bundle.css"));
         assertFalse(Runtime.isCssBundle("not.a.bundle.css"));
 

@@ -62,7 +62,7 @@ public class Runtime {
             Properties props = new Properties();
             is = Thread.currentThread().getContextClassLoader().getResourceAsStream(RUNTIME_SETTINGS_FILE);
             props.load(is);
-            setConfig(props);
+            configure(props);
         }
         catch (Exception ex) {
             //TODO Log
@@ -113,16 +113,15 @@ public class Runtime {
         return writeCssTag(href, rel, type, params, request);
     }
 
-    static void setConfig(Properties settings) {        
-        Runtime.settings = settings;
+    static void configure(Properties settings) {
         enabled = Boolean.valueOf(settings.getProperty(ENABLED_KEY));
         version = settings.getProperty(VERSION_KEY);
         imagesDir = settings.getProperty(IMAGE_DIR_KEY);
         jsDir = settings.getProperty(JS_DIR_KEY);
         cssDir = settings.getProperty(CSS_DIR_KEY);
-        setExternalHosts();
+        setupExternalHosts(settings);
         if (!enabled) {
-            figureOutBundles();
+            setupBundles(settings);
         }
     }
 
@@ -179,20 +178,23 @@ public class Runtime {
             buffer.append(externalHosts[Math.abs(src.hashCode()) % externalHosts.length]);
         }
         buffer.append(request.getContextPath()).append(topLevelDir);
-        String versionedSrc = FilenameUtils.insertVersion(src, version);
+        String versionedSrc = null;
         if (isTextResource && isGzipAccepted(request)) {
-            versionedSrc = FilenameUtils.insertGzipExtension(versionedSrc);
+            versionedSrc = FilenameUtils.insertVersionAndGzipExtension(src, version);
+        }
+        else {
+            versionedSrc = FilenameUtils.insertVersion(src, version);
         }
         buffer.append(versionedSrc);
 
     }
 
-    static boolean isCssBundle(String href) {
-        return cssBundles.get(href) != null;
+    static boolean isCssBundle(String name) {
+        return cssBundles.get(name) != null;
     }
 
-    static boolean isScriptBundle(String src) {
-        return jsBundles.get(src) != null;
+    static boolean isScriptBundle(String name) {
+        return jsBundles.get(name) != null;
     }
 
     private static String unbundleScriptBundles(String src, String type, Map<String, String> params, HttpServletRequest request) {
@@ -227,7 +229,7 @@ public class Runtime {
         return gzipAccepted && !qZero;
     }
 
-    private static void figureOutBundles() {
+    private static void setupBundles(Properties settings) {
         Enumeration properties = settings.propertyNames();
         while (properties.hasMoreElements()) {
             String property = (String) properties.nextElement();
@@ -240,7 +242,7 @@ public class Runtime {
         }
     }
 
-    private static void setExternalHosts() {
+    private static void setupExternalHosts(Properties settings) {
         if (settings.getProperty(EXTERNAL_HOSTS_KEY) != null) {
             externalHosts = settings.getProperty(EXTERNAL_HOSTS_KEY).split(",");
             for (int i = 0; i < externalHosts.length; i++) {

@@ -15,35 +15,42 @@ public class FilenameUtilsTest {
     public void testAppendVersion() {
         String filename = "myscript.js";
         String result = FilenameUtils.insertVersion(filename, "123");
-        assertEquals("myscript_v123.js", result);
+        assertEquals("myscript__v123.js", result);
     }
 
     @Test
     public void testAppendVersionWithSubdir() {
         String filename = "/dir/subdir/myscript.js";
         String result = FilenameUtils.insertVersion(filename, "123");
-        assertEquals("/dir/subdir/myscript_v123.js", result);
+        assertEquals("/dir/subdir/myscript__v123.js", result);
     }
 
     @Test
-    public void testAppendGzipExtension() {
+    public void testAppendVersionAndGzipExtension() {
         String filename = "myscript.js";
-        String result = FilenameUtils.insertGzipExtension(filename);
-        assertEquals("myscript.gz.js", result);
+        String result = FilenameUtils.insertVersionAndGzipExtension(filename, "123");
+        assertEquals("myscript__v123.gz.js", result);
     }
 
     @Test
-    public void testAppendGzipExtensionWithDir() {
+    public void testAppendVersionAndGzipExtensionWithSubdir() {
         String filename = "/dir/subdir/myscript.js";
-        String result = FilenameUtils.insertGzipExtension(filename);
-        assertEquals("/dir/subdir/myscript.gz.js", result);
+        String result = FilenameUtils.insertVersionAndGzipExtension(filename, "123");
+        assertEquals("/dir/subdir/myscript__v123.gz.js", result);
     }
 
     @Test
-    public void testAppendGzipExtensionAndVersion() {
-        String filename = "myscript.js";
+    public void testAppendVersionToNoExtension() {
+        String filename = "myscript";
         String result = FilenameUtils.insertVersion(filename, "123");
-        result = FilenameUtils.insertGzipExtension(result);
-        assertEquals("myscript_v123.gz.js", result);
+        assertEquals("myscript__v123", result);
     }
+
+    @Test
+    public void testAppendVersionAndGzipExtensionToNoExtension() {
+        String filename = "myscript";
+        String result = FilenameUtils.insertVersionAndGzipExtension(filename, "123");
+        assertEquals("myscript__v123.gz", result);
+    }
+        
 }
