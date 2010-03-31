@@ -45,7 +45,7 @@ public class Runtime {
     public final static String CSS_BUNDLE_PREFIX_KEY = "css.bundle.";
     public final static String JS_BUNDLE_PREFIX_KEY = "js.bundle.";
 
-    private final static Properties settings = new Properties();
+    private static Properties settings = new Properties();
 
     private static boolean enabled = false;
     private static String version = null;
@@ -59,17 +59,10 @@ public class Runtime {
     static {
         InputStream is = null;
         try {
+            Properties props = new Properties();
             is = Thread.currentThread().getContextClassLoader().getResourceAsStream(RUNTIME_SETTINGS_FILE);
-            settings.load(is);
-            enabled = Boolean.valueOf(settings.getProperty(ENABLED_KEY));
-            version = settings.getProperty(VERSION_KEY);
-            imagesDir = settings.getProperty(IMAGE_DIR_KEY);
-            jsDir = settings.getProperty(JS_DIR_KEY);
-            cssDir = settings.getProperty(CSS_DIR_KEY);
-            setExternalHosts();
-            if (!enabled) {
-                figureOutBundles();
-            }
+            props.load(is);
+            setConfig(props);
         }
         catch (Exception ex) {
             //TODO Log
@@ -96,7 +89,7 @@ public class Runtime {
 
     public static String getScriptTag(String src, String type, Map<String, String> params, HttpServletRequest request) {
         if (!enabled && isScriptBundle(src)) {
-            return unbundleScriptBundles(src, type, params, request);          
+            return unbundleScriptBundles(src, type, params, request);
         }
         return writeScriptTag(src, type, params, request);
     }
@@ -115,9 +108,22 @@ public class Runtime {
 
     public static String getStylesheetTag(String href, String rel, String type, Map<String, String> params, HttpServletRequest request) {
         if (!enabled && isCssBundle(href)) {
-            return unbundleCssBundles(href, rel, type, params, request);            
+            return unbundleCssBundles(href, rel, type, params, request);
         }
         return writeCssTag(href, rel, type, params, request);
+    }
+
+    static void setConfig(Properties settings) {        
+        Runtime.settings = settings;
+        enabled = Boolean.valueOf(settings.getProperty(ENABLED_KEY));
+        version = settings.getProperty(VERSION_KEY);
+        imagesDir = settings.getProperty(IMAGE_DIR_KEY);
+        jsDir = settings.getProperty(JS_DIR_KEY);
+        cssDir = settings.getProperty(CSS_DIR_KEY);
+        setExternalHosts();
+        if (!enabled) {
+            figureOutBundles();
+        }
     }
 
 
@@ -181,11 +187,11 @@ public class Runtime {
 
     }
 
-    private static boolean isCssBundle(String href) {
+    static boolean isCssBundle(String href) {
         return cssBundles.get(href) != null;
     }
 
-    private static boolean isScriptBundle(String src) {
+    static boolean isScriptBundle(String src) {
         return jsBundles.get(src) != null;
     }
 
