@@ -35,6 +35,7 @@ import org.apache.maven.project.MavenProject;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.List;
 import java.util.Map;
 
@@ -107,12 +108,7 @@ public class WarpDriveMojo extends AbstractMojo {
     /**
      * @parameter
      */
-    public Map<String, String> jsBundles;
-
-    /**
-     * @parameter
-     */
-    public Map<String, String> cssBundles;
+    public Map<String, String> bundles;
 
     /**
      * @parameter default-value=true
@@ -214,12 +210,19 @@ public class WarpDriveMojo extends AbstractMojo {
     private VersioningStrategy versioningStrategy = new CurrentTimeMillisStrategy();
 
     public void execute() throws MojoExecutionException {
+
         JsProcessor jsProcessor = new YuiJsProcessor(this);
+
         SpritesProcessor spritesProcessor = new SmartSpritesProcessor(this);
+
         CssProcessor cssProcessor = new YuiCssProcessor(this);
+
         ImageProcessor imageProcessor = new DefaultImageProcessor(this);
+
         FilterConfigurator filterConfigurator = new FilterConfigurator(this);
-        FileUploader uploader = new FileUploader(this);
+
+        FileUploader externalUploader = new FileUploader(this);
+
         try {
             assertWarModule();
             normalizeDirectories();
@@ -231,7 +234,7 @@ public class WarpDriveMojo extends AbstractMojo {
                 cssProcessor.processCss();
                 imageProcessor.processImages();
                 filterConfigurator.configureWebXml();
-                uploader.uploadFiles();
+                externalUploader.uploadFiles();
             }
         }
         catch (Exception ex) {
@@ -261,27 +264,14 @@ public class WarpDriveMojo extends AbstractMojo {
         FileWriter writer = null;
         try {
             writer = new FileWriter(file);
-            writer.write(Runtime.ENABLED_KEY + "=" + enabled + "\n");
-            writer.write(Runtime.VERSION_KEY + "=" + version + "\n");
-            writer.write(Runtime.IMAGE_DIR_KEY + "=" + imageDir + "\n");
-            writer.write(Runtime.JS_DIR_KEY + "=" + jsDir + "\n");
-            writer.write(Runtime.CSS_DIR_KEY + "=" + cssDir + "\n");
-            if (externalHosts != null && externalHosts.size() > 0) {
-                writer.write(Runtime.EXTERNAL_HOSTS_KEY + "=");
-                for (int i = 0; i < externalHosts.size(); i++) {
-                    writer.write(externalHosts.get(i));
-                    if (i < externalHosts.size() - 1) {
-                        writer.write(',');
-                    }
-                }
-                writer.write('\n');
-            }
-            if (cssBundles != null && cssBundles.size() > 0) {
-                writeBundle(Runtime.CSS_BUNDLE_PREFIX_KEY, cssBundles, writer);
-            }
-            if (jsBundles != null && jsBundles.size() > 0) {
-                writeBundle(Runtime.JS_BUNDLE_PREFIX_KEY, jsBundles, writer);
-            }
+            writeBooleanValue(Runtime.ENABLED_KEY, enabled, writer);
+            writeStringValue(Runtime.VERSION_KEY, version, writer);
+            writeStringValue(Runtime.IMAGE_DIR_KEY, imageDir, writer);
+            writeStringValue(Runtime.JS_DIR_KEY, jsDir, writer);
+            writeStringValue(Runtime.CSS_DIR_KEY, cssDir, writer);
+            writeExternalHosts(writer);
+            writeBundles(writer);
+
         }
         finally {
             if (writer != null) {
@@ -290,9 +280,40 @@ public class WarpDriveMojo extends AbstractMojo {
         }
     }
 
-    private void writeBundle(String prefix, Map<String, String> bundles, FileWriter writer) throws IOException {
+    private void writeStringValue(String key, String value, Writer writer) throws IOException {
+        writer.write(key);
+        writer.write('=');
+        writer.write(value);
+        writer.write('\n');
+    }
+
+    private void writeBooleanValue(String key, boolean value, Writer writer) throws IOException {
+        writer.write(key);
+        writer.write('=');
+        writer.write(String.valueOf(value));
+        writer.write('\n');
+    }
+
+    private void writeExternalHosts(Writer writer) throws IOException {
+        if (externalHosts == null || externalHosts.isEmpty()) {
+            return;
+        }
+        writer.write(Runtime.EXTERNAL_HOSTS_KEY + "=");
+        for (int i = 0; i < externalHosts.size(); i++) {
+            writer.write(externalHosts.get(i));
+            if (i < externalHosts.size() - 1) {
+                writer.write(',');
+            }
+        }
+        writer.write('\n');
+    }
+
+    private void writeBundles(Writer writer) throws IOException {
+        if (bundles == null || bundles.isEmpty()) {
+            return;
+        }
         for (String key : bundles.keySet()) {
-            writer.write(prefix);
+            writer.write(Runtime.BUNDLE_PREFIX_KEY);
             writer.write(key);
             writer.write('=');
             String[] bundleEntries = bundles.get(key).split(",");

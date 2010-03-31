@@ -42,8 +42,7 @@ public class Runtime {
     public final static String IMAGE_DIR_KEY = "image.dir";
     public final static String JS_DIR_KEY = "js.dir";
     public final static String CSS_DIR_KEY = "css.dir";
-    public final static String CSS_BUNDLE_PREFIX_KEY = "css.bundle.";
-    public final static String JS_BUNDLE_PREFIX_KEY = "js.bundle.";
+    public final static String BUNDLE_PREFIX_KEY = "css.bundle.";
 
     private static Properties settings = new Properties();
 
@@ -53,8 +52,7 @@ public class Runtime {
     private static String imagesDir = null;
     private static String jsDir = null;
     private static String cssDir = null;
-    public static Map<String, List<String>> cssBundles = new HashMap<String, List<String>>();
-    public static Map<String, List<String>> jsBundles = new HashMap<String, List<String>>();
+    public static Map<String, List<String>> bundles = new HashMap<String, List<String>>();
 
     static {
         InputStream is = null;
@@ -88,7 +86,7 @@ public class Runtime {
     }
 
     public static String getScriptTag(String src, String type, Map<String, String> params, HttpServletRequest request) {
-        if (!enabled && isScriptBundle(src)) {
+        if (!enabled && isBundle(src)) {
             return unbundleScriptBundles(src, type, params, request);
         }
         return writeScriptTag(src, type, params, request);
@@ -107,7 +105,7 @@ public class Runtime {
     }
 
     public static String getStylesheetTag(String href, String rel, String type, Map<String, String> params, HttpServletRequest request) {
-        if (!enabled && isCssBundle(href)) {
+        if (!enabled && isBundle(href)) {
             return unbundleCssBundles(href, rel, type, params, request);
         }
         return writeCssTag(href, rel, type, params, request);
@@ -189,17 +187,13 @@ public class Runtime {
 
     }
 
-    static boolean isCssBundle(String name) {
-        return cssBundles.get(name) != null;
-    }
-
-    static boolean isScriptBundle(String name) {
-        return jsBundles.get(name) != null;
+    static boolean isBundle(String name) {
+        return bundles.containsKey(name);
     }
 
     private static String unbundleScriptBundles(String src, String type, Map<String, String> params, HttpServletRequest request) {
         StringBuilder builder = new StringBuilder();
-        for (String script : jsBundles.get(src)) {
+        for (String script : bundles.get(src)) {
             builder.append(writeScriptTag(script, type, params, request));
         }
         return builder.toString();
@@ -207,7 +201,7 @@ public class Runtime {
 
     private static String unbundleCssBundles(String href, String rel, String type, Map<String, String> params, HttpServletRequest request) {
         StringBuilder builder = new StringBuilder();
-        for (String stylesheet : cssBundles.get(href)) {
+        for (String stylesheet : bundles.get(href)) {
             builder.append(writeCssTag(stylesheet, rel, type, params, request));
         }
         return builder.toString();
@@ -233,11 +227,8 @@ public class Runtime {
         Enumeration properties = settings.propertyNames();
         while (properties.hasMoreElements()) {
             String property = (String) properties.nextElement();
-            if (property.startsWith(CSS_BUNDLE_PREFIX_KEY)) {
-                cssBundles.put(property.substring(CSS_BUNDLE_PREFIX_KEY.length()), Arrays.asList(settings.getProperty(property).split(",")));
-            }
-            if (property.startsWith(JS_BUNDLE_PREFIX_KEY)) {
-                jsBundles.put(property.substring(JS_BUNDLE_PREFIX_KEY.length()), Arrays.asList(settings.getProperty(property).split(",")));
+            if (property.startsWith(BUNDLE_PREFIX_KEY)) {
+                bundles.put(property.substring(BUNDLE_PREFIX_KEY.length()), Arrays.asList(settings.getProperty(property).split(",")));
             }
         }
     }
