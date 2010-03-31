@@ -44,7 +44,7 @@ import java.util.*;
  */
 public class S3Uploader {
 
-    private WarpDriveMojo mojo;
+    private final WarpDriveMojo mojo;
 
     public S3Uploader(WarpDriveMojo mojo) {
         this.mojo = mojo;
@@ -78,13 +78,11 @@ public class S3Uploader {
 
     private S3Service createS3Service(String accessKey, String secretKey) throws S3ServiceException {
         AWSCredentials awsCredentials = new AWSCredentials(accessKey, secretKey);
-        S3Service s3Service = new RestS3Service(awsCredentials);
-        return s3Service;
+        return new RestS3Service(awsCredentials); 
     }
 
     private S3ServiceSimpleMulti createMultithreadedS3Service(S3Service s3Service) {
-        S3ServiceSimpleMulti multithreadedS3Service = new S3ServiceSimpleMulti(s3Service);
-        return multithreadedS3Service;
+        return new S3ServiceSimpleMulti(s3Service);
     }
 
     private void grantReadAccessForAllUsersForBucket(S3Service s3Service, S3Bucket s3Bucket) throws S3ServiceException {
@@ -107,10 +105,8 @@ public class S3Uploader {
                     s3ObjectList.add(s3Object);
                 }
             }
-        }
-
-        S3Object[] s3ObjectsToArray = (S3Object[]) s3ObjectList.toArray(new S3Object[s3ObjectList.size()]);
-        return s3ObjectsToArray;
+        }       
+        return (S3Object[]) s3ObjectList.toArray(new S3Object[s3ObjectList.size()]);
     }
 
     private S3Object createS3ObjectFromFile(File file, S3Bucket s3Bucket, Calendar expires) throws IOException, NoSuchAlgorithmException {
@@ -146,8 +142,7 @@ public class S3Uploader {
     }
 
     private String getRelativePath(File file) {
-        String relativePath = file.getPath().substring(mojo.webappTargetDir.length() + 1);
-        return relativePath;
+        return file.getPath().substring(mojo.webappTargetDir.length() + 1);
     }
 
     private S3Object getBasicS3Object(S3Bucket s3Bucket, String relativePath, File file, Calendar expires) throws IOException, NoSuchAlgorithmException {

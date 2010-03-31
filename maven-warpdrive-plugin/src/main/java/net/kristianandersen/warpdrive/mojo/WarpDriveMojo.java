@@ -25,6 +25,7 @@ import net.kristianandersen.warpdrive.processors.js.JsProcessor;
 import net.kristianandersen.warpdrive.processors.js.YuiJsProcessor;
 import net.kristianandersen.warpdrive.processors.sprites.SmartSpritesProcessor;
 import net.kristianandersen.warpdrive.processors.sprites.SpritesProcessor;
+import net.kristianandersen.warpdrive.processors.bundles.BundleProcessor;
 import net.kristianandersen.warpdrive.upload.FileUploader;
 import net.kristianandersen.warpdrive.versioning.CurrentTimeMillisStrategy;
 import net.kristianandersen.warpdrive.versioning.VersioningStrategy;
@@ -57,7 +58,7 @@ public class WarpDriveMojo extends AbstractMojo {
      * @required
      * @readonly
      */
-    public MavenProject project;
+    private MavenProject project;
 
     /**
      * Webapp source directory.
@@ -207,7 +208,7 @@ public class WarpDriveMojo extends AbstractMojo {
 
     private String version;
 
-    private VersioningStrategy versioningStrategy = new CurrentTimeMillisStrategy();
+    private final VersioningStrategy versioningStrategy = new CurrentTimeMillisStrategy();
 
     public void execute() throws MojoExecutionException {
 
@@ -216,6 +217,8 @@ public class WarpDriveMojo extends AbstractMojo {
         SpritesProcessor spritesProcessor = new SmartSpritesProcessor(this);
 
         CssProcessor cssProcessor = new YuiCssProcessor(this);
+
+        BundleProcessor bundleProcessor = new BundleProcessor(this);
 
         ImageProcessor imageProcessor = new DefaultImageProcessor(this);
 
@@ -227,11 +230,12 @@ public class WarpDriveMojo extends AbstractMojo {
             assertWarModule();
             normalizeDirectories();
             version = versioningStrategy.getVersion();
-            writeWarpDriveProperties();
+            writeWarpDriveConfig();
             if (enabled) {
                 jsProcessor.processJS();
                 spritesProcessor.processSprites();
                 cssProcessor.processCss();
+                bundleProcessor.createBundles();
                 imageProcessor.processImages();
                 filterConfigurator.configureWebXml();
                 externalUploader.uploadFiles();
@@ -258,8 +262,8 @@ public class WarpDriveMojo extends AbstractMojo {
         if (!imageDir.startsWith("/")) imageDir = "/" + imageDir;
     }
 
-    private void writeWarpDriveProperties() throws IOException {
-        File file = new File(project.getBuild().getOutputDirectory(), Runtime.RUNTIME_SETTINGS_FILE);
+    private void writeWarpDriveConfig() throws IOException {
+        File file = new File(project.getBuild().getOutputDirectory(), Runtime.RUNTIME_CONFIG_FILE);
         file.getParentFile().mkdirs();
         FileWriter writer = null;
         try {
@@ -270,7 +274,7 @@ public class WarpDriveMojo extends AbstractMojo {
             writeStringValue(Runtime.JS_DIR_KEY, jsDir, writer);
             writeStringValue(Runtime.CSS_DIR_KEY, cssDir, writer);
             writeExternalHosts(writer);
-            writeBundles(writer);
+            writeBundleConfig(writer);
 
         }
         finally {
@@ -308,7 +312,7 @@ public class WarpDriveMojo extends AbstractMojo {
         writer.write('\n');
     }
 
-    private void writeBundles(Writer writer) throws IOException {
+    private void writeBundleConfig(Writer writer) throws IOException {
         if (bundles == null || bundles.isEmpty()) {
             return;
         }

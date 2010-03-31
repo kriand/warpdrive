@@ -46,7 +46,7 @@ public class SmartSpritesProcessor extends AbstractProcessor implements SpritesP
     }
 
     public void processSprites() throws IOException {
-        if (mojo.processSprites == false || mojo.cssDir == null) {
+        if (!mojo.processSprites || mojo.cssDir == null) {
             return;
         }
         File cssDir = new File(mojo.webappSourceDir, mojo.cssDir);
@@ -81,9 +81,9 @@ public class SmartSpritesProcessor extends AbstractProcessor implements SpritesP
     private List<String> getFilesToProcess(File cssDir) {
         List<String> cssFilenames = new ArrayList<String>();
         if (mojo.smartSpritesIncludeFiles != null) {
-            for(String file : mojo.smartSpritesIncludeFiles) {
-                cssFilenames.add(mojo.webappSourceDir + mojo.cssDir + file); 
-            }                        
+            for (String file : mojo.smartSpritesIncludeFiles) {
+                cssFilenames.add(mojo.webappSourceDir + mojo.cssDir + file);
+            }
         } else {
             Collection<File> cssFiles = FileUtils.listFiles(cssDir, new CssFilenameFilter(), true);
             for (File cssFile : cssFiles) {
@@ -111,10 +111,10 @@ public class SmartSpritesProcessor extends AbstractProcessor implements SpritesP
                 throw iaex;
             }
         }
-        if(mojo.smartSpritesCssFileEncoding != null) {
+        if (mojo.smartSpritesCssFileEncoding != null) {
             cssFileEncoding = mojo.smartSpritesCssFileEncoding;
         }
-        SmartSpritesParameters params = new SmartSpritesParameters(mojo.webappSourceDir + mojo.cssDir,
+        return new SmartSpritesParameters(mojo.webappSourceDir + mojo.cssDir,
                 cssFiles,
                 mojo.webappSourceDir + mojo.cssDir,
                 mojo.webappTargetDir + mojo.cssDir,
@@ -123,7 +123,6 @@ public class SmartSpritesProcessor extends AbstractProcessor implements SpritesP
                 pngDepth,
                 mojo.smartSpritesPngIE6,
                 cssFileEncoding);
-        return params;
     }
 
 }

@@ -32,9 +32,9 @@ import java.util.zip.GZIPOutputStream;
 public abstract class AbstractProcessor {
 
 
-    protected WarpDriveMojo mojo;
+    protected final WarpDriveMojo mojo;
 
-    public AbstractProcessor(WarpDriveMojo mojo) {
+    protected AbstractProcessor(WarpDriveMojo mojo) {
         this.mojo = mojo;
 
     }
@@ -42,8 +42,9 @@ public abstract class AbstractProcessor {
     protected void writeFile(File originalFile, String data) throws IOException {
         String baseFilename = getBaseFileName(originalFile, mojo.webappSourceDir);
         String filenameWithVersion = FilenameUtils.insertVersion(baseFilename, mojo.getVersion());
+        String filenameWithVersionAndGzipExtension = FilenameUtils.insertVersionAndGzipExtension(baseFilename, mojo.getVersion());
         File output = new File(mojo.webappTargetDir + filenameWithVersion);
-        File gzippedOutput = new File(mojo.webappTargetDir + FilenameUtils.insertGzipExtension(filenameWithVersion));
+        File gzippedOutput = new File(mojo.webappTargetDir + filenameWithVersionAndGzipExtension);
         output.getParentFile().mkdirs();
         FileWriter writer = new FileWriter(output);
         OutputStreamWriter zipWriter = new OutputStreamWriter((new GZIPOutputStream(new FileOutputStream(gzippedOutput))));
@@ -87,58 +88,8 @@ public abstract class AbstractProcessor {
         }
     }
 
-    protected void writeBundles(String bundleDir, Map<String, String> bundleConfig) throws IOException {
-        if (bundleConfig == null || bundleConfig.size() == 0) {
-            return;
-        }
-        for (String bundleName : bundleConfig.keySet()) {
-            String filenameWithVersion = FilenameUtils.insertVersion(bundleDir + bundleName, mojo.getVersion());
-            File outputFile = new File(mojo.webappTargetDir + filenameWithVersion);
-            File gzippedOutputFile = new File(mojo.webappTargetDir + FilenameUtils.insertGzipExtension(filenameWithVersion));
-            FileOutputStream output = null;
-            GZIPOutputStream zippedOutput = null;
-            try {
-                output = new FileOutputStream(outputFile);
-                zippedOutput = new GZIPOutputStream(new FileOutputStream(gzippedOutputFile));
-                String files = bundleConfig.get(bundleName);
-                for (String file : files.split(",")) {
-                    FileInputStream fis = null;
-                    try {
-                        file = file.trim();
-                        String versionedFile = FilenameUtils.insertVersion(bundleDir + file, mojo.getVersion());
-                        File f = new File(mojo.webappTargetDir + versionedFile);
-                        fis = new FileInputStream(f);
-                        byte[] buf = new byte[1048576];
-                        int read = 0;
-                        while ((read = fis.read(buf)) != -1) {
-                            output.write(buf, 0, read);
-                            zippedOutput.write(buf, 0, read);
-                        }
-                    }
-                    finally {
-                        if (fis != null) {
-                            fis.close();
-                        }
-                    }
-                }
-            }
-            finally {
-                if (output != null) {
-                    output.close();
-                }
-                if (zippedOutput != null) {
-                    zippedOutput.close();
-                }
-            }
-
-        }
-
-    }
-
     private String getBaseFileName(File originalFile, String basedir) {
         String o = originalFile.getAbsolutePath();
         return o.substring(o.indexOf(basedir) + basedir.length());
     }
-
-
 }

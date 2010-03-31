@@ -37,7 +37,7 @@ import java.util.HashSet;
  */
 public class FileUploader {
 
-    private WarpDriveMojo mojo;
+    private final WarpDriveMojo mojo;
 
     public FileUploader(WarpDriveMojo mojo) {
         this.mojo = mojo;
@@ -45,7 +45,7 @@ public class FileUploader {
 
     public void uploadFiles() throws Exception {
 
-        if(mojo.uploadFiles == false) {
+        if(!mojo.uploadFiles) {
             return;
         }
 

@@ -42,7 +42,7 @@ public class YuiJsProcessor extends AbstractProcessor implements JsProcessor {
 
     public void processJS() throws IOException{
 
-        if (mojo.processJS == false || mojo.jsDir == null) {
+        if (!mojo.processJS || mojo.jsDir == null) {
             return;
         }
 
@@ -63,8 +63,7 @@ public class YuiJsProcessor extends AbstractProcessor implements JsProcessor {
                                    mojo.yuiJsPreserveAllSemicolons,
                                    mojo.yuiJsDisableOptimizations);
             writeFile(file, s.toString());
-        }
-        writeBundles(mojo.jsDir, mojo.jsBundles);
+        }        
     }
 
 }

@@ -26,9 +26,9 @@ import org.mozilla.javascript.EvaluatorException;
  * Time: 6:57:28 PM
  * To change this template use File | Settings | File Templates.
  */
-public class JsErrorReporter implements ErrorReporter {
+class JsErrorReporter implements ErrorReporter {
 
-    private WarpDriveMojo mojo;
+    private final WarpDriveMojo mojo;
 
     public JsErrorReporter(WarpDriveMojo mojo) {
         this.mojo = mojo;

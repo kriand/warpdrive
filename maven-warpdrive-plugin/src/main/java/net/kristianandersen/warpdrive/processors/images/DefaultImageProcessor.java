@@ -47,7 +47,7 @@ public class DefaultImageProcessor extends AbstractProcessor implements ImagePro
 
     public void processImages() throws IOException {
         
-        if (mojo.processImages == false || mojo.imageDir == null) {
+        if (!mojo.processImages || mojo.imageDir == null) {
             return;
         }
         File imageDir = new File(mojo.webappSourceDir, mojo.imageDir);

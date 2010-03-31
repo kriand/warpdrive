@@ -26,9 +26,9 @@ import org.apache.maven.plugin.logging.Log;
  * Time: 6:48:40 PM
  * To change this template use File | Settings | File Templates.
  */
-public class MavenLogMessageSink implements MessageSink {
+class MavenLogMessageSink implements MessageSink {
 
-    private Log log;
+    private final Log log;
 
     public MavenLogMessageSink (Log log) {
         this.log = log;

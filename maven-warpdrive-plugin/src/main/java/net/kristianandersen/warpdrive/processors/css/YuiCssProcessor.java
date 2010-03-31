@@ -38,7 +38,7 @@ import java.util.Arrays;
 public class YuiCssProcessor extends AbstractProcessor implements CssProcessor {
 
 
-    private CssUrlRewriter rewriter = new CssUrlRewriter();
+    private final CssUrlRewriter rewriter = new CssUrlRewriter();
 
     public YuiCssProcessor(WarpDriveMojo mojo) {
         super(mojo);
@@ -46,7 +46,7 @@ public class YuiCssProcessor extends AbstractProcessor implements CssProcessor {
 
     public void processCss() throws IOException {
 
-        if (mojo.processCSS == false || mojo.cssDir == null) {
+        if (!mojo.processCSS || mojo.cssDir == null) {
             return;
         }
 
@@ -55,8 +55,7 @@ public class YuiCssProcessor extends AbstractProcessor implements CssProcessor {
             return;
         }
         setupOutputDirs();
-        compress(cssDir);
-        writeBundles(mojo.cssDir, mojo.cssBundles);
+        compress(cssDir);        
     }
 
     private void setupOutputDirs() {

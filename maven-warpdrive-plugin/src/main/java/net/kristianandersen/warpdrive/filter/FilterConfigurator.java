@@ -40,7 +40,7 @@ public class FilterConfigurator {
 
     private final static String FILTER_NAME = WarpDriveFilter.class.getName();
 
-    private WarpDriveMojo mojo;
+    private final WarpDriveMojo mojo;
 
     public FilterConfigurator(WarpDriveMojo mojo) {
         this.mojo = mojo;
@@ -56,7 +56,7 @@ public class FilterConfigurator {
         output.output(doc, new FileOutputStream(webXml));
     }
 
-    private void configureWarpDriveFilter(Document doc) throws JDOMException, IOException {
+    private void configureWarpDriveFilter(Document doc) throws JDOMException {
 
         Element root = doc.getRootElement();
         removeFilterDefinitions(doc, root);

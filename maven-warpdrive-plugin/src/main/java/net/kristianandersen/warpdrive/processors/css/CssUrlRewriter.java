@@ -30,7 +30,7 @@ import java.io.IOException;
  * Time: 8:31:58 PM
  * To change this template use File | Settings | File Templates.
  */
-public class CssUrlRewriter {
+class CssUrlRewriter {
 
 
     public String rewrite(WarpDriveMojo mojo, File cssFile) throws IOException {

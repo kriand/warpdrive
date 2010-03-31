@@ -31,7 +31,7 @@ import java.util.*;
  */
 public class Runtime {
 
-    public final static String RUNTIME_SETTINGS_FILE = "/net/kristianandersen/warpdrive/settings.properties";
+    public final static String RUNTIME_CONFIG_FILE = "/net/kristianandersen/warpdrive/config.properties";
 
     public final static String GZIP_EXTENSION = ".gz";
 
@@ -52,13 +52,13 @@ public class Runtime {
     private static String imagesDir = null;
     private static String jsDir = null;
     private static String cssDir = null;
-    public static Map<String, List<String>> bundles = new HashMap<String, List<String>>();
+    public static final Map<String, List<String>> bundles = new HashMap<String, List<String>>();
 
     static {
         InputStream is = null;
         try {
             Properties props = new Properties();
-            is = Thread.currentThread().getContextClassLoader().getResourceAsStream(RUNTIME_SETTINGS_FILE);
+            is = Thread.currentThread().getContextClassLoader().getResourceAsStream(RUNTIME_CONFIG_FILE);
             props.load(is);
             configure(props);
         }
@@ -111,15 +111,15 @@ public class Runtime {
         return writeCssTag(href, rel, type, params, request);
     }
 
-    static void configure(Properties settings) {
-        enabled = Boolean.valueOf(settings.getProperty(ENABLED_KEY));
-        version = settings.getProperty(VERSION_KEY);
-        imagesDir = settings.getProperty(IMAGE_DIR_KEY);
-        jsDir = settings.getProperty(JS_DIR_KEY);
-        cssDir = settings.getProperty(CSS_DIR_KEY);
-        setupExternalHosts(settings);
+    static void configure(Properties config) {
+        enabled = Boolean.valueOf(config.getProperty(ENABLED_KEY));
+        version = config.getProperty(VERSION_KEY);
+        imagesDir = config.getProperty(IMAGE_DIR_KEY);
+        jsDir = config.getProperty(JS_DIR_KEY);
+        cssDir = config.getProperty(CSS_DIR_KEY);
+        setupExternalHosts(config);
         if (!enabled) {
-            setupBundles(settings);
+            setupBundles(config);
         }
     }
 
@@ -187,7 +187,7 @@ public class Runtime {
 
     }
 
-    static boolean isBundle(String name) {
+    private static boolean isBundle(String name) {
         return bundles.containsKey(name);
     }
 
@@ -223,19 +223,19 @@ public class Runtime {
         return gzipAccepted && !qZero;
     }
 
-    private static void setupBundles(Properties settings) {
-        Enumeration properties = settings.propertyNames();
+    private static void setupBundles(Properties config) {
+        Enumeration properties = config.propertyNames();
         while (properties.hasMoreElements()) {
             String property = (String) properties.nextElement();
             if (property.startsWith(BUNDLE_PREFIX_KEY)) {
-                bundles.put(property.substring(BUNDLE_PREFIX_KEY.length()), Arrays.asList(settings.getProperty(property).split(",")));
+                bundles.put(property.substring(BUNDLE_PREFIX_KEY.length()), Arrays.asList(config.getProperty(property).split(",")));
             }
         }
     }
 
-    private static void setupExternalHosts(Properties settings) {
-        if (settings.getProperty(EXTERNAL_HOSTS_KEY) != null) {
-            externalHosts = settings.getProperty(EXTERNAL_HOSTS_KEY).split(",");
+    private static void setupExternalHosts(Properties config) {
+        if (config.getProperty(EXTERNAL_HOSTS_KEY) != null) {
+            externalHosts = config.getProperty(EXTERNAL_HOSTS_KEY).split(",");
             for (int i = 0; i < externalHosts.length; i++) {
                 externalHosts[i] = externalHosts[i].trim();
                 if (externalHosts[i].endsWith("/")) {
