@@ -9,6 +9,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.zip.GZIPOutputStream;
+import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA.
@@ -23,15 +24,15 @@ public class BundleProcessor extends AbstractProcessor {
     }
 
     public void createBundles() throws IOException {
-        createBundlesInDir(mojo.cssDir);
-        createBundlesInDir(mojo.jsDir);
+        createBundlesInDir(mojo.cssBundles, mojo.cssDir);
+        createBundlesInDir(mojo.jsBundles, mojo.jsDir);
     }
 
-    private void createBundlesInDir(String bundleDir) throws IOException {
-        if (mojo.bundles == null || mojo.bundles.size() == 0) {
+    private void createBundlesInDir(Map<String, String> bundle, String bundleDir) throws IOException {
+        if (bundle == null || bundle.size() == 0) {
             return;
         }
-        for (String bundleName : mojo.bundles.keySet()) {
+        for (String bundleName : bundle.keySet()) {
             String filenameWithVersion = FilenameUtils.insertVersion(bundleDir + bundleName, mojo.getVersion());
             String filenameWithVersionAndGzipExtension = FilenameUtils.insertVersionAndGzipExtension(bundleDir + bundleName, mojo.getVersion());
             File outputFile = new File(mojo.webappTargetDir + filenameWithVersion);
@@ -41,7 +42,7 @@ public class BundleProcessor extends AbstractProcessor {
             try {
                 output = new FileOutputStream(outputFile);
                 zippedOutput = new GZIPOutputStream(new FileOutputStream(gzippedOutputFile));
-                String files = mojo.bundles.get(bundleName);
+                String files = bundle.get(bundleName);
                 for (String file : files.split(",")) {
                     FileInputStream fis = null;
                     try {

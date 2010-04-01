@@ -26,7 +26,7 @@ import net.kristianandersen.warpdrive.processors.js.YuiJsProcessor;
 import net.kristianandersen.warpdrive.processors.sprites.SmartSpritesProcessor;
 import net.kristianandersen.warpdrive.processors.sprites.SpritesProcessor;
 import net.kristianandersen.warpdrive.processors.bundles.BundleProcessor;
-import net.kristianandersen.warpdrive.upload.FileUploader;
+import net.kristianandersen.warpdrive.processors.upload.ExternalUploadProcessor;
 import net.kristianandersen.warpdrive.versioning.CurrentTimeMillisStrategy;
 import net.kristianandersen.warpdrive.versioning.VersioningStrategy;
 import org.apache.maven.plugin.AbstractMojo;
@@ -109,7 +109,12 @@ public class WarpDriveMojo extends AbstractMojo {
     /**
      * @parameter
      */
-    public Map<String, String> bundles;
+    public Map<String, String> jsBundles;
+
+    /**
+     * @parameter
+     */
+    public Map<String, String> cssBundles;
 
     /**
      * @parameter default-value=true
@@ -224,7 +229,7 @@ public class WarpDriveMojo extends AbstractMojo {
 
         FilterConfigurator filterConfigurator = new FilterConfigurator(this);
 
-        FileUploader externalUploader = new FileUploader(this);
+        ExternalUploadProcessor externalUploader = new ExternalUploadProcessor(this);
 
         try {
             assertWarModule();
@@ -274,7 +279,8 @@ public class WarpDriveMojo extends AbstractMojo {
             writeStringValue(Runtime.JS_DIR_KEY, jsDir, writer);
             writeStringValue(Runtime.CSS_DIR_KEY, cssDir, writer);
             writeExternalHosts(writer);
-            writeBundleConfig(writer);
+            writeBundleConfig(cssBundles, writer);
+            writeBundleConfig(jsBundles, writer);
 
         }
         finally {
@@ -312,15 +318,15 @@ public class WarpDriveMojo extends AbstractMojo {
         writer.write('\n');
     }
 
-    private void writeBundleConfig(Writer writer) throws IOException {
-        if (bundles == null || bundles.isEmpty()) {
+    private void writeBundleConfig(Map<String, String> bundle, Writer writer) throws IOException {
+        if (bundle == null || bundle.isEmpty()) {
             return;
         }
-        for (String key : bundles.keySet()) {
+        for (String key : bundle.keySet()) {
             writer.write(Runtime.BUNDLE_PREFIX_KEY);
             writer.write(key);
             writer.write('=');
-            String[] bundleEntries = bundles.get(key).split(",");
+            String[] bundleEntries = bundle.get(key).split(",");
             for (int i = 0; i < bundleEntries.length; i++) {
                 writer.write(bundleEntries[i].trim());
                 if (i < bundleEntries.length - 1) {

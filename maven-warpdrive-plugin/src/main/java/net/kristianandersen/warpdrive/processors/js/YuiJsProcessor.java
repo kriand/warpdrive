@@ -30,7 +30,6 @@ import java.util.Collection;
  * User: kriand
  * Date: Mar 2, 2010
  * Time: 7:46:28 PM
- * To change this template use File | Settings | File Templates.
  */
 public class YuiJsProcessor extends AbstractProcessor implements JsProcessor {
 
