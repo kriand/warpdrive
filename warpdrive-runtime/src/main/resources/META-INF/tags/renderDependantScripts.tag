@@ -1,1 +1,1 @@
-<%@ tag import="net.kristianandersen.warpdrive.Runtime" body-content="empty" %><%=Runtime.getScriptBuffer(request)%>
+<%@ taglib prefix="wd" uri="http://kristianandersen.net/warpdrive/taglib" %><%@ tag body-content="empty" %>${wd:renderBufferedScripts(pageContext.request)}

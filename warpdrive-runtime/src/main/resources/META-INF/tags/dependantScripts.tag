@@ -1,1 +1,1 @@
-<%@ tag import="net.kristianandersen.warpdrive.Runtime" body-content="scriptless" %><jsp:doBody scope="request" var="warpdrive_scriptbuffer" /><%Runtime.getScriptBuffer(request).append(request.getAttribute("warpdrive_scriptbuffer").toString().trim()).append('\n');%>
+<%@ taglib prefix="wd" uri="http://kristianandersen.net/warpdrive/taglib" %><%@ tag import="net.kristianandersen.warpdrive.Runtime" body-content="scriptless" %><jsp:doBody scope="request" var="<%=Runtime.BUFFERED_SCRIPTS_KEY%>" />${wd:bufferScripts(pageContext.request)}

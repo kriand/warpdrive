@@ -39,6 +39,7 @@ public class Runtime {
     public final static String VERSION_KEY = "version";
     public final static String EXTERNAL_HOSTS_KEY = "external.hosts";
     public final static String SCRIPT_BUFFER_KEY = "net.kristianandersen.warpdrive.ScriptBuffer";
+    public final static String BUFFERED_SCRIPTS_KEY = "net.kristianandersen.warpdrive.scripts";
     public final static String IMAGE_DIR_KEY = "image.dir";
     public final static String JS_DIR_KEY = "js.dir";
     public final static String CSS_DIR_KEY = "css.dir";
@@ -76,13 +77,13 @@ public class Runtime {
         }
     }
 
-    public static StringBuilder getScriptBuffer(HttpServletRequest request) {
-        StringBuilder scriptBuffer = (StringBuilder) request.getAttribute(SCRIPT_BUFFER_KEY);
-        if (scriptBuffer == null) {
-            scriptBuffer = new StringBuilder();
-            request.setAttribute(SCRIPT_BUFFER_KEY, scriptBuffer);
-        }
-        return scriptBuffer;
+    public static void bufferScripts(HttpServletRequest request) {
+        StringBuilder scriptBuffer = getScriptBuffer(request);
+        scriptBuffer.append(request.getAttribute(BUFFERED_SCRIPTS_KEY).toString().trim()).append('\n');
+    }
+
+    public static String renderBufferedScripts(HttpServletRequest request) {
+        return getScriptBuffer(request).toString();
     }
 
     public static String getScriptTag(String src, String type, Map<String, String> params, HttpServletRequest request) {
@@ -123,6 +124,14 @@ public class Runtime {
         }
     }
 
+    private static StringBuilder getScriptBuffer(HttpServletRequest request) {
+        StringBuilder scriptBuffer = (StringBuilder) request.getAttribute(SCRIPT_BUFFER_KEY);
+        if (scriptBuffer == null) {
+            scriptBuffer = new StringBuilder();
+            request.setAttribute(SCRIPT_BUFFER_KEY, scriptBuffer);
+        }
+        return scriptBuffer;
+    }
 
     private static String writeCssTag(String href, String rel, String type, Map<String, String> params, HttpServletRequest request) {
         StringBuilder buffer = new StringBuilder();
@@ -167,27 +176,26 @@ public class Runtime {
         return buffer.toString();
     }
 
-    private static void appendLink(String src, StringBuilder buffer, String topLevelDir, HttpServletRequest request, boolean isTextResource) {
+    private static void appendLink(String filename, StringBuilder buffer, String topLevelDir, HttpServletRequest request, boolean isTextResource) {
         if (!enabled) {
-            buffer.append(request.getContextPath()).append(topLevelDir).append(src);
+            buffer.append(request.getContextPath()).append(topLevelDir).append(filename);
             return;
         }
         if (externalHosts != null) {
-            buffer.append(externalHosts[Math.abs(src.hashCode()) % externalHosts.length]);
+            buffer.append(externalHosts[Math.abs(filename.hashCode()) % externalHosts.length]);
         }
         buffer.append(request.getContextPath()).append(topLevelDir);
         String versionedSrc = null;
         if (isTextResource && isGzipAccepted(request)) {
-            versionedSrc = FilenameUtils.insertVersionAndGzipExtension(src, version);
-        }
-        else {
-            versionedSrc = FilenameUtils.insertVersion(src, version);
+            versionedSrc = FilenameUtils.insertVersionAndGzipExtension(filename, version);
+        } else {
+            versionedSrc = FilenameUtils.insertVersion(filename, version);
         }
         buffer.append(versionedSrc);
 
     }
 
-    private static boolean isBundle(String name) {
+    static boolean isBundle(String name) {
         return bundles.containsKey(name);
     }
 

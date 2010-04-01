@@ -42,4 +42,19 @@
         <function-signature>java.lang.String getStylesheetTag(java.lang.String, java.lang.String, java.lang.String, java.util.Map, javax.servlet.http.HttpServletRequest)
         </function-signature>
     </function>
+    <function>
+        <name>bufferScripts</name>
+        <function-class>net.kristianandersen.warpdrive.Runtime</function-class>
+        <function-signature>void bufferScripts(javax.servlet.http.HttpServletRequest)
+        </function-signature>
+    </function>
+    <function>
+        <name>renderBufferedScripts</name>
+        <function-class>net.kristianandersen.warpdrive.Runtime</function-class>
+        <function-signature>java.lang.String renderBufferedScripts(javax.servlet.http.HttpServletRequest) 
+        </function-signature>
+    </function>
+
+
+
 </taglib>
