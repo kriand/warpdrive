@@ -39,8 +39,7 @@ import java.util.*;
  * Created by IntelliJ IDEA.
  * User: kriand
  * Date: Mar 23, 2010
- * Time: 10:45:19 PM
- * To change this template use File | Settings | File Templates.
+ * Time: 10:45:19 PM 
  */
 public class S3Uploader {
 
@@ -52,24 +51,30 @@ public class S3Uploader {
 
     public void uploadFiles(Set<File> files) throws Exception {
 
-        Properties credentials = new Properties();
-        credentials.load(new FileInputStream(mojo.s3Credentials));
+        Properties settings = new Properties();
+        settings.load(new FileInputStream(mojo.s3SettingsFile));
 
-        String accessKey = credentials.getProperty("accessKey");
-        String secretKey = credentials.getProperty("secretKey");
+        String bucket = settings.getProperty("bucket"); 
+        String accessKey = settings.getProperty("accessKey");
+        String secretKey = settings.getProperty("secretKey");
+
+        if (bucket == null) {
+            mojo.getLog().error("Bucket could not be found in settings file");
+            return;
+        }
 
         if (accessKey == null) {
-            mojo.getLog().error("AccessKey could not be found in credentials file");
+            mojo.getLog().error("AccessKey could not be found in settings file");
             return;
         }
 
         if (secretKey == null) {
-            mojo.getLog().error("SecretKey could not be found in credentials file");
+            mojo.getLog().error("SecretKey could not be found in settings file");
             return;
         }
 
         S3Service s3Service = createS3Service(accessKey, secretKey);
-        S3Bucket s3Bucket = s3Service.getBucket(mojo.s3Bucket);
+        S3Bucket s3Bucket = s3Service.getBucket(bucket);
         grantReadAccessForAllUsersForBucket(s3Service, s3Bucket);
         S3Object[] s3Objects = createS3Objects(s3Bucket, files);
         S3ServiceSimpleMulti multithreadedService = createMultithreadedS3Service(s3Service);

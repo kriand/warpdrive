@@ -31,8 +31,7 @@ import java.util.HashSet;
  * Created by IntelliJ IDEA.
  * User: kriand
  * Date: Mar 23, 2010
- * Time: 10:44:15 PM
- * To change this template use File | Settings | File Templates.
+ * Time: 10:44:15 PM 
  */
 public class ExternalUploadProcessor {
 
@@ -50,7 +49,7 @@ public class ExternalUploadProcessor {
 
         Set<File> files = getFilesToUpload();
         
-        if(mojo.s3Bucket != null && mojo.s3Credentials != null) {
+        if(mojo.s3SettingsFile != null) {
 
             S3Uploader s3Uploader = new S3Uploader(mojo);
             s3Uploader.uploadFiles(files);

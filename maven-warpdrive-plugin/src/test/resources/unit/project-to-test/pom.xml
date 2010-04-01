@@ -54,8 +54,7 @@
                             </cssBundles>
                             <configureFilter>true</configureFilter>
                             <uploadFiles>false</uploadFiles>
-                            <s3Bucket>warpdrive-testbucket</s3Bucket>
-                            <s3Credentials>/Users/kriand/.grails/awscreds.properties</s3Credentials>
+                            <s3SettingsFile>s3settings.properties</s3SettingsFile>
                         </configuration>
                     </execution>
                 </executions>

@@ -204,12 +204,7 @@ public class WarpDriveMojo extends AbstractMojo {
     /**
      * @parameter
      */
-    public String s3Bucket;
-
-    /**
-     * @parameter
-     */
-    public File s3Credentials;
+    public File s3SettingsFile;
 
     private String version;
 

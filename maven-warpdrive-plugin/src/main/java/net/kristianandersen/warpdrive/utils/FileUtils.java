@@ -19,6 +19,8 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.util.Collection;
 import java.util.Vector;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Created by IntelliJ IDEA.
@@ -29,11 +31,8 @@ import java.util.Vector;
  */
 public class FileUtils {
 
-    public static Collection<File> listFiles(
-            File directory,
-            FilenameFilter filter,
-            boolean recurse) {
-        Vector<File> files = new Vector<File>();
+    public static Collection<File> listFiles(File directory, FilenameFilter filter, boolean recurse) {
+        List<File> files = new ArrayList<File>();
         File[] entries = directory.listFiles();
         for (File entry : entries) {
             if (filter == null || filter.accept(directory, entry.getName())) {
