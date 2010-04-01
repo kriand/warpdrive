@@ -46,7 +46,8 @@ public class WarpDriveFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest)request;
         HttpServletResponse resp = (HttpServletResponse)response;
         String oneYearFromNow = getOneYearFromNow();
-        if(req.getRequestURI().endsWith(Runtime.GZIP_EXTENSION)) {
+        //TODO Improve:
+        if(req.getRequestURI().substring(0, req.getRequestURI().lastIndexOf('.')).endsWith(Runtime.GZIP_EXTENSION)) {
             resp.setHeader("Content-Encoding", "gzip");
         }
         resp.setHeader("Expires", oneYearFromNow);
