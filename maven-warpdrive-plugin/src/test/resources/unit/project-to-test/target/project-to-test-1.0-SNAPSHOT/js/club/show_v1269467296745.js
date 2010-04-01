@@ -1,1 +1,0 @@
-$(document).ready(function(){var A=new GPoint(longitude,latitude);var B=new GMap(document.getElementById("map"));B.addControl(new GOverviewMapControl());B.addControl(new GSmallMapControl());B.addOverlay(new GMarker(A));B.centerAndZoom(A,3)});

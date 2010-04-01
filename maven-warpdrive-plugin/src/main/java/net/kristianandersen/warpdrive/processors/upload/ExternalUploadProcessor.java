@@ -13,17 +13,16 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
-package net.kristianandersen.warpdrive.upload;
+package net.kristianandersen.warpdrive.processors.upload;
 
 import net.kristianandersen.warpdrive.mojo.WarpDriveMojo;
-import net.kristianandersen.warpdrive.upload.s3.S3Uploader;
+import net.kristianandersen.warpdrive.processors.upload.s3.S3Uploader;
 import net.kristianandersen.warpdrive.utils.FileUtils;
 import net.kristianandersen.warpdrive.processors.css.CssFilenameFilter;
 import net.kristianandersen.warpdrive.processors.js.JsFilenameFilter;
 import net.kristianandersen.warpdrive.processors.images.ImageFilenameFilter;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Set;
 import java.util.Collection;
 import java.util.HashSet;
@@ -35,11 +34,11 @@ import java.util.HashSet;
  * Time: 10:44:15 PM
  * To change this template use File | Settings | File Templates.
  */
-public class FileUploader {
+public class ExternalUploadProcessor {
 
     private final WarpDriveMojo mojo;
 
-    public FileUploader(WarpDriveMojo mojo) {
+    public ExternalUploadProcessor(WarpDriveMojo mojo) {
         this.mojo = mojo;
     }
 

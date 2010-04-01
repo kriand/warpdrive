@@ -13,7 +13,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
-package net.kristianandersen.warpdrive.upload.s3;
+package net.kristianandersen.warpdrive.processors.upload.s3;
 
 import net.kristianandersen.warpdrive.mojo.WarpDriveMojo;
 import org.jets3t.service.S3Service;
