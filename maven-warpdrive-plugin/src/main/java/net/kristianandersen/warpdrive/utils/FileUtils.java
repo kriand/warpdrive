@@ -27,19 +27,18 @@ import java.util.ArrayList;
  * User: kriand
  * Date: Mar 2, 2010
  * Time: 8:33:44 PM
- * To change this template use File | Settings | File Templates.
  */
 public class FileUtils {
 
-    public static Collection<File> listFiles(File directory, FilenameFilter filter, boolean recurse) {
+    public static Collection<File> listFiles(File directory, FilenameFilter filter, boolean recursive) {
         List<File> files = new ArrayList<File>();
         File[] entries = directory.listFiles();
         for (File entry : entries) {
             if (filter == null || filter.accept(directory, entry.getName())) {
                 files.add(entry);
             }
-            if (recurse && entry.isDirectory()) {
-                files.addAll(listFiles(entry, filter, recurse));
+            if (recursive && entry.isDirectory()) {
+                files.addAll(listFiles(entry, filter, recursive));
             }
         }
         return files;
