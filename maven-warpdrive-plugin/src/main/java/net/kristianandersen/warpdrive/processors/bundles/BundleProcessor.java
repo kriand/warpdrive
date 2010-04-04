@@ -1,3 +1,18 @@
+/*
+   Copyright 2010 Kristian Andersen
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ */
 package net.kristianandersen.warpdrive.processors.bundles;
 
 import net.kristianandersen.warpdrive.mojo.WarpDriveMojo;
@@ -33,12 +48,16 @@ public class BundleProcessor extends AbstractProcessor {
             return;
         }
         for (String bundleName : bundle.keySet()) {
+
             String filenameWithVersion = FilenameUtils.insertVersion(bundleDir + bundleName, mojo.getVersion());
             String filenameWithVersionAndGzipExtension = FilenameUtils.insertVersionAndGzipExtension(bundleDir + bundleName, mojo.getVersion());
+
             File outputFile = new File(mojo.webappTargetDir + filenameWithVersion);
             File gzippedOutputFile = new File(mojo.webappTargetDir + filenameWithVersionAndGzipExtension);
+
             FileOutputStream output = null;
             GZIPOutputStream zippedOutput = null;
+
             try {
                 output = new FileOutputStream(outputFile);
                 zippedOutput = new GZIPOutputStream(new FileOutputStream(gzippedOutputFile));

@@ -26,8 +26,7 @@ import java.util.*;
  * Created by IntelliJ IDEA.
  * User: kriand
  * Date: Mar 2, 2010
- * Time: 10:54:25 PM
- * To change this template use File | Settings | File Templates.
+ * Time: 10:54:25 PM 
  */
 public class Runtime {
 
@@ -38,8 +37,7 @@ public class Runtime {
     public final static String ENABLED_KEY = "enabled";
     public final static String VERSION_KEY = "version";
     public final static String EXTERNAL_HOSTS_KEY = "external.hosts";
-    public final static String SCRIPT_BUFFER_KEY = "net.kristianandersen.warpdrive.ScriptBuffer";
-    public final static String BUFFERED_SCRIPTS_KEY = "net.kristianandersen.warpdrive.scripts";
+    public final static String SCRIPT_BUFFER_KEY = "net.kristianandersen.warpdrive.ScriptBuffer";    
     public final static String IMAGE_DIR_KEY = "image.dir";
     public final static String JS_DIR_KEY = "js.dir";
     public final static String CSS_DIR_KEY = "css.dir";
@@ -64,7 +62,8 @@ public class Runtime {
             configure(props);
         }
         catch (Exception ex) {
-            //TODO Log
+            System.err.println("Unable to initialize WarpDrive, disabling!");
+            ex.printStackTrace();
             enabled = false;
         }
         finally {
@@ -77,15 +76,34 @@ public class Runtime {
         }
     }
 
-    public static void bufferScripts(HttpServletRequest request) {
+    /**
+     *
+     *
+     * @param request
+     * @param scriptsToBuffer
+     */
+    public static void bufferScripts(HttpServletRequest request, String scriptsToBuffer) {
         StringBuilder scriptBuffer = getScriptBuffer(request);
-        scriptBuffer.append(request.getAttribute(BUFFERED_SCRIPTS_KEY).toString().trim()).append('\n');
+        scriptBuffer.append(scriptsToBuffer.trim());
     }
 
+    /**
+     *
+     * @param request
+     * @return
+     */
     public static String renderBufferedScripts(HttpServletRequest request) {
         return getScriptBuffer(request).toString();
     }
 
+    /**
+     *
+     * @param src
+     * @param type
+     * @param params
+     * @param request
+     * @return
+     */
     public static String getScriptTag(String src, String type, Map<String, String> params, HttpServletRequest request) {
         if (!enabled && isBundle(src)) {
             return unbundleScriptBundles(src, type, params, request);
@@ -93,6 +111,13 @@ public class Runtime {
         return writeScriptTag(src, type, params, request);
     }
 
+    /**
+     *
+     * @param src
+     * @param params
+     * @param request
+     * @return
+     */
     public static String getImageTag(String src, Map<String, String> params, HttpServletRequest request) {
         StringBuilder buffer = new StringBuilder();
         buffer.append("<img src=\"");
@@ -101,10 +126,19 @@ public class Runtime {
         for (String key : params.keySet()) {
             buffer.append(key).append("=\"").append(params.get(key)).append("\" ");
         }
-        buffer.append("/>\n");
+        buffer.append("/>");
         return buffer.toString();
     }
 
+    /**
+     *
+     * @param href
+     * @param rel
+     * @param type
+     * @param params
+     * @param request
+     * @return
+     */
     public static String getStylesheetTag(String href, String rel, String type, Map<String, String> params, HttpServletRequest request) {
         if (!enabled && isBundle(href)) {
             return unbundleCssBundles(href, rel, type, params, request);
@@ -112,6 +146,11 @@ public class Runtime {
         return writeCssTag(href, rel, type, params, request);
     }
 
+
+    /**
+     *
+     * @param config
+     */
     static void configure(Properties config) {
         enabled = Boolean.valueOf(config.getProperty(ENABLED_KEY));
         version = config.getProperty(VERSION_KEY);
@@ -124,6 +163,11 @@ public class Runtime {
         }
     }
 
+    /**
+     *
+     * @param request
+     * @return
+     */
     private static StringBuilder getScriptBuffer(HttpServletRequest request) {
         StringBuilder scriptBuffer = (StringBuilder) request.getAttribute(SCRIPT_BUFFER_KEY);
         if (scriptBuffer == null) {
@@ -133,6 +177,15 @@ public class Runtime {
         return scriptBuffer;
     }
 
+    /**
+     *
+     * @param href
+     * @param rel
+     * @param type
+     * @param params
+     * @param request
+     * @return
+     */
     private static String writeCssTag(String href, String rel, String type, Map<String, String> params, HttpServletRequest request) {
         StringBuilder buffer = new StringBuilder();
         buffer.append("<link href=\"");
@@ -153,10 +206,18 @@ public class Runtime {
         for (String key : params.keySet()) {
             buffer.append(key).append("=\"").append(params.get(key)).append("\" ");
         }
-        buffer.append("/>\n");
+        buffer.append("/>");
         return buffer.toString();
     }
 
+    /**
+     *
+     * @param src
+     * @param type
+     * @param params
+     * @param request
+     * @return
+     */
     private static String writeScriptTag(String src, String type, Map<String, String> params, HttpServletRequest request) {
         StringBuilder buffer = new StringBuilder();
         buffer.append("<script src=\"");
@@ -172,10 +233,18 @@ public class Runtime {
         for (String key : params.keySet()) {
             buffer.append(key).append("=\"").append(params.get(key)).append("\" ");
         }
-        buffer.append("></script>\n");
+        buffer.append("></script>");
         return buffer.toString();
     }
 
+    /**
+     *
+     * @param filename
+     * @param buffer
+     * @param topLevelDir
+     * @param request
+     * @param isTextResource
+     */
     private static void appendLink(String filename, StringBuilder buffer, String topLevelDir, HttpServletRequest request, boolean isTextResource) {
         if (!enabled) {
             buffer.append(request.getContextPath()).append(topLevelDir).append(filename);
@@ -195,10 +264,23 @@ public class Runtime {
 
     }
 
+    /**
+     *
+     * @param name
+     * @return
+     */
     static boolean isBundle(String name) {
         return bundles.containsKey(name);
     }
 
+    /**
+     *
+     * @param src
+     * @param type
+     * @param params
+     * @param request
+     * @return
+     */
     private static String unbundleScriptBundles(String src, String type, Map<String, String> params, HttpServletRequest request) {
         StringBuilder builder = new StringBuilder();
         for (String script : bundles.get(src)) {
@@ -207,6 +289,15 @@ public class Runtime {
         return builder.toString();
     }
 
+    /**
+     *
+     * @param href
+     * @param rel
+     * @param type
+     * @param params
+     * @param request
+     * @return
+     */
     private static String unbundleCssBundles(String href, String rel, String type, Map<String, String> params, HttpServletRequest request) {
         StringBuilder builder = new StringBuilder();
         for (String stylesheet : bundles.get(href)) {
@@ -215,6 +306,11 @@ public class Runtime {
         return builder.toString();
     }
 
+    /**
+     *
+     * @param request
+     * @return
+     */
     private static boolean isGzipAccepted(HttpServletRequest request) {
         Enumeration acceptEncoding = request.getHeaders("Accept-Encoding");
         boolean gzipAccepted = false;
@@ -231,6 +327,10 @@ public class Runtime {
         return gzipAccepted && !qZero;
     }
 
+    /**
+     *
+     * @param config
+     */
     private static void setupBundles(Properties config) {
         Enumeration properties = config.propertyNames();
         while (properties.hasMoreElements()) {
@@ -241,6 +341,10 @@ public class Runtime {
         }
     }
 
+    /**
+     * 
+     * @param config
+     */
     private static void setupExternalHosts(Properties config) {
         if (config.getProperty(EXTERNAL_HOSTS_KEY) != null) {
             externalHosts = config.getProperty(EXTERNAL_HOSTS_KEY).split(",");
