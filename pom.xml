@@ -8,7 +8,7 @@
     <artifactId>warpdrive</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
-    <name>WarpDrive</name>
+    <name>WarpDrive Parent Project</name>
     <properties>
         <maven.version>2.2.1</maven.version>
         <servlet.api.version>2.5</servlet.api.version>
@@ -20,6 +20,7 @@
         <jaxen.version>1.1.1</jaxen.version>
         <maven-plugin-testing-harness.version>1.2</maven-plugin-testing-harness.version>
         <junit.version>4.8.1</junit.version>
+        <mockito.version>1.8.4</mockito.version>        
     </properties>
     <modules>
         <module>maven-warpdrive-plugin</module>
@@ -140,6 +141,11 @@
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
                 <version>${junit.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-all</artifactId>
+                <version>${mockito.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
