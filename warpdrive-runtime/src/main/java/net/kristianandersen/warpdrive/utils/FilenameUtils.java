@@ -31,7 +31,7 @@ public class FilenameUtils {
         StringBuilder result = new StringBuilder();
         int ext = findExtension(file);
         result.append(file.substring(0, ext))
-              .append("__v")
+              .append(Runtime.VERSION_PREFIX)
               .append(version)
               .append(file.substring(ext));
         return result.toString();
@@ -44,7 +44,7 @@ public class FilenameUtils {
         StringBuilder result = new StringBuilder();
         int ext = findExtension(file);
         result.append(file.substring(0, ext))
-              .append("__v")
+              .append(Runtime.VERSION_PREFIX)
               .append(version)
               .append(Runtime.GZIP_EXTENSION)
               .append(file.substring(ext));

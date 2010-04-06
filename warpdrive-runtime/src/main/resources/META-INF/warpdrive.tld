@@ -1,3 +1,4 @@
+
 <taglib xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd" version="2.0">
     <description>WarpDrive TagLib</description>
@@ -49,12 +50,9 @@
         </function-signature>
     </function>
     <function>
-        <name>renderBufferedScripts</name>
+        <name>getBufferedScripts</name>
         <function-class>net.kristianandersen.warpdrive.Runtime</function-class>
-        <function-signature>java.lang.String renderBufferedScripts(javax.servlet.http.HttpServletRequest) 
+        <function-signature>java.lang.String getBufferedScripts(javax.servlet.http.HttpServletRequest)
         </function-signature>
     </function>
-
-
-
 </taglib>

@@ -46,8 +46,8 @@ public class WarpDriveFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest)request;
         HttpServletResponse resp = (HttpServletResponse)response;
         String oneYearFromNow = getOneYearFromNow();
-        //TODO Improve:
-        if(req.getRequestURI().substring(0, req.getRequestURI().lastIndexOf('.')).endsWith(Runtime.GZIP_EXTENSION)) {
+        //TODO Improve this:
+        if(req.getRequestURI().endsWith(".gz.css") || req.getRequestURI().endsWith(".gz.js") ) {
             resp.setHeader("Content-Encoding", "gzip");
         }
         resp.setHeader("Expires", oneYearFromNow);
@@ -56,9 +56,9 @@ public class WarpDriveFilter implements Filter {
     }
 
     private String getOneYearFromNow() {
+        SimpleDateFormat sdf = new SimpleDateFormat(EXPIRES_HEADER_FORMAT);
         Calendar cal = GregorianCalendar.getInstance();
         cal.add(1, Calendar.YEAR);
-        SimpleDateFormat sdf = new SimpleDateFormat(EXPIRES_HEADER_FORMAT);
         return sdf.format(cal.getTime());
     }
 

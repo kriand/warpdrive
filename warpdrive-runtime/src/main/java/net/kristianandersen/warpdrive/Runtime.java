@@ -26,7 +26,7 @@ import java.util.*;
  * Created by IntelliJ IDEA.
  * User: kriand
  * Date: Mar 2, 2010
- * Time: 10:54:25 PM 
+ * Time: 10:54:25 PM
  */
 public class Runtime {
 
@@ -34,14 +34,16 @@ public class Runtime {
 
     public final static String GZIP_EXTENSION = ".gz";
 
+    public final static String VERSION_PREFIX = "__v";
+
     public final static String ENABLED_KEY = "enabled";
     public final static String VERSION_KEY = "version";
     public final static String EXTERNAL_HOSTS_KEY = "external.hosts";
-    public final static String SCRIPT_BUFFER_KEY = "net.kristianandersen.warpdrive.ScriptBuffer";    
+    public final static String SCRIPT_BUFFER_KEY = "net.kristianandersen.warpdrive.ScriptBuffer";
     public final static String IMAGE_DIR_KEY = "image.dir";
     public final static String JS_DIR_KEY = "js.dir";
     public final static String CSS_DIR_KEY = "css.dir";
-    public final static String BUNDLE_PREFIX_KEY = "css.bundle.";
+    public final static String BUNDLE_PREFIX_KEY = "bundle.";
 
     private static Properties settings = new Properties();
 
@@ -58,13 +60,16 @@ public class Runtime {
         try {
             Properties props = new Properties();
             is = Thread.currentThread().getContextClassLoader().getResourceAsStream(RUNTIME_CONFIG_FILE);
-            props.load(is);
-            configure(props);
+            if (is != null) {
+                props.load(is);
+                configure(props);
+            } else {
+                System.err.println("No config found, WarpDrive must be manually configured");
+                enabled = false;
+            }
         }
         catch (Exception ex) {
-            System.err.println("Unable to initialize WarpDrive, disabling!");
-            ex.printStackTrace();
-            enabled = false;
+            throw new IllegalStateException("Caught exception while reading config, disabling WarpDrive", ex);            
         }
         finally {
             if (is != null) {
@@ -77,8 +82,6 @@ public class Runtime {
     }
 
     /**
-     *
-     *
      * @param request
      * @param scriptsToBuffer
      */
@@ -88,16 +91,14 @@ public class Runtime {
     }
 
     /**
-     *
      * @param request
      * @return
      */
-    public static String renderBufferedScripts(HttpServletRequest request) {
+    public static String getBufferedScripts(HttpServletRequest request) {
         return getScriptBuffer(request).toString();
     }
 
     /**
-     *
      * @param src
      * @param type
      * @param params
@@ -112,7 +113,6 @@ public class Runtime {
     }
 
     /**
-     *
      * @param src
      * @param params
      * @param request
@@ -131,7 +131,6 @@ public class Runtime {
     }
 
     /**
-     *
      * @param href
      * @param rel
      * @param type
@@ -148,7 +147,6 @@ public class Runtime {
 
 
     /**
-     *
      * @param config
      */
     static void configure(Properties config) {
@@ -164,7 +162,6 @@ public class Runtime {
     }
 
     /**
-     *
      * @param request
      * @return
      */
@@ -178,7 +175,6 @@ public class Runtime {
     }
 
     /**
-     *
      * @param href
      * @param rel
      * @param type
@@ -191,27 +187,28 @@ public class Runtime {
         buffer.append("<link href=\"");
         appendLink(href, buffer, cssDir, request, true);
         buffer.append("\" rel=\"");
-        if ("".equals(rel)) {
+        if (rel == null || "".equals(rel)) {
             buffer.append("stylesheet");
         } else {
             buffer.append(rel);
         }
         buffer.append("\" type=\"");
-        if ("".equals(type)) {
+        if (type == null || "".equals(type)) {
             buffer.append("text/css");
         } else {
             buffer.append(type);
         }
         buffer.append("\" ");
-        for (String key : params.keySet()) {
-            buffer.append(key).append("=\"").append(params.get(key)).append("\" ");
+        if(params != null) {
+            for (String key : params.keySet()) {
+                buffer.append(key).append("=\"").append(params.get(key)).append("\" ");
+            }
         }
         buffer.append("/>");
         return buffer.toString();
     }
 
     /**
-     *
      * @param src
      * @param type
      * @param params
@@ -224,21 +221,22 @@ public class Runtime {
         appendLink(src, buffer, jsDir, request, true);
 
         buffer.append("\" type=\"");
-        if ("".equals(type)) {
+        if (type == null || "".equals(type)) {
             buffer.append("text/javascript");
         } else {
             buffer.append(type);
         }
         buffer.append("\" ");
-        for (String key : params.keySet()) {
-            buffer.append(key).append("=\"").append(params.get(key)).append("\" ");
+        if (params != null) {
+            for (String key : params.keySet()) {
+                buffer.append(key).append("=\"").append(params.get(key)).append("\" ");
+            }
         }
         buffer.append("></script>");
         return buffer.toString();
     }
 
     /**
-     *
      * @param filename
      * @param buffer
      * @param topLevelDir
@@ -265,16 +263,14 @@ public class Runtime {
     }
 
     /**
-     *
      * @param name
      * @return
      */
-    static boolean isBundle(String name) {
+    private static boolean isBundle(String name) {
         return bundles.containsKey(name);
     }
 
     /**
-     *
      * @param src
      * @param type
      * @param params
@@ -290,7 +286,6 @@ public class Runtime {
     }
 
     /**
-     *
      * @param href
      * @param rel
      * @param type
@@ -307,7 +302,6 @@ public class Runtime {
     }
 
     /**
-     *
      * @param request
      * @return
      */
@@ -328,7 +322,6 @@ public class Runtime {
     }
 
     /**
-     *
      * @param config
      */
     private static void setupBundles(Properties config) {
@@ -342,7 +335,6 @@ public class Runtime {
     }
 
     /**
-     * 
      * @param config
      */
     private static void setupExternalHosts(Properties config) {
