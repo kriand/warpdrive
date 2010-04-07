@@ -34,8 +34,8 @@ import java.util.Map;
  */
 public class BundleProcessor extends AbstractProcessor {
 
-    public BundleProcessor(int priority, WarpDriveMojo mojo) {
-        super(priority, mojo);    
+    public BundleProcessor(WarpDriveMojo mojo) {
+        super(mojo);    
     }
 
     public void process() throws Exception {

@@ -37,8 +37,8 @@ public class YuiCssProcessor extends AbstractProcessor {
 
     private final CssUrlRewriter rewriter;
 
-    public YuiCssProcessor(int priority, WarpDriveMojo mojo) {
-        super(priority, mojo, new File(mojo.webappSourceDir, mojo.cssDir), "css");
+    public YuiCssProcessor(WarpDriveMojo mojo) {
+        super(mojo, new File(mojo.webappSourceDir, mojo.cssDir), "css");
         rewriter = new CssUrlRewriter();
     }
 

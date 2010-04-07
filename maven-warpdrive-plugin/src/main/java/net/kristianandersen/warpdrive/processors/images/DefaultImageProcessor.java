@@ -32,8 +32,8 @@ import org.apache.commons.io.FileUtils;
  */
 public class DefaultImageProcessor extends AbstractProcessor {
 
-    public DefaultImageProcessor(int priority, WarpDriveMojo mojo) {
-        super(priority, mojo, new File(mojo.webappSourceDir, mojo.imageDir), "gif", "png", "jpg", "jpeg");
+    public DefaultImageProcessor(WarpDriveMojo mojo) {
+        super(mojo, new File(mojo.webappSourceDir, mojo.imageDir), "gif", "png", "jpg", "jpeg");
     }
 
     public void process() throws Exception {

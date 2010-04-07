@@ -29,9 +29,8 @@ import java.util.Collection;
  */
 public class ExternalUploadProcessor extends AbstractProcessor {
 
-    public ExternalUploadProcessor(int priority, WarpDriveMojo mojo) {
-        super(priority,
-                mojo,
+    public ExternalUploadProcessor(WarpDriveMojo mojo) {
+        super(mojo,
                 new File[]{new File(mojo.webappTargetDir + mojo.cssDir),
                         new File(mojo.webappTargetDir + mojo.jsDir),
                         new File(mojo.webappTargetDir + mojo.imageDir)},

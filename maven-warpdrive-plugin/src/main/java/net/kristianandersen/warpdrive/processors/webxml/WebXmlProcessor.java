@@ -40,8 +40,8 @@ public class WebXmlProcessor extends AbstractProcessor {
 
     private final static String FILTER_NAME = WarpDriveFilter.class.getName();
 
-    public WebXmlProcessor(int priority, WarpDriveMojo mojo) {
-        super(priority, mojo);
+    public WebXmlProcessor(WarpDriveMojo mojo) {
+        super(mojo);
     }
 
     public void process() throws Exception {

@@ -31,8 +31,8 @@ import java.util.Collection;
  */
 public class YuiJsProcessor extends AbstractProcessor {
 
-    public YuiJsProcessor(int priority, WarpDriveMojo mojo) {
-        super(priority, mojo, new File(mojo.webappSourceDir, mojo.jsDir), "js" );
+    public YuiJsProcessor(WarpDriveMojo mojo) {
+        super(mojo, new File(mojo.webappSourceDir, mojo.jsDir), "js" );
     }
 
     public void process() throws Exception{

@@ -209,25 +209,24 @@ public class WarpDriveMojo extends AbstractMojo {
 
     private List<AbstractProcessor> setupProcessors() {
         List<AbstractProcessor> processors = new ArrayList<AbstractProcessor>();
-        if (bundlesAreConfigured()) {
-            processors.add(new BundleProcessor(15, this));
-        }
-        if (processWebXml) {
-            processors.add(new WebXmlProcessor(25, this));
-        }
         if (processJS) {
-            processors.add(new YuiJsProcessor(5, this));
+            processors.add(new YuiJsProcessor(this));
         }
         if (processCSS) {
-            processors.add(new YuiCssProcessor(10, this));
+            processors.add(new YuiCssProcessor(this));
+        }
+        if (bundlesAreConfigured()) {
+            processors.add(new BundleProcessor(this));
         }
         if (processImages) {
-            processors.add(new DefaultImageProcessor(20, this));
+            processors.add(new DefaultImageProcessor(this));
+        }
+        if (processWebXml) {
+            processors.add(new WebXmlProcessor(this));
         }
         if (uploadFiles) {
-            processors.add(new ExternalUploadProcessor(30, this));
+            processors.add(new ExternalUploadProcessor(this));
         }
-        Collections.sort(processors);
         return processors;
     }
 

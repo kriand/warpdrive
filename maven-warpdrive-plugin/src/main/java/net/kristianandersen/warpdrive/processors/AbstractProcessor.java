@@ -33,9 +33,7 @@ import java.util.zip.GZIPOutputStream;
  * Time: 8:44:20 PM
  * To change this template use File | Settings | File Templates.
  */
-public abstract class AbstractProcessor implements Comparable<AbstractProcessor> {
-
-    private int priority;
+public abstract class AbstractProcessor {
 
     private String[] fileExtensions;
 
@@ -43,33 +41,21 @@ public abstract class AbstractProcessor implements Comparable<AbstractProcessor>
 
     protected final WarpDriveMojo mojo;
 
-    protected AbstractProcessor(int priority, WarpDriveMojo mojo) {
-        this(priority, mojo, (File[])null );
+    protected AbstractProcessor(WarpDriveMojo mojo) {
+        this(mojo, (File[])null );
     }
 
-    protected AbstractProcessor(int priority, WarpDriveMojo mojo, File workDir, String... fileExtensions) {
-        this(priority, mojo, new File[]{workDir}, fileExtensions );
+    protected AbstractProcessor(WarpDriveMojo mojo, File workDir, String... fileExtensions) {
+        this(mojo, new File[]{workDir}, fileExtensions );
     }
 
-    protected AbstractProcessor(int priority, WarpDriveMojo mojo, File[] workDirs, String... fileExtensions) {
+    protected AbstractProcessor(WarpDriveMojo mojo, File[] workDirs, String... fileExtensions) {
         this.mojo = mojo;
         this.workDirs = workDirs;
         this.fileExtensions = fileExtensions;
-        this.priority = priority;
     }
 
     public abstract void process() throws Exception;
-
-    public int compareTo(AbstractProcessor other) {
-        if (other == null) {
-            return -1;
-        }
-        return priority - other.getPriority();
-    }
-
-    public int getPriority() {
-        return priority;
-    }
 
     protected Log log() {
         return mojo.getLog();
