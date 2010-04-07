@@ -13,9 +13,11 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
-package net.kristianandersen.warpdrive.filter;
+package net.kristianandersen.warpdrive.processors.webxml;
 
 import net.kristianandersen.warpdrive.mojo.WarpDriveMojo;
+import net.kristianandersen.warpdrive.processors.AbstractProcessor;
+import net.kristianandersen.warpdrive.filter.WarpDriveFilter;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -34,24 +36,20 @@ import java.util.List;
  * User: kriand
  * Date: Mar 3, 2010
  * Time: 9:30:46 PM
- * To change this template use File | Settings | File Templates.
  */
-public class FilterConfigurator {
+public class WebXmlProcessor extends AbstractProcessor {
 
     private final static String FILTER_NAME = WarpDriveFilter.class.getName();
 
-    private final WarpDriveMojo mojo;
-
-    public FilterConfigurator(WarpDriveMojo mojo) {
-        this.mojo = mojo;
+    public WebXmlProcessor(int priority, WarpDriveMojo mojo) {
+        super(priority, mojo);
     }
 
-    public void configureWebXml() throws JDOMException, IOException {
+    public void process() throws Exception {
         File webXml = new File(mojo.webXml);
         SAXBuilder builder = new SAXBuilder();
         Document doc = builder.build(webXml);
         configureWarpDriveFilter(doc);
-        configureMimeMappings(doc);
         XMLOutputter output = new XMLOutputter(Format.getPrettyFormat());
         output.output(doc, new FileOutputStream(webXml));
     }
@@ -65,21 +63,6 @@ public class FilterConfigurator {
                 mojo.getLog().warn("Configuring filter even though external hosts are defined. You probably want to set the configureFilter option to false");
             }
             addFilterDefinitions(root);
-        }
-
-    }
-
-    private void configureMimeMappings(Document doc) throws JDOMException, IOException {
-
-        Element root = doc.getRootElement();
-        removeMimeMapping("css.gz", doc, root);
-        removeMimeMapping("js.gz", doc, root);
-        if (mojo.configureFilter) {
-            if (mojo.externalHosts != null && mojo.externalHosts.size() > 0) {
-                mojo.getLog().warn("Configuring mime-mappings even though external hosts are defined. You probably want to set the configureFilter option to false");
-            }
-            addMimeMapping(root, "css.gz", "text/css");
-            addMimeMapping(root, "js.gz", "text/javasscript");
         }
 
     }
@@ -112,16 +95,6 @@ public class FilterConfigurator {
         root.addContent(filterDef).addContent(filterMappingJs).addContent(filterMappingCss).addContent(filterMappingImages);
     }
 
-    private void addMimeMapping(Element root, String ext, String mType) {
-        Element mimeMapping = new Element("mime-mapping", root.getNamespace());
-        Element extension = new Element("extension", root.getNamespace());
-        extension.setText(ext);
-        Element mimeType = new Element("mime-type", root.getNamespace());
-        mimeType.setText(mType);
-        mimeMapping.addContent(extension).addContent(mimeType);
-        root.addContent(mimeMapping);
-    }
-
     private void removeFilterDefinitions(Document doc, Element root) throws JDOMException {
         XPath xpath = XPath.newInstance("//ns:filter-name");
         xpath.addNamespace("ns", root.getNamespaceURI());
@@ -132,16 +105,4 @@ public class FilterConfigurator {
             }
         }
     }
-
-    private void removeMimeMapping(String extension, Document doc, Element root) throws JDOMException {
-        XPath xpath = XPath.newInstance("//ns:extension");
-        xpath.addNamespace("ns", root.getNamespaceURI());
-        List<Element> mimetypeExtensionElements = xpath.selectNodes(doc);
-        for (Element e : mimetypeExtensionElements) {
-            if (extension.equals(e.getText())) {
-                e.getParentElement().detach();
-            }
-        }
-    }
-
 }

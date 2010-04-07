@@ -34,27 +34,19 @@ import java.util.Collection;
  * Time: 9:56:45 PM
  * To change this template use File | Settings | File Templates.
  */
-public class YuiCssProcessor extends AbstractProcessor implements CssProcessor {
+public class YuiCssProcessor extends AbstractProcessor {
 
 
-    private final CssUrlRewriter rewriter = new CssUrlRewriter();
+    private final CssUrlRewriter rewriter;
 
-    public YuiCssProcessor(WarpDriveMojo mojo) {
-        super(mojo);
+    public YuiCssProcessor(int priority, WarpDriveMojo mojo) {
+        super(priority, mojo, new File(mojo.webappSourceDir, mojo.cssDir), "css");
+        rewriter = new CssUrlRewriter();
     }
 
-    public void processCss() throws IOException {
-
-        if (!mojo.processCSS || mojo.cssDir == null) {
-            return;
-        }
-
-        File cssDir = new File(mojo.webappSourceDir, mojo.cssDir);
-        if (!cssDir.exists()) {
-            return;
-        }
+    public void process() throws Exception {
         setupOutputDirs();
-        compress(cssDir);        
+        compress();
     }
 
     private void setupOutputDirs() {
@@ -64,8 +56,8 @@ public class YuiCssProcessor extends AbstractProcessor implements CssProcessor {
         }
     }
 
-    private void compress(File cssDir) throws IOException {
-        Collection<File> cssFiles = FileUtils.listFiles(cssDir, new String[]{"css"}, true);
+    private void compress() throws IOException {
+        Collection<File> cssFiles = getFileset();
         for (File file : cssFiles) {
             String rewritten = rewriter.rewrite(mojo, file);
             CssCompressor compressor = new CssCompressor(new StringReader(rewritten));

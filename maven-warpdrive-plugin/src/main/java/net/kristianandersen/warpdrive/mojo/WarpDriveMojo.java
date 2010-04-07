@@ -16,15 +16,13 @@
 package net.kristianandersen.warpdrive.mojo;
 
 import net.kristianandersen.warpdrive.Runtime;
-import net.kristianandersen.warpdrive.filter.FilterConfigurator;
-import net.kristianandersen.warpdrive.processors.css.CssProcessor;
+import net.kristianandersen.warpdrive.processors.AbstractProcessor;
+import net.kristianandersen.warpdrive.processors.bundles.BundleProcessor;
 import net.kristianandersen.warpdrive.processors.css.YuiCssProcessor;
 import net.kristianandersen.warpdrive.processors.images.DefaultImageProcessor;
-import net.kristianandersen.warpdrive.processors.images.ImageProcessor;
-import net.kristianandersen.warpdrive.processors.js.JsProcessor;
 import net.kristianandersen.warpdrive.processors.js.YuiJsProcessor;
-import net.kristianandersen.warpdrive.processors.bundles.BundleProcessor;
 import net.kristianandersen.warpdrive.processors.upload.ExternalUploadProcessor;
+import net.kristianandersen.warpdrive.processors.webxml.WebXmlProcessor;
 import net.kristianandersen.warpdrive.versioning.CurrentTimeMillisStrategy;
 import net.kristianandersen.warpdrive.versioning.VersioningStrategy;
 import org.apache.maven.plugin.AbstractMojo;
@@ -35,6 +33,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -184,37 +184,50 @@ public class WarpDriveMojo extends AbstractMojo {
     private final VersioningStrategy versioningStrategy = new CurrentTimeMillisStrategy();
 
     public void execute() throws MojoExecutionException {
-
-        JsProcessor jsProcessor = new YuiJsProcessor(this);
-
-        CssProcessor cssProcessor = new YuiCssProcessor(this);
-
-        BundleProcessor bundleProcessor = new BundleProcessor(this);
-
-        ImageProcessor imageProcessor = new DefaultImageProcessor(this);
-
-        FilterConfigurator filterConfigurator = new FilterConfigurator(this);
-
-        ExternalUploadProcessor externalUploadProcessor = new ExternalUploadProcessor(this);
-
         try {
             assertWarModule();
             normalizeDirectories();
             version = versioningStrategy.getVersion();
             writeWarpDriveConfig();
-            if (enabled) {
-                jsProcessor.processJS();
-                cssProcessor.processCss();
-                bundleProcessor.createBundles();
-                imageProcessor.processImages();
-                externalUploadProcessor.uploadFiles();
-                filterConfigurator.configureWebXml();
+            List<AbstractProcessor> processors = setupProcessors();
+            for (AbstractProcessor processor : processors) {
+                processor.process();
             }
         }
         catch (Exception ex) {
-            ex.printStackTrace();
-            throw new MojoExecutionException("Caught IOException", ex);
+            throw new MojoExecutionException("Caught Exception", ex);
         }
+    }
+
+    private List<AbstractProcessor> setupProcessors() {
+        List<AbstractProcessor> processors = new ArrayList<AbstractProcessor>();
+        if (!enabled) {
+            return processors;
+        }
+        if (bundlesAreConfigured()) {
+            processors.add(new BundleProcessor(15, this));
+        }
+        if (configureFilter) {
+            processors.add(new WebXmlProcessor(25, this));
+        }
+        if (processJS) {
+            processors.add(new YuiJsProcessor(5, this));
+        }
+        if (processCSS) {
+            processors.add(new YuiCssProcessor(10, this));
+        }
+        if (processImages) {
+            processors.add(new DefaultImageProcessor(20, this));
+        }
+        if (uploadFiles) {
+            processors.add(new ExternalUploadProcessor(30, this));
+        }
+        Collections.sort(processors);
+        return processors;
+    }
+
+    private boolean bundlesAreConfigured() {
+        return (cssBundles != null && cssBundles.size() > 0) || (jsBundles != null && jsBundles.size() > 0);
     }
 
     private void assertWarModule() throws MojoExecutionException {
@@ -277,7 +290,7 @@ public class WarpDriveMojo extends AbstractMojo {
         for (int i = 0; i < externalHosts.size(); i++) {
             writer.write(externalHosts.get(i));
             if (i < externalHosts.size() - 1) {
-                writer.write(',');
+                writer.write(Runtime.MULTIVAL_SEPARATOR);
             }
         }
         writer.write('\n');
@@ -291,7 +304,7 @@ public class WarpDriveMojo extends AbstractMojo {
             writer.write(Runtime.BUNDLE_PREFIX_KEY);
             writer.write(key);
             writer.write('=');
-            String[] bundleEntries = bundle.get(key).split(",");
+            String[] bundleEntries = bundle.get(key).split(Runtime.MULTIVAL_SEPARATOR);
             for (int i = 0; i < bundleEntries.length; i++) {
                 writer.write(bundleEntries[i].trim());
                 if (i < bundleEntries.length - 1) {

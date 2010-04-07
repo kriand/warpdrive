@@ -33,7 +33,6 @@ public class Runtime {
     public final static String RUNTIME_CONFIG_FILE = "/net/kristianandersen/warpdrive/config.properties";
 
     public final static String GZIP_EXTENSION = ".gz";
-
     public final static String VERSION_PREFIX = "__v";
 
     public final static String ENABLED_KEY = "enabled";
@@ -44,6 +43,7 @@ public class Runtime {
     public final static String JS_DIR_KEY = "js.dir";
     public final static String CSS_DIR_KEY = "css.dir";
     public final static String BUNDLE_PREFIX_KEY = "bundle.";
+    public final static String MULTIVAL_SEPARATOR = ",";
 
     private static Properties settings = new Properties();
 
@@ -329,7 +329,7 @@ public class Runtime {
         while (properties.hasMoreElements()) {
             String property = (String) properties.nextElement();
             if (property.startsWith(BUNDLE_PREFIX_KEY)) {
-                bundles.put(property.substring(BUNDLE_PREFIX_KEY.length()), Arrays.asList(config.getProperty(property).split(",")));
+                bundles.put(property.substring(BUNDLE_PREFIX_KEY.length()), Arrays.asList(config.getProperty(property).split(MULTIVAL_SEPARATOR)));
             }
         }
     }
@@ -339,7 +339,7 @@ public class Runtime {
      */
     private static void setupExternalHosts(Properties config) {
         if (config.getProperty(EXTERNAL_HOSTS_KEY) != null) {
-            externalHosts = config.getProperty(EXTERNAL_HOSTS_KEY).split(",");
+            externalHosts = config.getProperty(EXTERNAL_HOSTS_KEY).split(MULTIVAL_SEPARATOR);
             for (int i = 0; i < externalHosts.length; i++) {
                 externalHosts[i] = externalHosts[i].trim();
                 if (externalHosts[i].endsWith("/")) {

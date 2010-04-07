@@ -13,7 +13,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
-package net.kristianandersen.warpdrive.processors.upload.s3;
+package net.kristianandersen.warpdrive.processors.upload;
 
 import net.kristianandersen.warpdrive.mojo.WarpDriveMojo;
 import org.jets3t.service.S3Service;
@@ -49,7 +49,7 @@ public class S3Uploader {
         this.mojo = mojo;
     }
 
-    public void uploadFiles(Set<File> files) throws Exception {
+    public void uploadFiles(Collection<File> files) throws Exception {
 
         Properties settings = new Properties();
         settings.load(new FileInputStream(mojo.s3SettingsFile));
@@ -97,7 +97,7 @@ public class S3Uploader {
         s3Service.putBucketAcl(s3Bucket);
     }
 
-    private S3Object[] createS3Objects(S3Bucket s3Bucket, Set<File> files) throws IOException, NoSuchAlgorithmException {
+    private S3Object[] createS3Objects(S3Bucket s3Bucket, Collection<File> files) throws IOException, NoSuchAlgorithmException {
 
         List<S3Object> s3ObjectList = new ArrayList<S3Object>();
 

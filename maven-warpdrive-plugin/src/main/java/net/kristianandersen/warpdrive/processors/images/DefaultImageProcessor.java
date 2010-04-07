@@ -30,26 +30,16 @@ import org.apache.commons.io.FileUtils;
  * Date: Mar 3, 2010
  * Time: 8:54:57 PM 
  */
-public class DefaultImageProcessor extends AbstractProcessor implements ImageProcessor {
+public class DefaultImageProcessor extends AbstractProcessor {
 
-    public DefaultImageProcessor(WarpDriveMojo mojo) {
-        super(mojo);
+    public DefaultImageProcessor(int priority, WarpDriveMojo mojo) {
+        super(priority, mojo, new File(mojo.webappSourceDir, mojo.imageDir), "gif", "png", "jpg", "jpeg");
     }
 
-
-    public void processImages() throws IOException {
-        
-        if (!mojo.processImages || mojo.imageDir == null) {
-            return;
-        }
-        File imageDir = new File(mojo.webappSourceDir, mojo.imageDir);
-        if (!imageDir.exists()) {
-            return;
-        }
-        Collection<File> imageFiles = FileUtils.listFiles(imageDir, new String[]{"gif", "png", "jpg", "jpeg"}, true);
+    public void process() throws Exception {
+        Collection<File> imageFiles = getFileset();
         for (File f : imageFiles) {
             writeFile(f);                        
         }
     }
-
 }

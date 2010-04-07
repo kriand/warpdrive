@@ -34,11 +34,11 @@ import java.util.Map;
  */
 public class BundleProcessor extends AbstractProcessor {
 
-    public BundleProcessor(WarpDriveMojo mojo) {
-        super(mojo);    
+    public BundleProcessor(int priority, WarpDriveMojo mojo) {
+        super(priority, mojo);    
     }
 
-    public void createBundles() throws IOException {
+    public void process() throws Exception {
         createBundlesInDir(mojo.cssBundles, mojo.cssDir);
         createBundlesInDir(mojo.jsBundles, mojo.jsDir);
     }

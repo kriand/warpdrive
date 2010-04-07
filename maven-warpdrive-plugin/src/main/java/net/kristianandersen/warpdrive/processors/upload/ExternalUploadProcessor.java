@@ -16,62 +16,33 @@
 package net.kristianandersen.warpdrive.processors.upload;
 
 import net.kristianandersen.warpdrive.mojo.WarpDriveMojo;
-import net.kristianandersen.warpdrive.processors.upload.s3.S3Uploader;
+import net.kristianandersen.warpdrive.processors.AbstractProcessor;
 
 import java.io.File;
-import java.util.Set;
 import java.util.Collection;
-import java.util.HashSet;
-
-import org.apache.commons.io.FileUtils;
 
 /**
  * Created by IntelliJ IDEA.
  * User: kriand
  * Date: Mar 23, 2010
- * Time: 10:44:15 PM 
+ * Time: 10:44:15 PM
  */
-public class ExternalUploadProcessor {
+public class ExternalUploadProcessor extends AbstractProcessor {
 
-    private final WarpDriveMojo mojo;
-
-    public ExternalUploadProcessor(WarpDriveMojo mojo) {
-        this.mojo = mojo;
+    public ExternalUploadProcessor(int priority, WarpDriveMojo mojo) {
+        super(priority,
+                mojo,
+                new File[]{new File(mojo.webappTargetDir + mojo.cssDir),
+                        new File(mojo.webappTargetDir + mojo.jsDir),
+                        new File(mojo.webappTargetDir + mojo.imageDir)},
+                "css", "js", "gif", "png", "jpg", "jpeg");
     }
 
-    public void uploadFiles() throws Exception {
-
-        if(!mojo.uploadFiles) {
-            return;
-        }
-
-        Set<File> files = getFilesToUpload();
-        
-        if(mojo.s3SettingsFile != null) {
-
+    public void process() throws Exception {
+        Collection<File> files = getFileset();
+        if (mojo.s3SettingsFile != null) {
             S3Uploader s3Uploader = new S3Uploader(mojo);
             s3Uploader.uploadFiles(files);
         }
-
     }
-
-    private Set<File> getFilesToUpload() {
-        Set<File> files = new HashSet<File>();
-
-        File cssDir = new File(mojo.webappTargetDir + mojo.cssDir);
-        Collection<File> cssFiles = FileUtils.listFiles(cssDir, new String[]{"css"}, true);
-        files.addAll(cssFiles);
-
-        File jsDir = new File(mojo.webappTargetDir + mojo.jsDir);
-        Collection<File> jsFiles = FileUtils.listFiles(jsDir, new String[]{"js"}, true);
-        files.addAll(jsFiles);
-
-        File imageDir = new File(mojo.webappTargetDir + mojo.imageDir);
-        Collection<File> imageFiles = FileUtils.listFiles(imageDir, new String[]{"gif", "png", "jpg", "jpeg"}, true);
-        files.addAll(imageFiles);
-
-        return files;
-    }
-
-
 }

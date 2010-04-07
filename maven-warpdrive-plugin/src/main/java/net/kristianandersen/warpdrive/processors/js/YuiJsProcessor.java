@@ -29,28 +29,14 @@ import java.util.Collection;
  * Date: Mar 2, 2010
  * Time: 7:46:28 PM
  */
-public class YuiJsProcessor extends AbstractProcessor implements JsProcessor {
+public class YuiJsProcessor extends AbstractProcessor {
 
-
-    public YuiJsProcessor(WarpDriveMojo mojo) {
-        super(mojo);
+    public YuiJsProcessor(int priority, WarpDriveMojo mojo) {
+        super(priority, mojo, new File(mojo.webappSourceDir, mojo.jsDir), "js" );
     }
 
-
-    public void processJS() throws IOException{
-
-        if (!mojo.processJS || mojo.jsDir == null) {
-            return;
-        }
-
-        File jsDir = new File(mojo.webappSourceDir, mojo.jsDir);
-
-        if(!jsDir.exists()) {
-            return;
-        }
-
-        Collection<File> jsFiles = FileUtils.listFiles(jsDir, new String[]{"js"}, true);
-
+    public void process() throws Exception{
+        Collection<File> jsFiles = getFileset();
         for (File file : jsFiles) {
             JavaScriptCompressor compressor = new JavaScriptCompressor(new FileReader(file), new JsErrorReporter(mojo));
             StringWriter s = new StringWriter();

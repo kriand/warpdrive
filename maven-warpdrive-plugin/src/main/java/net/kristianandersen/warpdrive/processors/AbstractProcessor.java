@@ -17,8 +17,12 @@ package net.kristianandersen.warpdrive.processors;
 
 import net.kristianandersen.warpdrive.mojo.WarpDriveMojo;
 import net.kristianandersen.warpdrive.utils.FilenameUtils;
+import org.apache.commons.io.FileUtils;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.zip.GZIPOutputStream;
 
 /**
@@ -28,14 +32,50 @@ import java.util.zip.GZIPOutputStream;
  * Time: 8:44:20 PM
  * To change this template use File | Settings | File Templates.
  */
-public abstract class AbstractProcessor {
+public abstract class AbstractProcessor implements Comparable<AbstractProcessor> {
 
+    private int priority;
+
+    private String[] fileExtensions;
+
+    private File[] workDirs;
 
     protected final WarpDriveMojo mojo;
 
-    protected AbstractProcessor(WarpDriveMojo mojo) {
-        this.mojo = mojo;
+    protected AbstractProcessor(int priority, WarpDriveMojo mojo) {
+        this(priority, mojo, (File[])null );
+    }
 
+    protected AbstractProcessor(int priority, WarpDriveMojo mojo, File workDir, String... fileExtensions) {
+        this(priority, mojo, new File[]{workDir}, fileExtensions );
+    }
+
+    protected AbstractProcessor(int priority, WarpDriveMojo mojo, File[] workDirs, String... fileExtensions) {
+        this.mojo = mojo;
+        this.workDirs = workDirs;
+        this.fileExtensions = fileExtensions;
+        this.priority = priority;
+    }
+
+    public abstract void process() throws Exception;
+
+    public int compareTo(AbstractProcessor other) {
+        if (other == null) {
+            return -1;
+        }
+        return priority - other.getPriority();
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    protected Collection<File> getFileset() {
+        List<File> result = new ArrayList<File>();
+        for (File workDir : workDirs) {
+            result.addAll(FileUtils.listFiles(workDir, fileExtensions, true));
+        }
+        return result;
     }
 
     protected void writeFile(File originalFile, String data) throws IOException {
@@ -49,7 +89,7 @@ public abstract class AbstractProcessor {
         OutputStreamWriter zipWriter = new OutputStreamWriter((new GZIPOutputStream(new FileOutputStream(gzippedOutput))));
         try {
             writer.write(data);
-            zipWriter.write(data);            
+            zipWriter.write(data);
         }
         finally {
             if (writer != null) {
