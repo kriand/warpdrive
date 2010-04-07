@@ -30,10 +30,6 @@
                         </goals>
                         <configuration>
                             <enabled>true</enabled>
-                            <smartSpritesPngDepth>AUTO</smartSpritesPngDepth>
-                            <smartSpritesIncludeFiles>
-                                <file>sprites.css</file>
-                            </smartSpritesIncludeFiles>
                             <jsBundles>
                                 <common.js>
                                     application.js,
@@ -52,7 +48,7 @@
                                     sprites-sprite.css
                                 </common.css>
                             </cssBundles>
-                            <configureFilter>true</configureFilter>
+                            <processWebXml>true</processWebXml>
                             <uploadFiles>false</uploadFiles>
                             <s3SettingsFile>s3settings.properties</s3SettingsFile>
                         </configuration>

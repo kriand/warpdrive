@@ -137,7 +137,7 @@ public class WarpDriveMojo extends AbstractMojo {
     /**
      * @parameter default-value=true
      */
-    public boolean configureFilter;
+    public boolean processWebXml;
 
     /**
      * @parameter default-value=8000
@@ -207,7 +207,7 @@ public class WarpDriveMojo extends AbstractMojo {
         if (bundlesAreConfigured()) {
             processors.add(new BundleProcessor(15, this));
         }
-        if (configureFilter) {
+        if (processWebXml) {
             processors.add(new WebXmlProcessor(25, this));
         }
         if (processJS) {
