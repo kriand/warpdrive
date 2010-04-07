@@ -44,8 +44,8 @@ import java.util.Map;
  * Date: Mar 2, 2010
  * Time: 5:46:05 PM
  *
- * @goal process
- * @phase process-sources
+ * @goal warpspeed
+ * @phase prepare-package
  */
 public class WarpDriveMojo extends AbstractMojo {
 
@@ -185,10 +185,14 @@ public class WarpDriveMojo extends AbstractMojo {
 
     public void execute() throws MojoExecutionException {
         try {
+            if (!enabled) {
+                return;
+            }
+            printEyeCatcher();
             assertWarModule();
             normalizeDirectories();
             version = versioningStrategy.getVersion();
-            writeWarpDriveConfig();
+            writeWarpDriveConfigFile();
             List<AbstractProcessor> processors = setupProcessors();
             for (AbstractProcessor processor : processors) {
                 processor.process();
@@ -199,11 +203,12 @@ public class WarpDriveMojo extends AbstractMojo {
         }
     }
 
+    public String getVersion() {
+        return version;
+    }
+
     private List<AbstractProcessor> setupProcessors() {
         List<AbstractProcessor> processors = new ArrayList<AbstractProcessor>();
-        if (!enabled) {
-            return processors;
-        }
         if (bundlesAreConfigured()) {
             processors.add(new BundleProcessor(15, this));
         }
@@ -245,7 +250,7 @@ public class WarpDriveMojo extends AbstractMojo {
         if (!imageDir.startsWith("/")) imageDir = "/" + imageDir;
     }
 
-    private void writeWarpDriveConfig() throws IOException {
+    private void writeWarpDriveConfigFile() throws IOException {
         File file = new File(project.getBuild().getOutputDirectory(), Runtime.RUNTIME_CONFIG_FILE);
         file.getParentFile().mkdirs();
         FileWriter writer = null;
@@ -256,7 +261,7 @@ public class WarpDriveMojo extends AbstractMojo {
             writeStringValue(Runtime.IMAGE_DIR_KEY, imageDir, writer);
             writeStringValue(Runtime.JS_DIR_KEY, jsDir, writer);
             writeStringValue(Runtime.CSS_DIR_KEY, cssDir, writer);
-            writeExternalHosts(writer);
+            writeExternalHostsConfig(writer);
             writeBundleConfig(cssBundles, writer);
             writeBundleConfig(jsBundles, writer);
 
@@ -282,7 +287,7 @@ public class WarpDriveMojo extends AbstractMojo {
         writer.write('\n');
     }
 
-    private void writeExternalHosts(Writer writer) throws IOException {
+    private void writeExternalHostsConfig(Writer writer) throws IOException {
         if (externalHosts == null || externalHosts.isEmpty()) {
             return;
         }
@@ -315,8 +320,20 @@ public class WarpDriveMojo extends AbstractMojo {
         }
     }
 
-    public String getVersion() {
-        return version;
+    private void printEyeCatcher() {
+        getLog().info("  +    .          .      +       .        *  .    .  . .. .........");
+        getLog().info("             *        .                 .     .    . .  . .........");
+        getLog().info(".     +          .         .       .          .   . . . . .........");
+        getLog().info("      .        +     .       +     .      .  .  .  . .. ...........");
+        getLog().info(".         +            .          +        .  +   .  . .. .........");
+        getLog().info("  .    'warpdrive is      _____       .        .   . .  ... .......");
+        getLog().info("     active, captain!'-__/.....\\__        +   .   . . .............");
+        getLog().info("   .                     \\_____/            .    .  .. ............");
+        getLog().info("      +    .     +                    +    .   .    . .. . . ......");
+        getLog().info("  +    .          .      +       .            .    .. . ... .......");
+        getLog().info("             *        .                 .    +   . .. . ...........");
+        getLog().info("             .        .       *         .        . .  .. . ........");
+        getLog().info(".     +          .         .       .          +    . . .. . .......");
     }
 
 }

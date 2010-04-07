@@ -24,9 +24,8 @@
                 <executions>
                     <execution>
                         <id>process</id>
-                        <phase>prepare-package</phase>
                         <goals>
-                            <goal>process</goal>
+                            <goal>warpspeed</goal>
                         </goals>
                         <configuration>
                             <enabled>true</enabled>

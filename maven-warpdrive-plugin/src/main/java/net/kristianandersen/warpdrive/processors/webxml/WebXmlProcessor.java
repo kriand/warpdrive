@@ -15,9 +15,9 @@
  */
 package net.kristianandersen.warpdrive.processors.webxml;
 
+import net.kristianandersen.warpdrive.filter.WarpDriveFilter;
 import net.kristianandersen.warpdrive.mojo.WarpDriveMojo;
 import net.kristianandersen.warpdrive.processors.AbstractProcessor;
-import net.kristianandersen.warpdrive.filter.WarpDriveFilter;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -28,7 +28,6 @@ import org.jdom.xpath.XPath;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -55,16 +54,12 @@ public class WebXmlProcessor extends AbstractProcessor {
     }
 
     private void configureWarpDriveFilter(Document doc) throws JDOMException {
-
+        if (mojo.externalHosts != null && mojo.externalHosts.size() > 0) {
+            mojo.getLog().warn("Configuring filter even though external hosts are defined. You probably want to set the configureFilter option to false");
+        }
         Element root = doc.getRootElement();
         removeFilterDefinitions(doc, root);
-        if (mojo.configureFilter) {
-            if (mojo.externalHosts != null && mojo.externalHosts.size() > 0) {
-                mojo.getLog().warn("Configuring filter even though external hosts are defined. You probably want to set the configureFilter option to false");
-            }
-            addFilterDefinitions(root);
-        }
-
+        addFilterDefinitions(root);
     }
 
     private void addFilterDefinitions(Element root) {
