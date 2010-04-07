@@ -26,6 +26,7 @@ import org.jets3t.service.model.S3Bucket;
 import org.jets3t.service.model.S3Object;
 import org.jets3t.service.multithread.S3ServiceSimpleMulti;
 import org.jets3t.service.security.AWSCredentials;
+import org.apache.maven.plugin.logging.Log;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -45,12 +46,14 @@ public class S3Uploader {
 
     private final WarpDriveMojo mojo;
 
-    public S3Uploader(WarpDriveMojo mojo) {
+    private final Log log;
+
+    public S3Uploader(WarpDriveMojo mojo, Log log) {
         this.mojo = mojo;
+        this.log = log;
     }
 
-    public void uploadFiles(Collection<File> files) throws Exception {
-
+    public void uploadFiles(Collection<File> files) throws Exception {        
         Properties settings = new Properties();
         settings.load(new FileInputStream(mojo.s3SettingsFile));
 
@@ -74,11 +77,15 @@ public class S3Uploader {
         }
 
         S3Service s3Service = createS3Service(accessKey, secretKey);
+        log.debug("Fetching bucket: " + bucket);
         S3Bucket s3Bucket = s3Service.getBucket(bucket);
+        log.info("Grating READ access for EVERYONE to bucket: " + bucket);
         grantReadAccessForAllUsersForBucket(s3Service, s3Bucket);
         S3Object[] s3Objects = createS3Objects(s3Bucket, files);
         S3ServiceSimpleMulti multithreadedService = createMultithreadedS3Service(s3Service);
-        multithreadedService.putObjects(s3Bucket, s3Objects);
+        log.debug("Uploading to S3...");
+        multithreadedService.putObjects(s3Bucket, s3Objects);       
+        log.debug("...done!");
     }
 
     private S3Service createS3Service(String accessKey, String secretKey) throws S3ServiceException {
@@ -98,12 +105,10 @@ public class S3Uploader {
     }
 
     private S3Object[] createS3Objects(S3Bucket s3Bucket, Collection<File> files) throws IOException, NoSuchAlgorithmException {
-
         List<S3Object> s3ObjectList = new ArrayList<S3Object>();
-
         Calendar expirationDate = getExpirationDate();
-
         for (File file : files) {
+            log.debug("Preparing for upload to S3: " + file);
             if (!file.isDirectory()) {
                 S3Object s3Object = createS3ObjectFromFile(file, s3Bucket, expirationDate);
                 if (s3Object != null) {

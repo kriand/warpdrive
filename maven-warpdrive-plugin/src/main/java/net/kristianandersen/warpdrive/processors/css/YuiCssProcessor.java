@@ -18,10 +18,8 @@ package net.kristianandersen.warpdrive.processors.css;
 import com.yahoo.platform.yui.compressor.CssCompressor;
 import net.kristianandersen.warpdrive.mojo.WarpDriveMojo;
 import net.kristianandersen.warpdrive.processors.AbstractProcessor;
-import org.apache.commons.io.FileUtils;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Collection;
@@ -45,27 +43,17 @@ public class YuiCssProcessor extends AbstractProcessor {
     }
 
     public void process() throws Exception {
-        setupOutputDirs();
-        compress();
-    }
-
-    private void setupOutputDirs() {
-        File outputDir = new File(mojo.webappTargetDir + mojo.cssDir);
-        if (!outputDir.exists()) {
-            outputDir.mkdirs();
-        }
-    }
-
-    private void compress() throws IOException {
+        log().info("Processing CSS files");
         Collection<File> cssFiles = getFileset();
         for (File file : cssFiles) {
+            log().debug("Rewriting URLs in file: " + file.getName());
             String rewritten = rewriter.rewrite(mojo, file);
             CssCompressor compressor = new CssCompressor(new StringReader(rewritten));
             StringWriter s = new StringWriter();
+            log().debug("Compressing file: " + file.getName());
             compressor.compress(s, mojo.yuiCssLineBreak);
             writeFile(file, s.toString());
         }
+        log().info("All CSS files processed OK");
     }
-
-
 }

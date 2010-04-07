@@ -18,6 +18,7 @@ package net.kristianandersen.warpdrive.processors;
 import net.kristianandersen.warpdrive.mojo.WarpDriveMojo;
 import net.kristianandersen.warpdrive.utils.FilenameUtils;
 import org.apache.commons.io.FileUtils;
+import org.apache.maven.plugin.logging.Log;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -68,6 +69,10 @@ public abstract class AbstractProcessor implements Comparable<AbstractProcessor>
 
     public int getPriority() {
         return priority;
+    }
+
+    protected Log log() {
+        return mojo.getLog();
     }
 
     protected Collection<File> getFileset() {

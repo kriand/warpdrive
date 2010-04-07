@@ -45,12 +45,14 @@ public class WebXmlProcessor extends AbstractProcessor {
     }
 
     public void process() throws Exception {
+        log().info("Processing web.xml found here: " + mojo.webXml);
         File webXml = new File(mojo.webXml);
         SAXBuilder builder = new SAXBuilder();
         Document doc = builder.build(webXml);
         configureWarpDriveFilter(doc);
         XMLOutputter output = new XMLOutputter(Format.getPrettyFormat());
         output.output(doc, new FileOutputStream(webXml));
+        log().info("web.xml processed OK");
     }
 
     private void configureWarpDriveFilter(Document doc) throws JDOMException {
@@ -58,7 +60,9 @@ public class WebXmlProcessor extends AbstractProcessor {
             mojo.getLog().warn("Configuring filter even though external hosts are defined. You probably want to set the configureFilter option to false");
         }
         Element root = doc.getRootElement();
+        log().debug("Removing old filter-config");
         removeFilterDefinitions(doc, root);
+        log().debug("Adding new filter-config");
         addFilterDefinitions(root);
     }
 

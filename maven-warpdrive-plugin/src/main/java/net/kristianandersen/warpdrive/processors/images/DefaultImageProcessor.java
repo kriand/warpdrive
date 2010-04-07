@@ -37,9 +37,12 @@ public class DefaultImageProcessor extends AbstractProcessor {
     }
 
     public void process() throws Exception {
+        log().info("Processing image files");
         Collection<File> imageFiles = getFileset();
         for (File f : imageFiles) {
+            log().debug("Processing file: " + f.getName());
             writeFile(f);                        
         }
+        log().info("All image files processed OK");
     }
 }

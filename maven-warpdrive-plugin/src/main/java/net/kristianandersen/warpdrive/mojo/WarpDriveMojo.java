@@ -254,6 +254,7 @@ public class WarpDriveMojo extends AbstractMojo {
         File file = new File(project.getBuild().getOutputDirectory(), Runtime.RUNTIME_CONFIG_FILE);
         file.getParentFile().mkdirs();
         FileWriter writer = null;
+        getLog().info("Writing WarpDrive configfile to: " + file.getName());
         try {
             writer = new FileWriter(file);
             writeBooleanValue(Runtime.ENABLED_KEY, enabled, writer);

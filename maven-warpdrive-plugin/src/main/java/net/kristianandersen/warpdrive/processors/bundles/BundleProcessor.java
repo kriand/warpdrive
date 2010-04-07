@@ -39,8 +39,11 @@ public class BundleProcessor extends AbstractProcessor {
     }
 
     public void process() throws Exception {
+        log().info("Processing css bundles in: " + mojo.cssBundles);
         createBundlesInDir(mojo.cssBundles, mojo.cssDir);
+        log().info("Processing js bundles in: " + mojo.jsBundles);
         createBundlesInDir(mojo.jsBundles, mojo.jsDir);
+        log().info("All bundles created OK");
     }
 
     private void createBundlesInDir(Map<String, String> bundle, String bundleDir) throws IOException {

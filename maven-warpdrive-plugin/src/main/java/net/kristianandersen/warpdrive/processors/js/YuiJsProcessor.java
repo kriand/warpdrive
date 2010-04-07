@@ -36,8 +36,10 @@ public class YuiJsProcessor extends AbstractProcessor {
     }
 
     public void process() throws Exception{
+        log().info("Processing JS files");
         Collection<File> jsFiles = getFileset();
         for (File file : jsFiles) {
+            log().debug("Compressing file: " + file);
             JavaScriptCompressor compressor = new JavaScriptCompressor(new FileReader(file), new JsErrorReporter(mojo));
             StringWriter s = new StringWriter();
             compressor.compress(s, mojo.yuiJsLineBreak,
@@ -46,7 +48,8 @@ public class YuiJsProcessor extends AbstractProcessor {
                                    mojo.yuiJsPreserveAllSemicolons,
                                    mojo.yuiJsDisableOptimizations);
             writeFile(file, s.toString());
-        }        
+        }
+        log().info("All JS files processed OK");
     }
 
 }

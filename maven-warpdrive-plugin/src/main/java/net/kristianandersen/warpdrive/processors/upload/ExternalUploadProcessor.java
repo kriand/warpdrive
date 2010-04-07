@@ -41,8 +41,10 @@ public class ExternalUploadProcessor extends AbstractProcessor {
     public void process() throws Exception {
         Collection<File> files = getFileset();
         if (mojo.s3SettingsFile != null) {
-            S3Uploader s3Uploader = new S3Uploader(mojo);
+            log().info(String.format("Uploading %s files to S3", files.size()));
+            S3Uploader s3Uploader = new S3Uploader(mojo, log());
             s3Uploader.uploadFiles(files);
+            log().info("All files uploaded OK");
         }
     }
 }
