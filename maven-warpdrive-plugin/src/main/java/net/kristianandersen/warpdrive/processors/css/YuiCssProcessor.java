@@ -18,15 +18,14 @@ package net.kristianandersen.warpdrive.processors.css;
 import com.yahoo.platform.yui.compressor.CssCompressor;
 import net.kristianandersen.warpdrive.mojo.WarpDriveMojo;
 import net.kristianandersen.warpdrive.processors.AbstractProcessor;
-import net.kristianandersen.warpdrive.utils.FileUtils;
-import org.apache.maven.model.Resource;
+import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Collection;
-import java.util.Arrays;
+
 
 /**
  * Created by IntelliJ IDEA.
@@ -66,7 +65,7 @@ public class YuiCssProcessor extends AbstractProcessor implements CssProcessor {
     }
 
     private void compress(File cssDir) throws IOException {
-        Collection<File> cssFiles = FileUtils.listFiles(cssDir, new CssFilenameFilter(), true);
+        Collection<File> cssFiles = FileUtils.listFiles(cssDir, new String[]{"css"}, true);
         for (File file : cssFiles) {
             String rewritten = rewriter.rewrite(mojo, file);
             CssCompressor compressor = new CssCompressor(new StringReader(rewritten));

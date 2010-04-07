@@ -23,8 +23,6 @@ import net.kristianandersen.warpdrive.processors.images.DefaultImageProcessor;
 import net.kristianandersen.warpdrive.processors.images.ImageProcessor;
 import net.kristianandersen.warpdrive.processors.js.JsProcessor;
 import net.kristianandersen.warpdrive.processors.js.YuiJsProcessor;
-import net.kristianandersen.warpdrive.processors.sprites.SmartSpritesProcessor;
-import net.kristianandersen.warpdrive.processors.sprites.SpritesProcessor;
 import net.kristianandersen.warpdrive.processors.bundles.BundleProcessor;
 import net.kristianandersen.warpdrive.processors.upload.ExternalUploadProcessor;
 import net.kristianandersen.warpdrive.versioning.CurrentTimeMillisStrategy;
@@ -172,31 +170,6 @@ public class WarpDriveMojo extends AbstractMojo {
     public int yuiCssLineBreak;
 
     /**
-     * @parameter
-     */
-    public List<String> smartSpritesIncludeFiles;
-
-    /**
-     * @parameter
-     */
-    public String smartSpritesCssFileSuffix;
-
-    /**
-     * @parameter
-     */
-    public String smartSpritesPngDepth;
-
-    /**
-     * @parameter default-value=false
-     */
-    public boolean smartSpritesPngIE6;
-
-    /**
-     * @parameter
-     */
-    public String smartSpritesCssFileEncoding;
-
-    /**
      * @parameter default-value=false
      */
     public boolean uploadFiles;
@@ -214,8 +187,6 @@ public class WarpDriveMojo extends AbstractMojo {
 
         JsProcessor jsProcessor = new YuiJsProcessor(this);
 
-        SpritesProcessor spritesProcessor = new SmartSpritesProcessor(this);
-
         CssProcessor cssProcessor = new YuiCssProcessor(this);
 
         BundleProcessor bundleProcessor = new BundleProcessor(this);
@@ -224,7 +195,7 @@ public class WarpDriveMojo extends AbstractMojo {
 
         FilterConfigurator filterConfigurator = new FilterConfigurator(this);
 
-        ExternalUploadProcessor externalUploader = new ExternalUploadProcessor(this);
+        ExternalUploadProcessor externalUploadProcessor = new ExternalUploadProcessor(this);
 
         try {
             assertWarModule();
@@ -233,12 +204,11 @@ public class WarpDriveMojo extends AbstractMojo {
             writeWarpDriveConfig();
             if (enabled) {
                 jsProcessor.processJS();
-                spritesProcessor.processSprites();
                 cssProcessor.processCss();
                 bundleProcessor.createBundles();
                 imageProcessor.processImages();
+                externalUploadProcessor.uploadFiles();
                 filterConfigurator.configureWebXml();
-                externalUploader.uploadFiles();
             }
         }
         catch (Exception ex) {

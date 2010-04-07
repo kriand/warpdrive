@@ -17,26 +17,18 @@ package net.kristianandersen.warpdrive.processors.images;
 
 import net.kristianandersen.warpdrive.mojo.WarpDriveMojo;
 import net.kristianandersen.warpdrive.processors.AbstractProcessor;
-import net.kristianandersen.warpdrive.utils.FileUtils;
-import org.carrot2.labs.smartsprites.SmartSpritesParameters;
-import org.carrot2.labs.smartsprites.SpriteBuilder;
-import org.carrot2.labs.smartsprites.message.MessageLog;
-import org.carrot2.labs.smartsprites.message.Message;
-import org.carrot2.labs.smartsprites.message.MemoryMessageSink;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.List;
+
+import org.apache.commons.io.FileUtils;
 
 /**
  * Created by IntelliJ IDEA.
  * User: kriand
  * Date: Mar 3, 2010
- * Time: 8:54:57 PM
- * To change this template use File | Settings | File Templates.
+ * Time: 8:54:57 PM 
  */
 public class DefaultImageProcessor extends AbstractProcessor implements ImageProcessor {
 
@@ -54,7 +46,7 @@ public class DefaultImageProcessor extends AbstractProcessor implements ImagePro
         if (!imageDir.exists()) {
             return;
         }
-        Collection<File> imageFiles = FileUtils.listFiles(imageDir, new ImageFilenameFilter(), true);
+        Collection<File> imageFiles = FileUtils.listFiles(imageDir, new String[]{"gif", "png", "jpg", "jpeg"}, true);
         for (File f : imageFiles) {
             writeFile(f);                        
         }

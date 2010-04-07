@@ -17,10 +17,8 @@ package net.kristianandersen.warpdrive.processors.js;
 
 import com.yahoo.platform.yui.compressor.JavaScriptCompressor;
 import net.kristianandersen.warpdrive.processors.AbstractProcessor;
-import net.kristianandersen.warpdrive.utils.FileUtils;
 import net.kristianandersen.warpdrive.mojo.WarpDriveMojo;
-import org.mozilla.javascript.ErrorReporter;
-import org.mozilla.javascript.EvaluatorException;
+import org.apache.commons.io.FileUtils;
 
 import java.io.*;
 import java.util.Collection;
@@ -51,7 +49,7 @@ public class YuiJsProcessor extends AbstractProcessor implements JsProcessor {
             return;
         }
 
-        Collection<File> jsFiles = FileUtils.listFiles(jsDir, new JsFilenameFilter(), true);
+        Collection<File> jsFiles = FileUtils.listFiles(jsDir, new String[]{"js"}, true);
 
         for (File file : jsFiles) {
             JavaScriptCompressor compressor = new JavaScriptCompressor(new FileReader(file), new JsErrorReporter(mojo));

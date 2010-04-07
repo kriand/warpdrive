@@ -19,7 +19,6 @@ import net.kristianandersen.warpdrive.mojo.WarpDriveMojo;
 import net.kristianandersen.warpdrive.utils.FilenameUtils;
 
 import java.io.*;
-import java.util.Map;
 import java.util.zip.GZIPOutputStream;
 
 /**

@@ -12,13 +12,11 @@
     <properties>
         <maven.version>2.2.1</maven.version>
         <servlet.api.version>2.5</servlet.api.version>
-        <jstl.version>1.2</jstl.version>
+        <commons.io.version>1.4</commons.io.version>
         <yui.version>2.3.6</yui.version>
-        <smartsprites.version>0.2.6</smartsprites.version>
         <jets3t.version>0.7.3</jets3t.version>
         <jdom.version>1.1</jdom.version>
-        <jaxen.version>1.1.1</jaxen.version>
-        <maven-plugin-testing-harness.version>1.2</maven-plugin-testing-harness.version>
+        <jaxen.version>1.1.1</jaxen.version>        
         <junit.version>4.8.1</junit.version>
         <mockito.version>1.8.4</mockito.version>        
     </properties>
@@ -118,14 +116,9 @@
                 <version>${servlet.api.version}</version>
             </dependency>
             <dependency>
-                <groupId>javax.servlet</groupId>
-                <artifactId>jstl</artifactId>
-                <version>${jstl.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.carrot2</groupId>
-                <artifactId>smartsprites</artifactId>
-                <version>${smartsprites.version}</version>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons.io.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.jdom</groupId>

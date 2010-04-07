@@ -17,15 +17,13 @@ package net.kristianandersen.warpdrive.processors.upload;
 
 import net.kristianandersen.warpdrive.mojo.WarpDriveMojo;
 import net.kristianandersen.warpdrive.processors.upload.s3.S3Uploader;
-import net.kristianandersen.warpdrive.utils.FileUtils;
-import net.kristianandersen.warpdrive.processors.css.CssFilenameFilter;
-import net.kristianandersen.warpdrive.processors.js.JsFilenameFilter;
-import net.kristianandersen.warpdrive.processors.images.ImageFilenameFilter;
 
 import java.io.File;
 import java.util.Set;
 import java.util.Collection;
 import java.util.HashSet;
+
+import org.apache.commons.io.FileUtils;
 
 /**
  * Created by IntelliJ IDEA.
@@ -61,15 +59,15 @@ public class ExternalUploadProcessor {
         Set<File> files = new HashSet<File>();
 
         File cssDir = new File(mojo.webappTargetDir + mojo.cssDir);
-        Collection<File> cssFiles = FileUtils.listFiles(cssDir, new CssFilenameFilter(), true);
+        Collection<File> cssFiles = FileUtils.listFiles(cssDir, new String[]{"css"}, true);
         files.addAll(cssFiles);
 
         File jsDir = new File(mojo.webappTargetDir + mojo.jsDir);
-        Collection<File> jsFiles = FileUtils.listFiles(jsDir, new JsFilenameFilter(), true);
+        Collection<File> jsFiles = FileUtils.listFiles(jsDir, new String[]{"js"}, true);
         files.addAll(jsFiles);
 
         File imageDir = new File(mojo.webappTargetDir + mojo.imageDir);
-        Collection<File> imageFiles = FileUtils.listFiles(imageDir, new ImageFilenameFilter(), true);
+        Collection<File> imageFiles = FileUtils.listFiles(imageDir, new String[]{"gif", "png", "jpg", "jpeg"}, true);
         files.addAll(imageFiles);
 
         return files;
