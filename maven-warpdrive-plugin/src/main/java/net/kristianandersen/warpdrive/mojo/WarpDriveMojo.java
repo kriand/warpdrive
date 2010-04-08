@@ -309,11 +309,11 @@ public class WarpDriveMojo extends AbstractMojo {
             writer.write(Runtime.BUNDLE_PREFIX_KEY);
             writer.write(key);
             writer.write('=');
-            String[] bundleEntries = bundle.get(key).split(Runtime.MULTIVAL_SEPARATOR);
+            String[] bundleEntries = bundle.get(key).split(",");
             for (int i = 0; i < bundleEntries.length; i++) {
                 writer.write(bundleEntries[i].trim());
                 if (i < bundleEntries.length - 1) {
-                    writer.write(',');
+                    writer.write(Runtime.MULTIVAL_SEPARATOR);
                 }
             }
             writer.write('\n');
