@@ -45,24 +45,24 @@ public class WebXmlProcessor extends AbstractProcessor {
     }
 
     public void process() throws Exception {
-        log().info("Processing web.xml found here: " + mojo.webXml);
-        File webXml = new File(mojo.webXml);
+        getLog().info("Processing web.xml found here: " + getMojo().getWebXml());
+        File webXml = new File(getMojo().getWebXml());
         SAXBuilder builder = new SAXBuilder();
         Document doc = builder.build(webXml);
         configureWarpDriveFilter(doc);
         XMLOutputter output = new XMLOutputter(Format.getPrettyFormat());
         output.output(doc, new FileOutputStream(webXml));
-        log().info("web.xml processed OK");
+        getLog().info("web.xml processed OK");
     }
 
     private void configureWarpDriveFilter(Document doc) throws JDOMException {
-        if (mojo.externalHosts != null && mojo.externalHosts.size() > 0) {
-            mojo.getLog().warn("Configuring filter even though external hosts are defined. You probably want to set the configureFilter option to false");
+        if (getMojo().getExternalHosts() != null && getMojo().getExternalHosts().size() > 0) {
+            getMojo().getLog().warn("Configuring filter even though external hosts are defined. You probably want to set the configureFilter option to false");
         }
         Element root = doc.getRootElement();
-        log().debug("Removing old filter-config");
+        getLog().debug("Removing old filter-config");
         removeFilterDefinitions(doc, root);
-        log().debug("Adding new filter-config");
+        getLog().debug("Adding new filter-config");
         addFilterDefinitions(root);
     }
 
@@ -78,17 +78,17 @@ public class WebXmlProcessor extends AbstractProcessor {
 
         Element filterMappingJs = new Element("filter-mapping", root.getNamespace());
         Element filterMappingJsUrl = new Element("url-pattern", root.getNamespace());
-        filterMappingJsUrl.setText(mojo.jsDir + "*");
+        filterMappingJsUrl.setText(getMojo().getJsDir() + "*");
         filterMappingJs.addContent((Element) filterName.clone()).addContent(filterMappingJsUrl);
 
         Element filterMappingCss = new Element("filter-mapping", root.getNamespace());
         Element filterMappingCssUrl = new Element("url-pattern", root.getNamespace());
-        filterMappingCssUrl.setText(mojo.cssDir + "*");
+        filterMappingCssUrl.setText(getMojo().getCssDir() + "*");
         filterMappingCss.addContent((Element) filterName.clone()).addContent(filterMappingCssUrl);
 
         Element filterMappingImages = new Element("filter-mapping", root.getNamespace());
         Element filterMappingImagesUrl = new Element("url-pattern", root.getNamespace());
-        filterMappingImagesUrl.setText(mojo.imageDir + "*");
+        filterMappingImagesUrl.setText(getMojo().getImageDir() + "*");
         filterMappingImages.addContent((Element) filterName.clone()).addContent(filterMappingImagesUrl);
 
         root.addContent(filterDef).addContent(filterMappingJs).addContent(filterMappingCss).addContent(filterMappingImages);

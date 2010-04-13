@@ -34,7 +34,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -48,6 +47,12 @@ import java.util.Map;
  * @phase prepare-package
  */
 public class WarpDriveMojo extends AbstractMojo {
+
+
+    /**
+     *
+     */
+    public static final int WRITE_BUFFER_SIZE = 32768;
 
     /**
      * The Maven Project.
@@ -64,7 +69,7 @@ public class WarpDriveMojo extends AbstractMojo {
      * @parameter default-value="${basedir}/src/main/webapp"
      * @required
      */
-    public String webappSourceDir;
+    private String webappSourceDir;
 
     /**
      * Webapp target directory.
@@ -72,112 +77,112 @@ public class WarpDriveMojo extends AbstractMojo {
      * @parameter default-value="${project.build.directory}/${project.build.finalName}"
      * @required
      */
-    public String webappTargetDir;
+    private String webappTargetDir;
 
     /**
      * @parameter default-value=true
      */
-    public boolean enabled;
+    private boolean enabled;
 
     /**
      * @parameter default-value="${basedir}/src/main/webapp/WEB-INF/web.xml"
      */
-    public String webXml;
+    private String webXml;
 
     /**
      * @parameter default-value="js"
      */
-    public String jsDir;
+    private String jsDir;
 
     /**
      * @parameter default-value="images"
      */
-    public String imageDir;
+    private String imageDir;
 
     /**
      * @parameter default-value="css"
      */
-    public String cssDir;
+    private String cssDir;
 
     /**
      * @parameter
      */
-    public List<String> externalHosts;
+    private List<String> externalHosts;
 
     /**
      * @parameter
      */
-    public Map<String, String> jsBundles;
+    private Map<String, String> jsBundles;
 
     /**
      * @parameter
      */
-    public Map<String, String> cssBundles;
+    private Map<String, String> cssBundles;
 
     /**
      * @parameter default-value=true
      */
-    public boolean processJS;
+    private boolean processJS;
 
     /**
      * @parameter default-value=true
      */
-    public boolean processSprites;
+    private boolean processSprites;
 
     /**
      * @parameter default-value=true
      */
-    public boolean processCSS;
+    private boolean processCSS;
 
     /**
      * @parameter default-value=true
      */
-    public boolean processImages;
+    private boolean processImages;
 
     /**
      * @parameter default-value=true
      */
-    public boolean processWebXml;
+    private boolean processWebXml;
 
     /**
      * @parameter default-value=8000
      */
-    public int yuiJsLineBreak;
+    private int yuiJsLineBreak;
 
     /**
      * @parameter default-value=true
      */
-    public boolean yuiJsMunge;
+    private boolean yuiJsMunge;
 
     /**
      * @parameter default-value=false
      */
-    public boolean yuiJsVerbose;
+    private boolean yuiJsVerbose;
 
     /**
      * @parameter default-value=false
      */
-    public boolean yuiJsPreserveAllSemicolons;
+    private boolean yuiJsPreserveAllSemicolons;
 
     /**
      * @parameter default-value=false
      */
-    public boolean yuiJsDisableOptimizations;
+    private boolean yuiJsDisableOptimizations;
 
     /**
      * @parameter default-value=8000
      */
-    public int yuiCssLineBreak;
+    private int yuiCssLineBreak;
 
     /**
      * @parameter default-value=false
      */
-    public boolean uploadFiles;
+    private boolean uploadFiles;
 
     /**
      * @parameter
      */
-    public File s3SettingsFile;
+    private File s3SettingsFile;
 
     private String version;
 
@@ -185,7 +190,7 @@ public class WarpDriveMojo extends AbstractMojo {
 
     public void execute() throws MojoExecutionException {
         try {
-            if (!enabled) {
+            if (!isEnabled()) {
                 return;
             }
             printEyeCatcher();
@@ -209,29 +214,29 @@ public class WarpDriveMojo extends AbstractMojo {
 
     private List<AbstractProcessor> setupProcessors() {
         List<AbstractProcessor> processors = new ArrayList<AbstractProcessor>();
-        if (processJS) {
+        if (isProcessJS()) {
             processors.add(new YuiJsProcessor(this));
         }
-        if (processCSS) {
+        if (isProcessCSS()) {
             processors.add(new YuiCssProcessor(this));
         }
         if (bundlesAreConfigured()) {
             processors.add(new BundleProcessor(this));
         }
-        if (processImages) {
+        if (isProcessImages()) {
             processors.add(new DefaultImageProcessor(this));
         }
-        if (processWebXml) {
+        if (isProcessWebXml()) {
             processors.add(new WebXmlProcessor(this));
         }
-        if (uploadFiles) {
+        if (isUploadFiles()) {
             processors.add(new ExternalUploadProcessor(this));
         }
         return processors;
     }
 
     private boolean bundlesAreConfigured() {
-        return (cssBundles != null && cssBundles.size() > 0) || (jsBundles != null && jsBundles.size() > 0);
+        return (getCssBundles() != null && getCssBundles().size() > 0) || (getJsBundles() != null && getJsBundles().size() > 0);
     }
 
     private void assertWarModule() throws MojoExecutionException {
@@ -241,12 +246,12 @@ public class WarpDriveMojo extends AbstractMojo {
     }
 
     private void normalizeDirectories() {
-        if (!cssDir.endsWith("/")) cssDir = cssDir + "/";
-        if (!jsDir.endsWith("/")) jsDir = jsDir + "/";
-        if (!imageDir.endsWith("/")) imageDir = imageDir + "/";
-        if (!cssDir.startsWith("/")) cssDir = "/" + cssDir;
-        if (!jsDir.startsWith("/")) jsDir = "/" + jsDir;
-        if (!imageDir.startsWith("/")) imageDir = "/" + imageDir;
+        if (!getCssDir().endsWith("/")) setCssDir(getCssDir() + "/");
+        if (!getJsDir().endsWith("/")) setJsDir(jsDir + "/");
+        if (!getImageDir().endsWith("/")) setImageDir(getImageDir() + "/");
+        if (!getCssDir().startsWith("/")) setCssDir("/" + getCssDir());
+        if (!getJsDir().startsWith("/")) setJsDir("/" + getJsDir());
+        if (!getImageDir().startsWith("/")) setImageDir("/" + imageDir);
     }
 
     private void writeWarpDriveConfigFile() throws IOException {
@@ -256,14 +261,14 @@ public class WarpDriveMojo extends AbstractMojo {
         getLog().info("Writing WarpDrive configfile to: " + file.getName());
         try {
             writer = new FileWriter(file);
-            writeBooleanValue(Runtime.ENABLED_KEY, enabled, writer);
+            writeBooleanValue(Runtime.ENABLED_KEY, isEnabled(), writer);
             writeStringValue(Runtime.VERSION_KEY, version, writer);
-            writeStringValue(Runtime.IMAGE_DIR_KEY, imageDir, writer);
-            writeStringValue(Runtime.JS_DIR_KEY, jsDir, writer);
-            writeStringValue(Runtime.CSS_DIR_KEY, cssDir, writer);
+            writeStringValue(Runtime.IMAGE_DIR_KEY, getImageDir(), writer);
+            writeStringValue(Runtime.JS_DIR_KEY, getJsDir(), writer);
+            writeStringValue(Runtime.CSS_DIR_KEY, getCssDir(), writer);
             writeExternalHostsConfig(writer);
-            writeBundleConfig(cssBundles, writer);
-            writeBundleConfig(jsBundles, writer);
+            writeBundleConfig(getCssBundles(), writer);
+            writeBundleConfig(getJsBundles(), writer);
 
         }
         finally {
@@ -288,13 +293,13 @@ public class WarpDriveMojo extends AbstractMojo {
     }
 
     private void writeExternalHostsConfig(Writer writer) throws IOException {
-        if (externalHosts == null || externalHosts.isEmpty()) {
+        if (getExternalHosts() == null || getExternalHosts().isEmpty()) {
             return;
         }
         writer.write(Runtime.EXTERNAL_HOSTS_KEY + "=");
-        for (int i = 0; i < externalHosts.size(); i++) {
-            writer.write(externalHosts.get(i));
-            if (i < externalHosts.size() - 1) {
+        for (int i = 0; i < getExternalHosts().size(); i++) {
+            writer.write(getExternalHosts().get(i));
+            if (i < getExternalHosts().size() - 1) {
                 writer.write(Runtime.MULTIVAL_SEPARATOR);
             }
         }
@@ -336,4 +341,187 @@ public class WarpDriveMojo extends AbstractMojo {
         getLog().info(".     +          .         .       .          +    . . .. . .......");
     }
 
+    public String getWebappSourceDir() {
+        return webappSourceDir;
+    }
+
+    public void setWebappSourceDir(String webappSourceDir) {
+        this.webappSourceDir = webappSourceDir;
+    }
+
+    public String getWebappTargetDir() {
+        return webappTargetDir;
+    }
+
+    public void setWebappTargetDir(String webappTargetDir) {
+        this.webappTargetDir = webappTargetDir;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public String getWebXml() {
+        return webXml;
+    }
+
+    public void setWebXml(String webXml) {
+        this.webXml = webXml;
+    }
+
+    public String getJsDir() {
+        return jsDir;
+    }
+
+    public void setJsDir(String jsDir) {
+        this.jsDir = jsDir;
+    }
+
+    public String getImageDir() {
+        return imageDir;
+    }
+
+    public void setImageDir(String imageDir) {
+        this.imageDir = imageDir;
+    }
+
+    public String getCssDir() {
+        return cssDir;
+    }
+
+    public void setCssDir(String cssDir) {
+        this.cssDir = cssDir;
+    }
+
+    public List<String> getExternalHosts() {
+        return externalHosts;
+    }
+
+    public void setExternalHosts(List<String> externalHosts) {
+        this.externalHosts = externalHosts;
+    }
+
+    public Map<String, String> getJsBundles() {
+        return jsBundles;
+    }
+
+    public void setJsBundles(Map<String, String> jsBundles) {
+        this.jsBundles = jsBundles;
+    }
+
+    public Map<String, String> getCssBundles() {
+        return cssBundles;
+    }
+
+    public void setCssBundles(Map<String, String> cssBundles) {
+        this.cssBundles = cssBundles;
+    }
+
+    public boolean isProcessJS() {
+        return processJS;
+    }
+
+    public void setProcessJS(boolean processJS) {
+        this.processJS = processJS;
+    }
+
+    public boolean isProcessSprites() {
+        return processSprites;
+    }
+
+    public void setProcessSprites(boolean processSprites) {
+        this.processSprites = processSprites;
+    }
+
+    public boolean isProcessCSS() {
+        return processCSS;
+    }
+
+    public void setProcessCSS(boolean processCSS) {
+        this.processCSS = processCSS;
+    }
+
+    public boolean isProcessImages() {
+        return processImages;
+    }
+
+    public void setProcessImages(boolean processImages) {
+        this.processImages = processImages;
+    }
+
+    public boolean isProcessWebXml() {
+        return processWebXml;
+    }
+
+    public void setProcessWebXml(boolean processWebXml) {
+        this.processWebXml = processWebXml;
+    }
+
+    public int getYuiJsLineBreak() {
+        return yuiJsLineBreak;
+    }
+
+    public void setYuiJsLineBreak(int yuiJsLineBreak) {
+        this.yuiJsLineBreak = yuiJsLineBreak;
+    }
+
+    public boolean isYuiJsMunge() {
+        return yuiJsMunge;
+    }
+
+    public void setYuiJsMunge(boolean yuiJsMunge) {
+        this.yuiJsMunge = yuiJsMunge;
+    }
+
+    public boolean isYuiJsVerbose() {
+        return yuiJsVerbose;
+    }
+
+    public void setYuiJsVerbose(boolean yuiJsVerbose) {
+        this.yuiJsVerbose = yuiJsVerbose;
+    }
+
+    public boolean isYuiJsPreserveAllSemicolons() {
+        return yuiJsPreserveAllSemicolons;
+    }
+
+    public void setYuiJsPreserveAllSemicolons(boolean yuiJsPreserveAllSemicolons) {
+        this.yuiJsPreserveAllSemicolons = yuiJsPreserveAllSemicolons;
+    }
+
+    public boolean isYuiJsDisableOptimizations() {
+        return yuiJsDisableOptimizations;
+    }
+
+    public void setYuiJsDisableOptimizations(boolean yuiJsDisableOptimizations) {
+        this.yuiJsDisableOptimizations = yuiJsDisableOptimizations;
+    }
+
+    public int getYuiCssLineBreak() {
+        return yuiCssLineBreak;
+    }
+
+    public void setYuiCssLineBreak(int yuiCssLineBreak) {
+        this.yuiCssLineBreak = yuiCssLineBreak;
+    }
+
+    public boolean isUploadFiles() {
+        return uploadFiles;
+    }
+
+    public void setUploadFiles(boolean uploadFiles) {
+        this.uploadFiles = uploadFiles;
+    }
+
+    public File getS3SettingsFile() {
+        return s3SettingsFile;
+    }
+
+    public void setS3SettingsFile(File s3SettingsFile) {
+        this.s3SettingsFile = s3SettingsFile;
+    }
 }

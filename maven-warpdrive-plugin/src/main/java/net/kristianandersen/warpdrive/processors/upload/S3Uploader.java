@@ -34,7 +34,14 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Locale;
+import java.util.Properties;
+import java.util.TimeZone;
 
 /**
  * Created by IntelliJ IDEA.
@@ -44,18 +51,24 @@ import java.util.*;
  */
 public class S3Uploader {
 
+    private static final int YEARS_TO_CACHE = 30;
+
+    private static final long ONE_YEAR_AS_SECONDS = 31536000L;
+
+    private static final long YEARS_TO_CACHE_AS_SECONDS = ONE_YEAR_AS_SECONDS * YEARS_TO_CACHE;
+
     private final WarpDriveMojo mojo;
 
     private final Log log;
 
-    public S3Uploader(WarpDriveMojo mojo, Log log) {
-        this.mojo = mojo;
-        this.log = log;
+    public S3Uploader(final WarpDriveMojo inMojo, final Log inLog) {
+        this.mojo = inMojo;
+        this.log = inLog;
     }
 
-    public void uploadFiles(Collection<File> files) throws Exception {        
+    public final void uploadFiles(final Collection<File> files) throws Exception {        
         Properties settings = new Properties();
-        settings.load(new FileInputStream(mojo.s3SettingsFile));
+        settings.load(new FileInputStream(mojo.getS3SettingsFile()));
 
         String bucket = settings.getProperty("bucket"); 
         String accessKey = settings.getProperty("accessKey");
@@ -88,23 +101,23 @@ public class S3Uploader {
         log.debug("...done!");
     }
 
-    private S3Service createS3Service(String accessKey, String secretKey) throws S3ServiceException {
+    private S3Service createS3Service(final String accessKey, final String secretKey) throws S3ServiceException {
         AWSCredentials awsCredentials = new AWSCredentials(accessKey, secretKey);
         return new RestS3Service(awsCredentials); 
     }
 
-    private S3ServiceSimpleMulti createMultithreadedS3Service(S3Service s3Service) {
+    private S3ServiceSimpleMulti createMultithreadedS3Service(final S3Service s3Service) {
         return new S3ServiceSimpleMulti(s3Service);
     }
 
-    private void grantReadAccessForAllUsersForBucket(S3Service s3Service, S3Bucket s3Bucket) throws S3ServiceException {
+    private void grantReadAccessForAllUsersForBucket(final S3Service s3Service, final S3Bucket s3Bucket) throws S3ServiceException {
         AccessControlList bucketAcl = s3Service.getBucketAcl(s3Bucket);
         bucketAcl.grantPermission(GroupGrantee.ALL_USERS, Permission.PERMISSION_READ);
         s3Bucket.setAcl(bucketAcl);
         s3Service.putBucketAcl(s3Bucket);
     }
 
-    private S3Object[] createS3Objects(S3Bucket s3Bucket, Collection<File> files) throws IOException, NoSuchAlgorithmException {
+    private S3Object[] createS3Objects(final S3Bucket s3Bucket, final Collection<File> files) throws IOException, NoSuchAlgorithmException {
         List<S3Object> s3ObjectList = new ArrayList<S3Object>();
         Calendar expirationDate = getExpirationDate();
         for (File file : files) {
@@ -119,7 +132,7 @@ public class S3Uploader {
         return (S3Object[]) s3ObjectList.toArray(new S3Object[s3ObjectList.size()]);
     }
 
-    private S3Object createS3ObjectFromFile(File file, S3Bucket s3Bucket, Calendar expires) throws IOException, NoSuchAlgorithmException {
+    private S3Object createS3ObjectFromFile(final File file, final S3Bucket s3Bucket, final Calendar expires) throws IOException, NoSuchAlgorithmException {
 
         String relativePath = getRelativePath(file);
 
@@ -151,16 +164,16 @@ public class S3Uploader {
         return imgObject;
     }
 
-    private String getRelativePath(File file) {
-        return file.getPath().substring(mojo.webappTargetDir.length() + 1);
+    private String getRelativePath(final File file) {
+        return file.getPath().substring(mojo.getWebappTargetDir().length() + 1);
     }
 
-    private S3Object getBasicS3Object(S3Bucket s3Bucket, String relativePath, File file, Calendar expires) throws IOException, NoSuchAlgorithmException {
+    private S3Object getBasicS3Object(final S3Bucket s3Bucket, final String relativePath, final File file, final Calendar expires) throws IOException, NoSuchAlgorithmException {
         S3Object s3Object = new S3Object(file);
         s3Object.setAcl(s3Bucket.getAcl());
         s3Object.setKey(relativePath);
         s3Object.addMetadata("Expires", htmlExpiresDateFormat().format(expires.getTime()));
-        s3Object.addMetadata("Cache-Control", "public, max-age=" + 946080000000L + ";public;must-revalidate;");
+        s3Object.addMetadata("Cache-Control", "public, max-age=" + YEARS_TO_CACHE_AS_SECONDS + ";public;must-revalidate;");
         return s3Object;
     }
 
@@ -172,7 +185,7 @@ public class S3Uploader {
 
     private Calendar getExpirationDate() {
         Calendar expiration = GregorianCalendar.getInstance();
-        expiration.add(Calendar.YEAR, 30);
+        expiration.add(Calendar.YEAR, YEARS_TO_CACHE);
         return expiration;
     }
 

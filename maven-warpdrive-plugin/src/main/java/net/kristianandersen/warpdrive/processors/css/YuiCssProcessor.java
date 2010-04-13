@@ -37,23 +37,23 @@ public class YuiCssProcessor extends AbstractProcessor {
 
     private final CssUrlRewriter rewriter;
 
-    public YuiCssProcessor(WarpDriveMojo mojo) {
-        super(mojo, new File(mojo.webappSourceDir, mojo.cssDir), "css");
+    public YuiCssProcessor(final WarpDriveMojo mojo) {
+        super(mojo, new File(mojo.getWebappSourceDir(), mojo.getCssDir()), "css");
         rewriter = new CssUrlRewriter();
     }
 
-    public void process() throws Exception {
-        log().info("Processing CSS files");
+    public final void process() throws Exception {
+        getLog().info("Processing CSS files");
         Collection<File> cssFiles = getFileset();
         for (File file : cssFiles) {
-            log().debug("Rewriting URLs in file: " + file.getName());
-            String rewritten = rewriter.rewrite(mojo, file);
+            getLog().debug("Rewriting URLs in file: " + file.getName());
+            String rewritten = rewriter.rewrite(getMojo(), file);
             CssCompressor compressor = new CssCompressor(new StringReader(rewritten));
             StringWriter s = new StringWriter();
-            log().debug("Compressing file: " + file.getName());
-            compressor.compress(s, mojo.yuiCssLineBreak);
+            getLog().debug("Compressing file: " + file.getName());
+            compressor.compress(s, getMojo().getYuiCssLineBreak());
             writeFile(file, s.toString());
         }
-        log().info("All CSS files processed OK");
+        getLog().info("All CSS files processed OK");
     }
 }

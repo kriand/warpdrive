@@ -15,8 +15,6 @@
  */
 package net.kristianandersen.warpdrive.filter;
 
-import net.kristianandersen.warpdrive.Runtime;
-
 import javax.servlet.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;

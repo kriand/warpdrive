@@ -19,10 +19,7 @@ import net.kristianandersen.warpdrive.mojo.WarpDriveMojo;
 import net.kristianandersen.warpdrive.processors.AbstractProcessor;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Collection;
-
-import org.apache.commons.io.FileUtils;
 
 /**
  * Created by IntelliJ IDEA.
@@ -32,17 +29,17 @@ import org.apache.commons.io.FileUtils;
  */
 public class DefaultImageProcessor extends AbstractProcessor {
 
-    public DefaultImageProcessor(WarpDriveMojo mojo) {
-        super(mojo, new File(mojo.webappSourceDir, mojo.imageDir), "gif", "png", "jpg", "jpeg");
+    public DefaultImageProcessor(final WarpDriveMojo mojo) {
+        super(mojo, new File(mojo.getWebappSourceDir(), mojo.getImageDir()), "gif", "png", "jpg", "jpeg");
     }
 
-    public void process() throws Exception {
-        log().info("Processing image files");
+    public final void process() throws Exception {
+        getLog().info("Processing image files");
         Collection<File> imageFiles = getFileset();
         for (File f : imageFiles) {
-            log().debug("Processing file: " + f.getName());
+            getLog().debug("Processing file: " + f.getName());
             writeFile(f);                        
         }
-        log().info("All image files processed OK");
+        getLog().info("All image files processed OK");
     }
 }

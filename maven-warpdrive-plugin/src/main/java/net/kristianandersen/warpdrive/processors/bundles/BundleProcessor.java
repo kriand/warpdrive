@@ -34,29 +34,37 @@ import java.util.Map;
  */
 public class BundleProcessor extends AbstractProcessor {
 
-    public BundleProcessor(WarpDriveMojo mojo) {
+    /**
+     *
+     * @param mojo
+     */
+    public BundleProcessor(final WarpDriveMojo mojo) {
         super(mojo);    
     }
 
-    public void process() throws Exception {
-        log().info("Processing css bundles in: " + mojo.cssBundles);
-        createBundlesInDir(mojo.cssBundles, mojo.cssDir);
-        log().info("Processing js bundles in: " + mojo.jsBundles);
-        createBundlesInDir(mojo.jsBundles, mojo.jsDir);
-        log().info("All bundles created OK");
+    /**
+     *
+     * @throws Exception
+     */
+    public final void process() throws Exception {
+        getLog().info("Processing css bundles in: " + getMojo().getCssBundles());
+        createBundlesInDir(getMojo().getCssBundles(), getMojo().getCssDir());
+        getLog().info("Processing js bundles in: " + getMojo().getJsBundles());
+        createBundlesInDir(getMojo().getJsBundles(), getMojo().getJsDir());
+        getLog().info("All bundles created OK");
     }
 
-    private void createBundlesInDir(Map<String, String> bundle, String bundleDir) throws IOException {
+    private void createBundlesInDir(final Map<String, String> bundle, final String bundleDir) throws IOException {
         if (bundle == null || bundle.size() == 0) {
             return;
         }
         for (String bundleName : bundle.keySet()) {
 
-            String filenameWithVersion = FilenameUtils.insertVersion(bundleDir + bundleName, mojo.getVersion());
-            String filenameWithVersionAndGzipExtension = FilenameUtils.insertVersionAndGzipExtension(bundleDir + bundleName, mojo.getVersion());
+            String filenameWithVersion = FilenameUtils.insertVersion(bundleDir + bundleName, getMojo().getVersion());
+            String filenameWithVersionAndGzipExtension = FilenameUtils.insertVersionAndGzipExtension(bundleDir + bundleName, getMojo().getVersion());
 
-            File outputFile = new File(mojo.webappTargetDir + filenameWithVersion);
-            File gzippedOutputFile = new File(mojo.webappTargetDir + filenameWithVersionAndGzipExtension);
+            File outputFile = new File(getMojo().getWebappTargetDir() + filenameWithVersion);
+            File gzippedOutputFile = new File(getMojo().getWebappTargetDir() + filenameWithVersionAndGzipExtension);
 
             FileOutputStream output = null;
             GZIPOutputStream zippedOutput = null;
@@ -69,24 +77,22 @@ public class BundleProcessor extends AbstractProcessor {
                     FileInputStream fis = null;
                     try {
                         file = file.trim();
-                        String versionedFile = FilenameUtils.insertVersion(bundleDir + file, mojo.getVersion());
-                        File f = new File(mojo.webappTargetDir + versionedFile);
+                        String versionedFile = FilenameUtils.insertVersion(bundleDir + file, getMojo().getVersion());
+                        File f = new File(getMojo().getWebappTargetDir() + versionedFile);
                         fis = new FileInputStream(f);
-                        byte[] buf = new byte[1048576];
+                        byte[] buf = new byte[WarpDriveMojo.WRITE_BUFFER_SIZE];
                         int read = 0;
                         while ((read = fis.read(buf)) != -1) {
                             output.write(buf, 0, read);
                             zippedOutput.write(buf, 0, read);
                         }
-                    }
-                    finally {
+                    } finally {
                         if (fis != null) {
                             fis.close();
                         }
                     }
                 }
-            }
-            finally {
+            } finally {
                 if (output != null) {
                     output.close();
                 }

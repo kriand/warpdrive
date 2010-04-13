@@ -18,9 +18,10 @@ package net.kristianandersen.warpdrive.processors.js;
 import com.yahoo.platform.yui.compressor.JavaScriptCompressor;
 import net.kristianandersen.warpdrive.processors.AbstractProcessor;
 import net.kristianandersen.warpdrive.mojo.WarpDriveMojo;
-import org.apache.commons.io.FileUtils;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.StringWriter;
 import java.util.Collection;
 
 /**
@@ -31,25 +32,25 @@ import java.util.Collection;
  */
 public class YuiJsProcessor extends AbstractProcessor {
 
-    public YuiJsProcessor(WarpDriveMojo mojo) {
-        super(mojo, new File(mojo.webappSourceDir, mojo.jsDir), "js" );
+    public YuiJsProcessor(final WarpDriveMojo mojo) {
+        super(mojo, new File(mojo.getWebappSourceDir(), mojo.getJsDir()), "js");
     }
 
-    public void process() throws Exception{
-        log().info("Processing JS files");
+    public final void process() throws Exception {
+        getLog().info("Processing JS files");
         Collection<File> jsFiles = getFileset();
         for (File file : jsFiles) {
-            log().debug("Compressing file: " + file);
-            JavaScriptCompressor compressor = new JavaScriptCompressor(new FileReader(file), new JsErrorReporter(mojo));
+            getLog().debug("Compressing file: " + file);
+            JavaScriptCompressor compressor = new JavaScriptCompressor(new FileReader(file), new JsErrorReporter(getMojo()));
             StringWriter s = new StringWriter();
-            compressor.compress(s, mojo.yuiJsLineBreak,
-                                   mojo.yuiJsMunge,
-                                   mojo.yuiJsVerbose,
-                                   mojo.yuiJsPreserveAllSemicolons,
-                                   mojo.yuiJsDisableOptimizations);
+            compressor.compress(s, getMojo().getYuiJsLineBreak(),
+                    getMojo().isYuiJsMunge(),
+                    getMojo().isYuiJsVerbose(),
+                    getMojo().isYuiJsPreserveAllSemicolons(),
+                    getMojo().isYuiJsDisableOptimizations());
             writeFile(file, s.toString());
         }
-        log().info("All JS files processed OK");
+        getLog().info("All JS files processed OK");
     }
 
 }

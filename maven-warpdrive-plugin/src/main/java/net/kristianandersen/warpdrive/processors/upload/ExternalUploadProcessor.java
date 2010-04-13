@@ -29,21 +29,21 @@ import java.util.Collection;
  */
 public class ExternalUploadProcessor extends AbstractProcessor {
 
-    public ExternalUploadProcessor(WarpDriveMojo mojo) {
+    public ExternalUploadProcessor(final WarpDriveMojo mojo) {
         super(mojo,
-                new File[]{new File(mojo.webappTargetDir + mojo.cssDir),
-                        new File(mojo.webappTargetDir + mojo.jsDir),
-                        new File(mojo.webappTargetDir + mojo.imageDir)},
+                new File[]{new File(mojo.getWebappTargetDir() + mojo.getCssDir()),
+                        new File(mojo.getWebappTargetDir() + mojo.getJsDir()),
+                        new File(mojo.getWebappTargetDir() + mojo.getImageDir())},
                 "css", "js", "gif", "png", "jpg", "jpeg");
     }
 
-    public void process() throws Exception {
+    public final void process() throws Exception {
         Collection<File> files = getFileset();
-        if (mojo.s3SettingsFile != null) {
-            log().info(String.format("Uploading %s files to S3", files.size()));
-            S3Uploader s3Uploader = new S3Uploader(mojo, log());
+        if (getMojo().getS3SettingsFile() != null) {
+            getLog().info(String.format("Uploading %s files to S3", files.size()));
+            S3Uploader s3Uploader = new S3Uploader(getMojo(), getLog());
             s3Uploader.uploadFiles(files);
-            log().info("All files uploaded OK");
+            getLog().info("All files uploaded OK");
         }
     }
 }

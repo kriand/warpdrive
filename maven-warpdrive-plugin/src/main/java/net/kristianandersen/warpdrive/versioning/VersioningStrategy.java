@@ -24,6 +24,9 @@
  */
 public interface VersioningStrategy {
 
+    /**
+     *
+     * @return
+     */
     String getVersion();
-
 }

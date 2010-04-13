@@ -22,11 +22,15 @@ package net.kristianandersen.warpdrive.versioning;
  * Time: 6:07:58 PM
  * To change this template use File | Settings | File Templates.
  */
-public class CurrentTimeMillisStrategy implements VersioningStrategy{
+public class CurrentTimeMillisStrategy implements VersioningStrategy {
 
 
-    public String getVersion() {
+    /**
+     *
+     * @return
+     * @see net.kristianandersen.warpdrive.versioning.VersioningStrategy#getVersion()  
+     */
+    public final String getVersion() {
         return String.valueOf(System.currentTimeMillis());
     }
-    
 }

@@ -30,12 +30,11 @@ class JsErrorReporter implements ErrorReporter {
 
     private final WarpDriveMojo mojo;
 
-    public JsErrorReporter(WarpDriveMojo mojo) {
-        this.mojo = mojo;
+    public JsErrorReporter(final WarpDriveMojo inMojo) {
+        this.mojo = inMojo;
     }
 
-    public void warning(String message, String sourceName,
-                        int line, String lineSource, int lineOffset) {
+    public void warning(final String message, final String sourceName, final int line, final String lineSource, final int lineOffset) {
         if (line < 0) {
             mojo.getLog().warn(message);
         } else {
@@ -43,8 +42,7 @@ class JsErrorReporter implements ErrorReporter {
         }
     }
 
-    public void error(String message, String sourceName,
-                      int line, String lineSource, int lineOffset) {
+    public void error(final String message, final String sourceName, final int line, final String lineSource, final int lineOffset) {
         if (line < 0) {
             mojo.getLog().error(message);
         } else {
@@ -52,8 +50,7 @@ class JsErrorReporter implements ErrorReporter {
         }
     }
 
-    public EvaluatorException runtimeError(String message, String sourceName,
-                                           int line, String lineSource, int lineOffset) {
+    public EvaluatorException runtimeError(final String message, final String sourceName, final int line, final String lineSource, final int lineOffset) {
         error(message, sourceName, line, lineSource, lineOffset);
         return new EvaluatorException(message);
     }

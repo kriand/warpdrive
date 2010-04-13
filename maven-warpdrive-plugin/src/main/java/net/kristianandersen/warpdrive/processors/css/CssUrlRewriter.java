@@ -33,7 +33,7 @@ import java.io.IOException;
 class CssUrlRewriter {
 
 
-    public String rewrite(WarpDriveMojo mojo, File cssFile) throws IOException {
+    public String rewrite(final WarpDriveMojo mojo, final File cssFile) throws IOException {
         StringBuilder css = new StringBuilder();
         BufferedReader reader = new BufferedReader(new FileReader(cssFile));
         String line = reader.readLine();
@@ -43,8 +43,8 @@ class CssUrlRewriter {
                 css.append(line);
             } else {
                 int index2 = line.indexOf(')', index);
-                String url = line.substring(index + 4, index2);
-                css.append(line.substring(0, index + 4));
+                String url = line.substring(index + "url(".length(), index2);
+                css.append(line.substring(0, index + "url(".length()));
 
                 if (url.startsWith("'")) {
                    css.append("'");
@@ -56,13 +56,13 @@ class CssUrlRewriter {
                     url = url.substring(1);
                 }
 
-                if(url.startsWith("..")) {
+                if (url.startsWith("..")) {
                     url = url.substring(2);
                 }
 
                 String versionedUrl = FilenameUtils.insertVersion(url, mojo.getVersion());
-                if(mojo.externalHosts != null) {
-                    css.append(mojo.externalHosts.get(Math.abs(versionedUrl.hashCode()) % mojo.externalHosts.size()));
+                if (mojo.getExternalHosts() != null) {
+                    css.append(mojo.getExternalHosts().get(Math.abs(versionedUrl.hashCode()) % mojo.getExternalHosts().size()));
                 }
                 css.append(versionedUrl);
                 css.append(line.substring(index2));
