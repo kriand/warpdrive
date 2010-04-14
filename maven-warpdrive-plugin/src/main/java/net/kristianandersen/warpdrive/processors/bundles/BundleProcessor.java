@@ -58,10 +58,10 @@ public class BundleProcessor extends AbstractProcessor {
         if (bundle == null || bundle.size() == 0) {
             return;
         }
-        for (String bundleName : bundle.keySet()) {
+        for (Map.Entry<String, String> bundleEntry : bundle.entrySet()) {
 
-            String filenameWithVersion = FilenameUtils.insertVersion(bundleDir + bundleName, getMojo().getVersion());
-            String filenameWithVersionAndGzipExtension = FilenameUtils.insertVersionAndGzipExtension(bundleDir + bundleName, getMojo().getVersion());
+            String filenameWithVersion = FilenameUtils.insertVersion(bundleDir + bundleEntry.getKey(), getMojo().getVersion());
+            String filenameWithVersionAndGzipExtension = FilenameUtils.insertVersionAndGzipExtension(bundleDir + bundleEntry.getKey(), getMojo().getVersion());
 
             File outputFile = new File(getMojo().getWebappTargetDir() + filenameWithVersion);
             File gzippedOutputFile = new File(getMojo().getWebappTargetDir() + filenameWithVersionAndGzipExtension);
@@ -72,7 +72,7 @@ public class BundleProcessor extends AbstractProcessor {
             try {
                 output = new FileOutputStream(outputFile);
                 zippedOutput = new GZIPOutputStream(new FileOutputStream(gzippedOutputFile));
-                String files = bundle.get(bundleName);
+                String files = bundleEntry.getValue();
                 for (String file : files.split(",")) {
                     FileInputStream fis = null;
                     try {

@@ -31,6 +31,7 @@ import org.apache.maven.plugin.logging.Log;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -68,8 +69,12 @@ public class S3Uploader {
 
     public final void uploadFiles(final Collection<File> files) throws Exception {        
         Properties settings = new Properties();
-        settings.load(new FileInputStream(mojo.getS3SettingsFile()));
-
+        InputStream is = new FileInputStream(mojo.getS3SettingsFile());
+        try {
+            settings.load(is);
+        } finally {
+            is.close();    
+        }
         String bucket = settings.getProperty("bucket"); 
         String accessKey = settings.getProperty("accessKey");
         String secretKey = settings.getProperty("secretKey");

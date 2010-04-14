@@ -256,7 +256,11 @@ public class WarpDriveMojo extends AbstractMojo {
 
     private void writeWarpDriveConfigFile() throws IOException {
         File file = new File(project.getBuild().getOutputDirectory(), Runtime.RUNTIME_CONFIG_FILE);
-        file.getParentFile().mkdirs();
+
+        if(!file.getParentFile().mkdirs()) {
+            throw new IOException("Unable to write configFile: " + file);
+        }
+
         FileWriter writer = null;
         getLog().info("Writing WarpDrive configfile to: " + file.getName());
         try {
@@ -310,11 +314,11 @@ public class WarpDriveMojo extends AbstractMojo {
         if (bundle == null || bundle.isEmpty()) {
             return;
         }
-        for (String key : bundle.keySet()) {
+        for (Map.Entry<String, String> entry : bundle.entrySet()) {
             writer.write(Runtime.BUNDLE_PREFIX_KEY);
-            writer.write(key);
+            writer.write(entry.getKey());
             writer.write('=');
-            String[] bundleEntries = bundle.get(key).split(",");
+            String[] bundleEntries = entry.getValue().split(",");
             for (int i = 0; i < bundleEntries.length; i++) {
                 writer.write(bundleEntries[i].trim());
                 if (i < bundleEntries.length - 1) {
@@ -339,6 +343,14 @@ public class WarpDriveMojo extends AbstractMojo {
         getLog().info("             *        .                 .    +   . .. . ...........");
         getLog().info("             .        .       *         .        . .  .. . ........");
         getLog().info(".     +          .         .       .          +    . . .. . .......");
+    }
+
+    public MavenProject getProject() {
+        return project;
+    }
+
+    public void setProject(MavenProject project) {
+        this.project = project;
     }
 
     public String getWebappSourceDir() {

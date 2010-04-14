@@ -28,6 +28,7 @@ import org.jdom.xpath.XPath;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 /**
@@ -51,7 +52,12 @@ public class WebXmlProcessor extends AbstractProcessor {
         Document doc = builder.build(webXml);
         configureWarpDriveFilter(doc);
         XMLOutputter output = new XMLOutputter(Format.getPrettyFormat());
-        output.output(doc, new FileOutputStream(webXml));
+        OutputStream os = new FileOutputStream(webXml);
+        try {
+            output.output(doc, os );
+        } finally {
+            os.close();
+        }
         getLog().info("web.xml processed OK");
     }
 

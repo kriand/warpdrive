@@ -20,12 +20,7 @@ import net.kristianandersen.warpdrive.utils.FilenameUtils;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 
 /**
@@ -50,8 +45,7 @@ public final class Runtime {
     public static final String CSS_DIR_KEY = "css.dir";
     public static final String BUNDLE_PREFIX_KEY = "bundle.";
     public static final String MULTIVAL_SEPARATOR = ",";
-
-    private static final Map<String, List<String>> bundles = new HashMap<String, List<String>>();
+    private static final Map<String, List<String>> BUNDLES = new HashMap<String, List<String>>();
 
     private static boolean enabled = false;
     private static String version = null;
@@ -87,6 +81,9 @@ public final class Runtime {
         }
     }
 
+    /**
+     * Private constructor to prevent this class from being instantiated.
+     */
     private Runtime() {
 
     }
@@ -133,9 +130,7 @@ public final class Runtime {
         buffer.append("<img src=\"");
         appendLink(src, buffer, imagesDir, request, false);
         buffer.append("\" ");
-        for (String key : params.keySet()) {
-            buffer.append(key).append("=\"").append(params.get(key)).append("\" ");
-        }
+        addAdditionalParameters(params, buffer);
         buffer.append("/>");
         return buffer.toString();
     }
@@ -209,11 +204,7 @@ public final class Runtime {
             buffer.append(type);
         }
         buffer.append("\" ");
-        if(params != null) {
-            for (String key : params.keySet()) {
-                buffer.append(key).append("=\"").append(params.get(key)).append("\" ");
-            }
-        }
+        addAdditionalParameters(params, buffer);
         buffer.append("/>");
         return buffer.toString();
     }
@@ -239,13 +230,23 @@ public final class Runtime {
             buffer.append(type);
         }
         buffer.append("\" ");
-        if (params != null) {
-            for (String key : params.keySet()) {
-                buffer.append(key).append("=\"").append(params.get(key)).append("\" ");
-            }
-        }
+        addAdditionalParameters(params, buffer);
         buffer.append("></script>");
         return buffer.toString();
+    }
+
+    /**
+     * 
+     * @param params
+     * @param buffer
+     */
+    private static void addAdditionalParameters(final Map<String, String> params, final StringBuilder buffer) {
+        if(params == null) {
+            return;
+        }
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            buffer.append(entry.getKey()).append("=\"").append(entry.getValue()).append("\" ");
+        }
     }
 
     /**
@@ -261,7 +262,11 @@ public final class Runtime {
             return;
         }
         if (externalHosts != null) {
-            buffer.append(externalHosts[Math.abs(filename.hashCode()) % externalHosts.length]);
+            int hashCode = filename.hashCode();
+            if(hashCode == Integer.MIN_VALUE) {
+                hashCode++;
+            }
+            buffer.append(externalHosts[Math.abs(hashCode) % externalHosts.length]);
         }
         buffer.append(request.getContextPath()).append(topLevelDir);
         String versionedSrc = null;
@@ -279,7 +284,7 @@ public final class Runtime {
      * @return
      */
     private static boolean isBundle(final String name) {
-        return bundles.containsKey(name);
+        return BUNDLES.containsKey(name);
     }
 
     /**
@@ -291,7 +296,7 @@ public final class Runtime {
      */
     private static String unbundleScriptBundles(final String src, final String type, final Map<String, String> params, final HttpServletRequest request) {
         StringBuilder builder = new StringBuilder();
-        for (String script : bundles.get(src)) {
+        for (String script : BUNDLES.get(src)) {
             builder.append(writeScriptTag(script, type, params, request));
         }
         return builder.toString();
@@ -307,7 +312,7 @@ public final class Runtime {
      */
     private static String unbundleCssBundles(final String href, final String rel, final String type, final Map<String, String> params, final HttpServletRequest request) {
         StringBuilder builder = new StringBuilder();
-        for (String stylesheet : bundles.get(href)) {
+        for (String stylesheet : BUNDLES.get(href)) {
             builder.append(writeCssTag(stylesheet, rel, type, params, request));
         }
         return builder.toString();
@@ -341,7 +346,7 @@ public final class Runtime {
         while (properties.hasMoreElements()) {
             String property = (String) properties.nextElement();
             if (property.startsWith(BUNDLE_PREFIX_KEY)) {
-                bundles.put(property.substring(BUNDLE_PREFIX_KEY.length()), Arrays.asList(config.getProperty(property).split(MULTIVAL_SEPARATOR)));
+                BUNDLES.put(property.substring(BUNDLE_PREFIX_KEY.length()), Arrays.asList(config.getProperty(property).split(MULTIVAL_SEPARATOR)));
             }
         }
     }
