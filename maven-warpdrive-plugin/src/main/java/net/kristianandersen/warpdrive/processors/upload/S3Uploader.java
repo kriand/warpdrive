@@ -16,6 +16,7 @@
 package net.kristianandersen.warpdrive.processors.upload;
 
 import net.kristianandersen.warpdrive.mojo.WarpDriveMojo;
+import org.apache.maven.plugin.logging.Log;
 import org.jets3t.service.S3Service;
 import org.jets3t.service.S3ServiceException;
 import org.jets3t.service.acl.AccessControlList;
@@ -26,7 +27,6 @@ import org.jets3t.service.model.S3Bucket;
 import org.jets3t.service.model.S3Object;
 import org.jets3t.service.multithread.S3ServiceSimpleMulti;
 import org.jets3t.service.security.AWSCredentials;
-import org.apache.maven.plugin.logging.Log;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -35,20 +35,13 @@ import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.Locale;
-import java.util.Properties;
-import java.util.TimeZone;
+import java.util.*;
 
 /**
  * Created by IntelliJ IDEA.
  * User: kriand
  * Date: Mar 23, 2010
- * Time: 10:45:19 PM 
+ * Time: 10:45:19 PM
  */
 public class S3Uploader {
 
@@ -67,31 +60,28 @@ public class S3Uploader {
         this.log = inLog;
     }
 
-    public final void uploadFiles(final Collection<File> files) throws Exception {        
+    public final void uploadFiles(final Collection<File> files) throws Exception {
         Properties settings = new Properties();
         InputStream is = new FileInputStream(mojo.getS3SettingsFile());
         try {
             settings.load(is);
         } finally {
-            is.close();    
+            is.close();
         }
-        String bucket = settings.getProperty("bucket"); 
+        String bucket = settings.getProperty("bucket");
         String accessKey = settings.getProperty("accessKey");
         String secretKey = settings.getProperty("secretKey");
 
         if (bucket == null) {
-            mojo.getLog().error("Bucket could not be found in settings file");
-            return;
+            throw new IllegalArgumentException("Bucket could not be found in settings file");
         }
 
         if (accessKey == null) {
-            mojo.getLog().error("AccessKey could not be found in settings file");
-            return;
+            throw new IllegalArgumentException("AccessKey could not be found in settings file");
         }
 
         if (secretKey == null) {
-            mojo.getLog().error("SecretKey could not be found in settings file");
-            return;
+            throw new IllegalArgumentException("SecretKey could not be found in settings file");            
         }
 
         S3Service s3Service = createS3Service(accessKey, secretKey);
@@ -102,13 +92,13 @@ public class S3Uploader {
         S3Object[] s3Objects = createS3Objects(s3Bucket, files);
         S3ServiceSimpleMulti multithreadedService = createMultithreadedS3Service(s3Service);
         log.debug("Uploading to S3...");
-        multithreadedService.putObjects(s3Bucket, s3Objects);       
+        multithreadedService.putObjects(s3Bucket, s3Objects);
         log.debug("...done!");
     }
 
     private S3Service createS3Service(final String accessKey, final String secretKey) throws S3ServiceException {
         AWSCredentials awsCredentials = new AWSCredentials(accessKey, secretKey);
-        return new RestS3Service(awsCredentials); 
+        return new RestS3Service(awsCredentials);
     }
 
     private S3ServiceSimpleMulti createMultithreadedS3Service(final S3Service s3Service) {
@@ -133,7 +123,7 @@ public class S3Uploader {
                     s3ObjectList.add(s3Object);
                 }
             }
-        }       
+        }
         return (S3Object[]) s3ObjectList.toArray(new S3Object[s3ObjectList.size()]);
     }
 
