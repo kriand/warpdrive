@@ -16,6 +16,87 @@
             <scope>runtime</scope>
         </dependency>
     </dependencies>
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>net.kristianandersen.warpdrive</groupId>
+                        <artifactId>maven-warpdrive-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>warpspeed</goal>
+                                </goals>
+                                <configuration>
+                                    <active>false</active>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.mortbay.jetty</groupId>
+                        <artifactId>jetty-maven-plugin</artifactId>
+                        <version>7.0.0.pre5</version>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>net.kristianandersen.warpdrive</groupId>
+                        <artifactId>maven-warpdrive-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>warpspeed</goal>
+                                </goals>
+                                <configuration>
+                                    <active>true</active>                                    
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <configuration>
+                            <webXml>target/warpdrive-web.xml</webXml>
+                            <webResources>
+                                <resource>
+                                    <directory>src/main/webapp</directory>
+                                    <excludes>
+                                        <exclude>js/*</exclude>
+                                        <exclude>images/*</exclude>
+                                        <exclude>css/*</exclude>
+                                    </excludes>
+                                </resource>
+                            </webResources>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.mortbay.jetty</groupId>
+                        <artifactId>jetty-maven-plugin</artifactId>
+                        <version>7.0.0.pre5</version>
+                        <configuration>
+                            <webAppSourceDirectory>${project.build.directory}/${project.build.finalName}
+                            </webAppSourceDirectory>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
     <build>
         <plugins>
             <plugin>
@@ -23,12 +104,10 @@
                 <artifactId>maven-warpdrive-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>process</id>
                         <goals>
                             <goal>warpspeed</goal>
                         </goals>
                         <configuration>
-                            <enabled>true</enabled>
                             <jsBundles>
                                 <common.js>
                                     application.js,
@@ -48,20 +127,9 @@
                                 </common.css>
                             </cssBundles>
                             <processWebXml>true</processWebXml>
-                            <uploadFiles>false</uploadFiles>
-                            <s3SettingsFile>s3settings.properties</s3SettingsFile>
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.mortbay.jetty</groupId>
-                <artifactId>jetty-maven-plugin</artifactId>
-                <version>7.0.0.pre5</version>
-                <configuration>
-                    <scanIntervalSeconds>10</scanIntervalSeconds>
-                    <webAppSourceDirectory>${project.build.directory}/${project.build.finalName}</webAppSourceDirectory>
-                </configuration>
             </plugin>
         </plugins>
     </build>

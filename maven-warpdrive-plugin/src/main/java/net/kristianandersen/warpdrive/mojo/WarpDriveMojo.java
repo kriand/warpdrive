@@ -45,6 +45,8 @@ import java.util.Map;
  *
  * @goal warpspeed
  * @phase prepare-package
+ * @requiresProject
+ *
  */
 public class WarpDriveMojo extends AbstractMojo {
 
@@ -82,12 +84,12 @@ public class WarpDriveMojo extends AbstractMojo {
     /**
      * @parameter default-value=true
      */
-    private boolean enabled;
+    private boolean active;
 
     /**
      * @parameter default-value="${basedir}/src/main/webapp/WEB-INF/web.xml"
      */
-    private String webXml;
+    private String webXmlSource;
 
     /**
      * @parameter default-value="js"
@@ -142,7 +144,7 @@ public class WarpDriveMojo extends AbstractMojo {
     /**
      * @parameter default-value=true
      */
-    private boolean processWebXml;
+    private boolean generateWebXml;
 
     /**
      * @parameter default-value=8000
@@ -190,14 +192,14 @@ public class WarpDriveMojo extends AbstractMojo {
 
     public void execute() throws MojoExecutionException {
         try {
-            if (!isEnabled()) {
-                return;
-            }
-            printEyeCatcher();
             assertWarModule();
             normalizeDirectories();
             version = versioningStrategy.getVersion();
             writeWarpDriveConfigFile();
+            if (!isActive()) {
+                return;
+            }
+            printEyeCatcher();
             List<AbstractProcessor> processors = setupProcessors();
             for (AbstractProcessor processor : processors) {
                 processor.process();
@@ -226,7 +228,7 @@ public class WarpDriveMojo extends AbstractMojo {
         if (isProcessImages()) {
             processors.add(new DefaultImageProcessor(this));
         }
-        if (isProcessWebXml()) {
+        if (isGenerateWebXml()) {
             processors.add(new WebXmlProcessor(this));
         }
         if (isUploadFiles()) {
@@ -257,15 +259,16 @@ public class WarpDriveMojo extends AbstractMojo {
     private void writeWarpDriveConfigFile() throws IOException {
         File file = new File(project.getBuild().getOutputDirectory(), Runtime.RUNTIME_CONFIG_FILE);
 
-        if(!file.getParentFile().mkdirs()) {
-            throw new IOException("Unable to write configFile: " + file);
+        boolean created = file.getParentFile().mkdirs();
+        if (created) {
+            getLog().info(String.format("Created directory: %s", file.getParentFile()));
         }
 
         FileWriter writer = null;
         getLog().info("Writing WarpDrive configfile to: " + file.getName());
         try {
             writer = new FileWriter(file);
-            writeBooleanValue(Runtime.ENABLED_KEY, isEnabled(), writer);
+            writeBooleanValue(Runtime.ENABLED_KEY, isActive(), writer);
             writeStringValue(Runtime.VERSION_KEY, version, writer);
             writeStringValue(Runtime.IMAGE_DIR_KEY, getImageDir(), writer);
             writeStringValue(Runtime.JS_DIR_KEY, getJsDir(), writer);
@@ -369,20 +372,20 @@ public class WarpDriveMojo extends AbstractMojo {
         this.webappTargetDir = webappTargetDir;
     }
 
-    public boolean isEnabled() {
-        return enabled;
+    public boolean isActive() {
+        return active;
     }
 
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
-    public String getWebXml() {
-        return webXml;
+    public String getWebXmlSource() {
+        return webXmlSource;
     }
 
-    public void setWebXml(String webXml) {
-        this.webXml = webXml;
+    public void setWebXmlSource(String webXmlSource) {
+        this.webXmlSource = webXmlSource;
     }
 
     public String getJsDir() {
@@ -465,12 +468,12 @@ public class WarpDriveMojo extends AbstractMojo {
         this.processImages = processImages;
     }
 
-    public boolean isProcessWebXml() {
-        return processWebXml;
+    public boolean isGenerateWebXml() {
+        return generateWebXml;
     }
 
-    public void setProcessWebXml(boolean processWebXml) {
-        this.processWebXml = processWebXml;
+    public void setGenerateWebXml(boolean generateWebXml) {
+        this.generateWebXml = generateWebXml;
     }
 
     public int getYuiJsLineBreak() {

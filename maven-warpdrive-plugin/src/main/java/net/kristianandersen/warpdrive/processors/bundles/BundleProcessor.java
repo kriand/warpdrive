@@ -17,6 +17,7 @@ package net.kristianandersen.warpdrive.processors.bundles;
 
 import net.kristianandersen.warpdrive.mojo.WarpDriveMojo;
 import net.kristianandersen.warpdrive.utils.FilenameUtils;
+import net.kristianandersen.warpdrive.Runtime;
 import net.kristianandersen.warpdrive.processors.AbstractProcessor;
 
 import java.io.File;
@@ -54,6 +55,12 @@ public class BundleProcessor extends AbstractProcessor {
         getLog().info("All bundles created OK");
     }
 
+    /**
+     * 
+     * @param bundle
+     * @param bundleDir
+     * @throws IOException
+     */
     private void createBundlesInDir(final Map<String, String> bundle, final String bundleDir) throws IOException {
         if (bundle == null || bundle.size() == 0) {
             return;
@@ -73,7 +80,7 @@ public class BundleProcessor extends AbstractProcessor {
                 output = new FileOutputStream(outputFile);
                 zippedOutput = new GZIPOutputStream(new FileOutputStream(gzippedOutputFile));
                 String files = bundleEntry.getValue();
-                for (String file : files.split(",")) {
+                for (String file : files.split(Runtime.MULTIVAL_SEPARATOR)) {
                     FileInputStream fis = null;
                     try {
                         file = file.trim();

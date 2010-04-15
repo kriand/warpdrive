@@ -39,29 +39,46 @@ import java.util.List;
  */
 public class WebXmlProcessor extends AbstractProcessor {
 
-    private final static String FILTER_NAME = WarpDriveFilter.class.getName();
+    /**
+     *
+     */
+    private static final String FILTER_NAME = WarpDriveFilter.class.getName();
 
-    public WebXmlProcessor(WarpDriveMojo mojo) {
+    /**
+     * @param mojo
+     */
+    public WebXmlProcessor(final WarpDriveMojo mojo) {
         super(mojo);
     }
 
-    public void process() throws Exception {
-        getLog().info("Processing web.xml found here: " + getMojo().getWebXml());
-        File webXml = new File(getMojo().getWebXml());
+    /**
+     * @throws Exception
+     */
+    public final void process() throws Exception {
+        getLog().info("Processing web.xml found here: " + getMojo().getWebXmlSource());
+        File webXmlSource = new File(getMojo().getWebXmlSource());
+        File webXmlTarget = new File(getMojo().getProject().getBuild().getDirectory(), "warpdrive-web.xml");
+        boolean created = webXmlTarget.getParentFile().mkdirs();
+        if (created) {
+            getLog().info(String.format("Created directoty %s", webXmlTarget.getParentFile()));
+        }
         SAXBuilder builder = new SAXBuilder();
-        Document doc = builder.build(webXml);
+        Document doc = builder.build(webXmlSource);
         configureWarpDriveFilter(doc);
-        XMLOutputter output = new XMLOutputter(Format.getPrettyFormat());
-        OutputStream os = new FileOutputStream(webXml);
+        XMLOutputter out = new XMLOutputter(Format.getPrettyFormat());
+        OutputStream os = new FileOutputStream(webXmlTarget);
         try {
-            output.output(doc, os );
+            out.output(doc, os);
         } finally {
             os.close();
         }
-        getLog().info("web.xml processed OK");
     }
 
-    private void configureWarpDriveFilter(Document doc) throws JDOMException {
+    /**
+     * @param doc
+     * @throws JDOMException
+     */
+    private void configureWarpDriveFilter(final Document doc) throws JDOMException {
         if (getMojo().getExternalHosts() != null && getMojo().getExternalHosts().size() > 0) {
             getMojo().getLog().warn("Configuring filter even though external hosts are defined. You probably want to set the configureFilter option to false");
         }
@@ -72,7 +89,10 @@ public class WebXmlProcessor extends AbstractProcessor {
         addFilterDefinitions(root);
     }
 
-    private void addFilterDefinitions(Element root) {
+    /**
+     * @param root
+     */
+    private void addFilterDefinitions(final Element root) {
         Element filterDef = new Element("filter", root.getNamespace());
         Element filterName = new Element("filter-name", root.getNamespace());
         filterName.setText(FILTER_NAME);
@@ -100,7 +120,12 @@ public class WebXmlProcessor extends AbstractProcessor {
         root.addContent(filterDef).addContent(filterMappingJs).addContent(filterMappingCss).addContent(filterMappingImages);
     }
 
-    private void removeFilterDefinitions(Document doc, Element root) throws JDOMException {
+    /**
+     * @param doc
+     * @param root
+     * @throws JDOMException
+     */
+    private void removeFilterDefinitions(final Document doc, final Element root) throws JDOMException {
         XPath xpath = XPath.newInstance("//ns:filter-name");
         xpath.addNamespace("ns", root.getNamespaceURI());
         List<Element> warpDriveFilterElements = xpath.selectNodes(doc);

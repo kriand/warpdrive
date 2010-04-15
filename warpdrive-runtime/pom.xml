@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>warpdrive-runtime</artifactId>
     <packaging>jar</packaging>
-    <name>WarpDrive Runtime Components</name>
+    <name>WarpDrive Runtime</name>
     <parent>
         <groupId>net.kristianandersen.warpdrive</groupId>
         <artifactId>warpdrive</artifactId>
