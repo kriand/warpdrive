@@ -126,7 +126,7 @@
                                     sprites-sprite.css
                                 </common.css>
                             </cssBundles>
-                            <processWebXml>true</processWebXml>
+                            <generateWebXml>true</generateWebXml>
                         </configuration>
                     </execution>
                 </executions>
