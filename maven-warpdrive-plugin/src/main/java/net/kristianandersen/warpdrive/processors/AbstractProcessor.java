@@ -79,8 +79,9 @@ public abstract class AbstractProcessor {
         String filenameWithVersionAndGzipExtension = FilenameUtils.insertVersionAndGzipExtension(baseFilename, getMojo().getVersion());
         File output = new File(getMojo().getWebappTargetDir() + filenameWithVersion);
         File gzippedOutput = new File(getMojo().getWebappTargetDir() + filenameWithVersionAndGzipExtension);
-        if(!output.getParentFile().mkdirs()) {
-            throw new IOException("Unable to write file: " + output);
+        boolean created = output.getParentFile().mkdirs();
+        if(created) {
+            getLog().info(String.format("Created directoty %s", output.getParentFile()));
         }
         FileWriter writer = new FileWriter(output);
         OutputStreamWriter zipWriter = new OutputStreamWriter((new GZIPOutputStream(new FileOutputStream(gzippedOutput))));
@@ -101,8 +102,9 @@ public abstract class AbstractProcessor {
         String baseFilename = getBaseFileName(originalFile, getMojo().getWebappSourceDir());
         String filenameWithVersion = FilenameUtils.insertVersion(baseFilename, getMojo().getVersion());
         File output = new File(getMojo().getWebappTargetDir() + filenameWithVersion);
-        if(!output.getParentFile().mkdirs()) {
-            throw new IOException("Unable to write file: " + output);
+        boolean created = output.getParentFile().mkdirs();
+        if(created) {
+            getLog().info(String.format("Created directoty %s", output.getParentFile()));
         }
         FileInputStream fis = null;
         FileOutputStream fos = null;
