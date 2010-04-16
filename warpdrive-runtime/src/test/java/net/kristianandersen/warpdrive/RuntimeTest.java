@@ -27,7 +27,7 @@ import java.util.StringTokenizer;
 
 /**
  * Created by IntelliJ IDEA.
- * User: kriand
+ * @author kriand <a href="http://mailhide.recaptcha.net/d?k=01r9lbYEAtg9V5s1Ru_jtZ1g==&c=-aIoeZ0yU0yPn2kdog349bCmN-h1pe5Ed0LsyuWMbEc=">Show email</a>
  * Date: Mar 31, 2010
  * Time: 9:47:28 PM
  */

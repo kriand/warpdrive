@@ -23,22 +23,36 @@ import java.util.Collection;
 
 /**
  * Created by IntelliJ IDEA.
- * User: kriand
+ * @author kriand <a href="http://mailhide.recaptcha.net/d?k=01r9lbYEAtg9V5s1Ru_jtZ1g==&c=-aIoeZ0yU0yPn2kdog349bCmN-h1pe5Ed0LsyuWMbEc=">Show email</a>
  * Date: Mar 3, 2010
  * Time: 8:54:57 PM 
  */
 public class DefaultImageProcessor extends AbstractProcessor {
 
+    /**
+     *
+     * Constructor.
+     *
+     * @param mojo The Maven plugin holds configuration
+     */
     public DefaultImageProcessor(final WarpDriveMojo mojo) {
         super(mojo, new File(mojo.getWebappSourceDir(), mojo.getImageDir()), "gif", "png", "jpg", "jpeg");
     }
 
+    /**
+     *
+     * Processes all files in the configured image-directory with extension, gif, png, jpg or jpeg.
+     * For images, the only processing performed is inserting version in filename.
+     *
+     * @throws Exception If a file could not be read or written. 
+     * @see net.kristianandersen.warpdrive.processors.AbstractProcessor#process() 
+     */
     public final void process() throws Exception {
         getLog().info("Processing image files");
         Collection<File> imageFiles = getFileset();
         for (File f : imageFiles) {
             getLog().debug("Processing file: " + f.getName());
-            writeFile(f);                        
+            addVersionToFile(f);
         }
         getLog().info("All image files processed OK");
     }

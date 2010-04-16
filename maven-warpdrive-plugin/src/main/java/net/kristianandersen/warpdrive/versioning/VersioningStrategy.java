@@ -17,10 +17,9 @@
 
 /**
  * Created by IntelliJ IDEA.
- * User: kriand
+ * @author kriand <a href="http://mailhide.recaptcha.net/d?k=01r9lbYEAtg9V5s1Ru_jtZ1g==&c=-aIoeZ0yU0yPn2kdog349bCmN-h1pe5Ed0LsyuWMbEc=">Show email</a>
  * Date: Mar 2, 2010
  * Time: 6:03:09 PM
- * To change this template use File | Settings | File Templates.
  */
 public interface VersioningStrategy {
 

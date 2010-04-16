@@ -20,11 +20,13 @@ import org.mozilla.javascript.ErrorReporter;
 import org.mozilla.javascript.EvaluatorException;
 
 /**
+ *
+ * An error reporter that logs errors to the Maven log.
+ *
  * Created by IntelliJ IDEA.
- * User: kriand
+ * @author kriand <a href="http://mailhide.recaptcha.net/d?k=01r9lbYEAtg9V5s1Ru_jtZ1g==&c=-aIoeZ0yU0yPn2kdog349bCmN-h1pe5Ed0LsyuWMbEc=">Show email</a>
  * Date: Mar 6, 2010
  * Time: 6:57:28 PM
- * To change this template use File | Settings | File Templates.
  */
 class JsErrorReporter implements ErrorReporter {
 

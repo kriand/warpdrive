@@ -25,7 +25,7 @@ import java.util.*;
 
 /**
  * Created by IntelliJ IDEA.
- * User: kriand
+ * @author kriand <a href="http://mailhide.recaptcha.net/d?k=01r9lbYEAtg9V5s1Ru_jtZ1g==&c=-aIoeZ0yU0yPn2kdog349bCmN-h1pe5Ed0LsyuWMbEc=">Show email</a>
  * Date: Mar 2, 2010
  * Time: 10:54:25 PM
  */
@@ -33,7 +33,7 @@ public final class Runtime {
 
     public static final String RUNTIME_CONFIG_FILE = "/net/kristianandersen/warpdrive/config.properties";
 
-    public static final String GZIP_EXTENSION = ".gz";
+    public static final String GZIP_EXTENSION = ".gz";    
     public static final String VERSION_PREFIX = "__v";
 
     public static final String ENABLED_KEY = "enabled";

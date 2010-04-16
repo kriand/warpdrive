@@ -22,13 +22,23 @@ import java.io.File;
 import java.util.Collection;
 
 /**
+ *
+ * Processor for handling uploads of resources to external locations.
+ * Currently, only <a href="http://aws.amazon.com/s3/">Amazon S3</a> is supported.
+ *
  * Created by IntelliJ IDEA.
- * User: kriand
+ * @author kriand <a href="http://mailhide.recaptcha.net/d?k=01r9lbYEAtg9V5s1Ru_jtZ1g==&c=-aIoeZ0yU0yPn2kdog349bCmN-h1pe5Ed0LsyuWMbEc=">Show email</a>
  * Date: Mar 23, 2010
  * Time: 10:44:15 PM
  */
 public class ExternalUploadProcessor extends AbstractProcessor {
 
+    /**
+     *
+     * Constructs a new upload processor, with configurations from the mojo.
+     *
+     * @param mojo The WarpDrive plugin, containing configuration.
+     */
     public ExternalUploadProcessor(final WarpDriveMojo mojo) {
         super(mojo,
                 new File[]{new File(mojo.getWebappTargetDir() + mojo.getCssDir()),
@@ -37,6 +47,12 @@ public class ExternalUploadProcessor extends AbstractProcessor {
                 "css", "js", "gif", "png", "jpg", "jpeg");
     }
 
+    /**
+     *
+     * Starts the fileupload-process.
+     *
+     * @throws Exception If something goes wrong during upload
+     */
     public final void process() throws Exception {
         Collection<File> files = getFileset();
         if (getMojo().getS3SettingsFile() != null) {

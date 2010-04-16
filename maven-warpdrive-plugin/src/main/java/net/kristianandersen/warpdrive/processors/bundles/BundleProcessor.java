@@ -15,63 +15,79 @@
  */
 package net.kristianandersen.warpdrive.processors.bundles;
 
-import net.kristianandersen.warpdrive.mojo.WarpDriveMojo;
-import net.kristianandersen.warpdrive.utils.FilenameUtils;
 import net.kristianandersen.warpdrive.Runtime;
+import net.kristianandersen.warpdrive.mojo.WarpDriveMojo;
 import net.kristianandersen.warpdrive.processors.AbstractProcessor;
+import net.kristianandersen.warpdrive.utils.FilenameUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.zip.GZIPOutputStream;
 import java.util.Map;
+import java.util.zip.GZIPOutputStream;
 
 /**
+ * Bundles configured scripts or stylesheets together, reducing the number
+ * of files and consequently the number of requests from each page.
+ *
  * Created by IntelliJ IDEA.
- * User: kriand
+ * @author kriand <a href="http://mailhide.recaptcha.net/d?k=01r9lbYEAtg9V5s1Ru_jtZ1g==&c=-aIoeZ0yU0yPn2kdog349bCmN-h1pe5Ed0LsyuWMbEc=">Show email</a>
  * Date: Apr 1, 2010
  * Time: 1:20:38 AM
  */
 public class BundleProcessor extends AbstractProcessor {
 
     /**
+     * Creates a new instance, configuration is provided through
+     * {@linkplain net.kristianandersen.warpdrive.mojo.WarpDriveMojo}.
      *
-     * @param mojo
+     * @param mojo The WarpDrive Maven plugin provides all configuration.
+     * @pre mojo != null
      */
     public BundleProcessor(final WarpDriveMojo mojo) {
-        super(mojo);    
+        super(mojo);
     }
 
     /**
+     * Performs the bundling, creating one new file for each bundle.
      *
-     * @throws Exception
+     * @throws Exception If a bundle can not be created due to fawlty configuration, io errors, etc.
+     * @see net.kristianandersen.warpdrive.processors.AbstractProcessor#process()
      */
     public final void process() throws Exception {
+
         getLog().info("Processing css bundles in: " + getMojo().getCssBundles());
         createBundlesInDir(getMojo().getCssBundles(), getMojo().getCssDir());
+
         getLog().info("Processing js bundles in: " + getMojo().getJsBundles());
         createBundlesInDir(getMojo().getJsBundles(), getMojo().getJsDir());
+
         getLog().info("All bundles created OK");
     }
 
     /**
-     * 
-     * @param bundle
-     * @param bundleDir
-     * @throws IOException
+     * Creates a set of configured bundles.
+     *
+     * @param bundles The bundles to create. The keys will be the bundle filenames.
+     *                The values are comma-separated lists containing the files in each bundle.
+     * @param bundleDir The directory where the bundle will be created.
+     * @throws IOException If the bundles can not be created.
+     * @pre bundleDir != null
      */
-    private void createBundlesInDir(final Map<String, String> bundle, final String bundleDir) throws IOException {
-        if (bundle == null || bundle.size() == 0) {
+    private void createBundlesInDir(final Map<String, String> bundles, final String bundleDir) throws IOException {
+        assert bundleDir == null : "Bundledir was null";
+        if (bundles == null || bundles.size() == 0) {
+            getLog().info(String.format("No bundles configured in directory: %s", bundleDir));
             return;
         }
-        for (Map.Entry<String, String> bundleEntry : bundle.entrySet()) {
+        for (Map.Entry<String, String> bundleEntry : bundles.entrySet()) {
 
-            String filenameWithVersion = FilenameUtils.insertVersion(bundleDir + bundleEntry.getKey(), getMojo().getVersion());
-            String filenameWithVersionAndGzipExtension = FilenameUtils.insertVersionAndGzipExtension(bundleDir + bundleEntry.getKey(), getMojo().getVersion());
+            final String filenameWithVersion = FilenameUtils.insertVersion(bundleDir + bundleEntry.getKey(), getMojo().getVersion());
+            final String filenameWithVersionAndGzipExtension = FilenameUtils.insertVersionAndGzipExtension(bundleDir + bundleEntry.getKey(), getMojo().getVersion());
 
-            File outputFile = new File(getMojo().getWebappTargetDir() + filenameWithVersion);
-            File gzippedOutputFile = new File(getMojo().getWebappTargetDir() + filenameWithVersionAndGzipExtension);
+            final File outputFile = new File(getMojo().getWebappTargetDir() + filenameWithVersion);
+            final File gzippedOutputFile = new File(getMojo().getWebappTargetDir() + filenameWithVersionAndGzipExtension);
 
             FileOutputStream output = null;
             GZIPOutputStream zippedOutput = null;
@@ -79,13 +95,13 @@ public class BundleProcessor extends AbstractProcessor {
             try {
                 output = new FileOutputStream(outputFile);
                 zippedOutput = new GZIPOutputStream(new FileOutputStream(gzippedOutputFile));
-                String files = bundleEntry.getValue();
+                final String files = bundleEntry.getValue();
                 for (String file : files.split(Runtime.MULTIVAL_SEPARATOR)) {
                     FileInputStream fis = null;
                     try {
                         file = file.trim();
-                        String versionedFile = FilenameUtils.insertVersion(bundleDir + file, getMojo().getVersion());
-                        File f = new File(getMojo().getWebappTargetDir() + versionedFile);
+                        final String versionedFile = FilenameUtils.insertVersion(bundleDir + file, getMojo().getVersion());
+                        final File f = new File(getMojo().getWebappTargetDir() + versionedFile);
                         fis = new FileInputStream(f);
                         byte[] buf = new byte[WarpDriveMojo.WRITE_BUFFER_SIZE];
                         int read = 0;

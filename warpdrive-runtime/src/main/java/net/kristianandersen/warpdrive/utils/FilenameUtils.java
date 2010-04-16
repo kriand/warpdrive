@@ -19,17 +19,30 @@ import net.kristianandersen.warpdrive.Runtime;
 
 /**
  * Created by IntelliJ IDEA.
- * User: kriand
+ * @author kriand <a href="http://mailhide.recaptcha.net/d?k=01r9lbYEAtg9V5s1Ru_jtZ1g==&c=-aIoeZ0yU0yPn2kdog349bCmN-h1pe5Ed0LsyuWMbEc=">Show email</a>
  * Date: Mar 3, 2010
  * Time: 6:42:39 PM
  */
-public class FilenameUtils {
+public final class FilenameUtils {
 
-    public static String insertVersion(String file, String version) {
+    /**
+     * Private contructor to prevent instantiation.
+     */
+    private FilenameUtils() {
+
+    }
+
+    /**
+     * 
+     * @param file
+     * @param version
+     * @return
+     */
+    public static String insertVersion(final String file, final String version) {
         assert file != null : "File should not be null";
         assert version != null : "Version should not be null";
-        StringBuilder result = new StringBuilder();
-        int ext = findExtension(file);
+        final StringBuilder result = new StringBuilder();
+        final int ext = findExtension(file);
         result.append(file.substring(0, ext))
               .append(Runtime.VERSION_PREFIX)
               .append(version)
@@ -37,12 +50,17 @@ public class FilenameUtils {
         return result.toString();
     }
 
-
-    public static String insertVersionAndGzipExtension(String file, String version) {
+    /**
+     *
+     * @param file
+     * @param version
+     * @return
+     */
+    public static String insertVersionAndGzipExtension(final String file, final String version) {
         assert file != null : "File should not be null";
         assert version != null : "Version should not be null";
-        StringBuilder result = new StringBuilder();
-        int ext = findExtension(file);
+        final StringBuilder result = new StringBuilder();
+        final int ext = findExtension(file);
         result.append(file.substring(0, ext))
               .append(Runtime.VERSION_PREFIX)
               .append(version)
@@ -51,9 +69,14 @@ public class FilenameUtils {
         return result.toString();
     }
 
+    /**
+     *
+     * @param file
+     * @return
+     */
     private static int findExtension(String file) {
         int lastDot = file.lastIndexOf('.');
-        if(lastDot == -1) {
+        if (lastDot == -1) {
             lastDot = file.length();
         }
         return lastDot;

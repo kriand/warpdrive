@@ -16,19 +16,22 @@
 package net.kristianandersen.warpdrive.versioning;
 
 /**
+ *
+ * Simple versioning strategy, just returning the currenttime in millis.
+ *
  * Created by IntelliJ IDEA.
- * User: kriand
+ * @author kriand <a href="http://mailhide.recaptcha.net/d?k=01r9lbYEAtg9V5s1Ru_jtZ1g==&c=-aIoeZ0yU0yPn2kdog349bCmN-h1pe5Ed0LsyuWMbEc=">Show email</a>
  * Date: Mar 2, 2010
  * Time: 6:07:58 PM
- * To change this template use File | Settings | File Templates.
  */
 public class CurrentTimeMillisStrategy implements VersioningStrategy {
 
-
     /**
      *
-     * @return
-     * @see net.kristianandersen.warpdrive.versioning.VersioningStrategy#getVersion()  
+     * Returns the version as current time in mills.
+     *
+     * @return The version as current time in mills.
+     * @see net.kristianandersen.warpdrive.versioning.VersioningStrategy#getVersion()
      */
     public final String getVersion() {
         return String.valueOf(System.currentTimeMillis());

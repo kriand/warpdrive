@@ -24,15 +24,27 @@ import java.io.FileReader;
 import java.io.IOException;
 
 /**
+ *
+ * Utilityclass for rewriting URLs in css-files. Based on code from the excellent UI-Performance plugin for Grails.
+ *
  * Created by IntelliJ IDEA.
- * User: kriand
+ * @author kriand <a href="http://mailhide.recaptcha.net/d?k=01r9lbYEAtg9V5s1Ru_jtZ1g==&c=-aIoeZ0yU0yPn2kdog349bCmN-h1pe5Ed0LsyuWMbEc=">Show email</a>
  * Date: Mar 3, 2010
  * Time: 8:31:58 PM
  */
 class CssUrlRewriter {
 
 
-    public String rewrite(final WarpDriveMojo mojo, final File cssFile) throws IOException {
+    /**
+     *
+     * Rewrites URLs in the cssfile to access versioned resources.
+     *
+     * @param mojo Contains configuration
+     * @param cssFile The css file to process
+     * @return The contents of the rewritten css.
+     * @throws IOException If the provided css file could not be read.
+     */
+    String rewrite(final WarpDriveMojo mojo, final File cssFile) throws IOException {
         StringBuilder css = new StringBuilder();
         BufferedReader reader = new BufferedReader(new FileReader(cssFile));
         try {

@@ -38,12 +38,16 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
+ *
+ * Helperclass to upload files to Amazon S3, for use with CouldFront.
+ * Also sets ridiculously long expires headers on uploaded files.  
+ *
  * Created by IntelliJ IDEA.
- * User: kriand
+ * @author kriand <a href="http://mailhide.recaptcha.net/d?k=01r9lbYEAtg9V5s1Ru_jtZ1g==&c=-aIoeZ0yU0yPn2kdog349bCmN-h1pe5Ed0LsyuWMbEc=">Show email</a>
  * Date: Mar 23, 2010
  * Time: 10:45:19 PM
  */
-public class S3Uploader {
+class S3Uploader {
 
     private static final int YEARS_TO_CACHE = 30;
 
@@ -55,12 +59,12 @@ public class S3Uploader {
 
     private final Log log;
 
-    public S3Uploader(final WarpDriveMojo inMojo, final Log inLog) {
+    S3Uploader(final WarpDriveMojo inMojo, final Log inLog) {
         this.mojo = inMojo;
         this.log = inLog;
     }
 
-    public final void uploadFiles(final Collection<File> files) throws Exception {
+    final void uploadFiles(final Collection<File> files) throws Exception {
         Properties settings = new Properties();
         InputStream is = new FileInputStream(mojo.getS3SettingsFile());
         try {

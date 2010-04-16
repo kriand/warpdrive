@@ -38,15 +38,15 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * The WarpDrive Maven plugin performs all the work required at buildtime.
+ * 
  * Created by IntelliJ IDEA.
- * User: kriand
+ * @author kriand <a href="http://mailhide.recaptcha.net/d?k=01r9lbYEAtg9V5s1Ru_jtZ1g==&c=-aIoeZ0yU0yPn2kdog349bCmN-h1pe5Ed0LsyuWMbEc=">Show email</a>
  * Date: Mar 2, 2010
  * Time: 5:46:05 PM
- *
  * @goal warpspeed
  * @phase prepare-package
  * @requiresProject
- *
  */
 public class WarpDriveMojo extends AbstractMojo {
 
@@ -124,26 +124,6 @@ public class WarpDriveMojo extends AbstractMojo {
     /**
      * @parameter default-value=true
      */
-    private boolean processJS;
-
-    /**
-     * @parameter default-value=true
-     */
-    private boolean processSprites;
-
-    /**
-     * @parameter default-value=true
-     */
-    private boolean processCSS;
-
-    /**
-     * @parameter default-value=true
-     */
-    private boolean processImages;
-
-    /**
-     * @parameter default-value=true
-     */
     private boolean generateWebXml;
 
     /**
@@ -214,19 +194,173 @@ public class WarpDriveMojo extends AbstractMojo {
         return version;
     }
 
+    public MavenProject getProject() {
+        return project;
+    }
+
+    public void setProject(MavenProject project) {
+        this.project = project;
+    }
+
+    public String getWebappSourceDir() {
+        return webappSourceDir;
+    }
+
+    public void setWebappSourceDir(String webappSourceDir) {
+        this.webappSourceDir = webappSourceDir;
+    }
+
+    public String getWebappTargetDir() {
+        return webappTargetDir;
+    }
+
+    public void setWebappTargetDir(String webappTargetDir) {
+        this.webappTargetDir = webappTargetDir;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public String getWebXmlSource() {
+        return webXmlSource;
+    }
+
+    public void setWebXmlSource(String webXmlSource) {
+        this.webXmlSource = webXmlSource;
+    }
+
+    public String getJsDir() {
+        return jsDir;
+    }
+
+    public void setJsDir(String jsDir) {
+        this.jsDir = jsDir;
+    }
+
+    public String getImageDir() {
+        return imageDir;
+    }
+
+    public void setImageDir(String imageDir) {
+        this.imageDir = imageDir;
+    }
+
+    public String getCssDir() {
+        return cssDir;
+    }
+
+    public void setCssDir(String cssDir) {
+        this.cssDir = cssDir;
+    }
+
+    public List<String> getExternalHosts() {
+        return externalHosts;
+    }
+
+    public void setExternalHosts(List<String> externalHosts) {
+        this.externalHosts = externalHosts;
+    }
+
+    public Map<String, String> getJsBundles() {
+        return jsBundles;
+    }
+
+    public void setJsBundles(Map<String, String> jsBundles) {
+        this.jsBundles = jsBundles;
+    }
+
+    public Map<String, String> getCssBundles() {
+        return cssBundles;
+    }
+
+    public void setCssBundles(Map<String, String> cssBundles) {
+        this.cssBundles = cssBundles;
+    }
+
+    public boolean isGenerateWebXml() {
+        return generateWebXml;
+    }
+
+    public void setGenerateWebXml(boolean generateWebXml) {
+        this.generateWebXml = generateWebXml;
+    }
+
+    public int getYuiJsLineBreak() {
+        return yuiJsLineBreak;
+    }
+
+    public void setYuiJsLineBreak(int yuiJsLineBreak) {
+        this.yuiJsLineBreak = yuiJsLineBreak;
+    }
+
+    public boolean isYuiJsMunge() {
+        return yuiJsMunge;
+    }
+
+    public void setYuiJsMunge(boolean yuiJsMunge) {
+        this.yuiJsMunge = yuiJsMunge;
+    }
+
+    public boolean isYuiJsVerbose() {
+        return yuiJsVerbose;
+    }
+
+    public void setYuiJsVerbose(boolean yuiJsVerbose) {
+        this.yuiJsVerbose = yuiJsVerbose;
+    }
+
+    public boolean isYuiJsPreserveAllSemicolons() {
+        return yuiJsPreserveAllSemicolons;
+    }
+
+    public void setYuiJsPreserveAllSemicolons(boolean yuiJsPreserveAllSemicolons) {
+        this.yuiJsPreserveAllSemicolons = yuiJsPreserveAllSemicolons;
+    }
+
+    public boolean isYuiJsDisableOptimizations() {
+        return yuiJsDisableOptimizations;
+    }
+
+    public void setYuiJsDisableOptimizations(boolean yuiJsDisableOptimizations) {
+        this.yuiJsDisableOptimizations = yuiJsDisableOptimizations;
+    }
+
+    public int getYuiCssLineBreak() {
+        return yuiCssLineBreak;
+    }
+
+    public void setYuiCssLineBreak(int yuiCssLineBreak) {
+        this.yuiCssLineBreak = yuiCssLineBreak;
+    }
+
+    public boolean isUploadFiles() {
+        return uploadFiles;
+    }
+
+    public void setUploadFiles(boolean uploadFiles) {
+        this.uploadFiles = uploadFiles;
+    }
+
+    public File getS3SettingsFile() {
+        return s3SettingsFile;
+    }
+
+    public void setS3SettingsFile(File s3SettingsFile) {
+        this.s3SettingsFile = s3SettingsFile;
+    }
+
     private List<AbstractProcessor> setupProcessors() {
         List<AbstractProcessor> processors = new ArrayList<AbstractProcessor>();
-        if (isProcessJS()) {
-            processors.add(new YuiJsProcessor(this));
-        }
-        if (isProcessCSS()) {
-            processors.add(new YuiCssProcessor(this));
-        }
+        processors.add(new YuiJsProcessor(this));
+        processors.add(new YuiCssProcessor(this));
+        processors.add(new DefaultImageProcessor(this));
         if (bundlesAreConfigured()) {
             processors.add(new BundleProcessor(this));
-        }
-        if (isProcessImages()) {
-            processors.add(new DefaultImageProcessor(this));
         }
         if (isGenerateWebXml()) {
             processors.add(new WebXmlProcessor(this));
@@ -346,197 +480,5 @@ public class WarpDriveMojo extends AbstractMojo {
         getLog().info("             *        .                 .    +   . .. . ...........");
         getLog().info("             .        .       *         .        . .  .. . ........");
         getLog().info(".     +          .         .       .          +    . . .. . .......");
-    }
-
-    public MavenProject getProject() {
-        return project;
-    }
-
-    public void setProject(MavenProject project) {
-        this.project = project;
-    }
-
-    public String getWebappSourceDir() {
-        return webappSourceDir;
-    }
-
-    public void setWebappSourceDir(String webappSourceDir) {
-        this.webappSourceDir = webappSourceDir;
-    }
-
-    public String getWebappTargetDir() {
-        return webappTargetDir;
-    }
-
-    public void setWebappTargetDir(String webappTargetDir) {
-        this.webappTargetDir = webappTargetDir;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    public String getWebXmlSource() {
-        return webXmlSource;
-    }
-
-    public void setWebXmlSource(String webXmlSource) {
-        this.webXmlSource = webXmlSource;
-    }
-
-    public String getJsDir() {
-        return jsDir;
-    }
-
-    public void setJsDir(String jsDir) {
-        this.jsDir = jsDir;
-    }
-
-    public String getImageDir() {
-        return imageDir;
-    }
-
-    public void setImageDir(String imageDir) {
-        this.imageDir = imageDir;
-    }
-
-    public String getCssDir() {
-        return cssDir;
-    }
-
-    public void setCssDir(String cssDir) {
-        this.cssDir = cssDir;
-    }
-
-    public List<String> getExternalHosts() {
-        return externalHosts;
-    }
-
-    public void setExternalHosts(List<String> externalHosts) {
-        this.externalHosts = externalHosts;
-    }
-
-    public Map<String, String> getJsBundles() {
-        return jsBundles;
-    }
-
-    public void setJsBundles(Map<String, String> jsBundles) {
-        this.jsBundles = jsBundles;
-    }
-
-    public Map<String, String> getCssBundles() {
-        return cssBundles;
-    }
-
-    public void setCssBundles(Map<String, String> cssBundles) {
-        this.cssBundles = cssBundles;
-    }
-
-    public boolean isProcessJS() {
-        return processJS;
-    }
-
-    public void setProcessJS(boolean processJS) {
-        this.processJS = processJS;
-    }
-
-    public boolean isProcessSprites() {
-        return processSprites;
-    }
-
-    public void setProcessSprites(boolean processSprites) {
-        this.processSprites = processSprites;
-    }
-
-    public boolean isProcessCSS() {
-        return processCSS;
-    }
-
-    public void setProcessCSS(boolean processCSS) {
-        this.processCSS = processCSS;
-    }
-
-    public boolean isProcessImages() {
-        return processImages;
-    }
-
-    public void setProcessImages(boolean processImages) {
-        this.processImages = processImages;
-    }
-
-    public boolean isGenerateWebXml() {
-        return generateWebXml;
-    }
-
-    public void setGenerateWebXml(boolean generateWebXml) {
-        this.generateWebXml = generateWebXml;
-    }
-
-    public int getYuiJsLineBreak() {
-        return yuiJsLineBreak;
-    }
-
-    public void setYuiJsLineBreak(int yuiJsLineBreak) {
-        this.yuiJsLineBreak = yuiJsLineBreak;
-    }
-
-    public boolean isYuiJsMunge() {
-        return yuiJsMunge;
-    }
-
-    public void setYuiJsMunge(boolean yuiJsMunge) {
-        this.yuiJsMunge = yuiJsMunge;
-    }
-
-    public boolean isYuiJsVerbose() {
-        return yuiJsVerbose;
-    }
-
-    public void setYuiJsVerbose(boolean yuiJsVerbose) {
-        this.yuiJsVerbose = yuiJsVerbose;
-    }
-
-    public boolean isYuiJsPreserveAllSemicolons() {
-        return yuiJsPreserveAllSemicolons;
-    }
-
-    public void setYuiJsPreserveAllSemicolons(boolean yuiJsPreserveAllSemicolons) {
-        this.yuiJsPreserveAllSemicolons = yuiJsPreserveAllSemicolons;
-    }
-
-    public boolean isYuiJsDisableOptimizations() {
-        return yuiJsDisableOptimizations;
-    }
-
-    public void setYuiJsDisableOptimizations(boolean yuiJsDisableOptimizations) {
-        this.yuiJsDisableOptimizations = yuiJsDisableOptimizations;
-    }
-
-    public int getYuiCssLineBreak() {
-        return yuiCssLineBreak;
-    }
-
-    public void setYuiCssLineBreak(int yuiCssLineBreak) {
-        this.yuiCssLineBreak = yuiCssLineBreak;
-    }
-
-    public boolean isUploadFiles() {
-        return uploadFiles;
-    }
-
-    public void setUploadFiles(boolean uploadFiles) {
-        this.uploadFiles = uploadFiles;
-    }
-
-    public File getS3SettingsFile() {
-        return s3SettingsFile;
-    }
-
-    public void setS3SettingsFile(File s3SettingsFile) {
-        this.s3SettingsFile = s3SettingsFile;
     }
 }

@@ -25,17 +25,33 @@ import java.io.StringWriter;
 import java.util.Collection;
 
 /**
+ *
+ * Compresses Javascripts using <a href="http://developer.yahoo.com/yui/compressor/">YUI Compressor</a>.
+ *
  * Created by IntelliJ IDEA.
- * User: kriand
+ * @author kriand <a href="http://mailhide.recaptcha.net/d?k=01r9lbYEAtg9V5s1Ru_jtZ1g==&c=-aIoeZ0yU0yPn2kdog349bCmN-h1pe5Ed0LsyuWMbEc=">Show email</a>
  * Date: Mar 2, 2010
  * Time: 7:46:28 PM
  */
 public class YuiJsProcessor extends AbstractProcessor {
 
+    /**
+     *
+     * Constructs a new Javascript processor, with configurations from the mojo.
+     *
+     * @param mojo Holds configuration.
+     */
     public YuiJsProcessor(final WarpDriveMojo mojo) {
         super(mojo, new File(mojo.getWebappSourceDir(), mojo.getJsDir()), "js");
     }
 
+    /**
+     *
+     * Runs all .js files in the configured js-directory through the YUI Compressor
+     *
+     * @throws Exception If an error occurs during compression or while writing files.
+     * @see net.kristianandersen.warpdrive.processors.AbstractProcessor#process()
+     */
     public final void process() throws Exception {
         getLog().info("Processing JS files");
         Collection<File> jsFiles = getFileset();
@@ -48,7 +64,7 @@ public class YuiJsProcessor extends AbstractProcessor {
                     getMojo().isYuiJsVerbose(),
                     getMojo().isYuiJsPreserveAllSemicolons(),
                     getMojo().isYuiJsDisableOptimizations());
-            writeFile(file, s.toString());
+            writeVersionedFile(file, s.toString());
         }
         getLog().info("All JS files processed OK");
     }
