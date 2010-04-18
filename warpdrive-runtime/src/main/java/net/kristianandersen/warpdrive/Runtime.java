@@ -20,10 +20,20 @@ import net.kristianandersen.warpdrive.utils.FilenameUtils;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 
 /**
+ *
+ * This class implements the runtime behaviour of WarpDrive. All logic for the taglibs is contained
+ * in here. It relies on a static initializer looking for a configuration file in the classpath at
+ * {@linkplain net.kristianandersen.warpdrive.Runtime#RUNTIME_CONFIG_FILE}
+ *
  * Created by IntelliJ IDEA.
  * @author kriand <a href="http://mailhide.recaptcha.net/d?k=01r9lbYEAtg9V5s1Ru_jtZ1g==&c=-aIoeZ0yU0yPn2kdog349bCmN-h1pe5Ed0LsyuWMbEc=">Show email</a>
  * Date: Mar 2, 2010
@@ -31,12 +41,25 @@ import java.util.*;
  */
 public final class Runtime {
 
+    /**
+     * Where to look for the configuration file in classpath.
+     */
     public static final String RUNTIME_CONFIG_FILE = "/net/kristianandersen/warpdrive/config.properties";
 
-    public static final String GZIP_EXTENSION = ".gz";    
-    public static final String VERSION_PREFIX = "__v";
+    /**
+     * Syntax for the gzip extension.
+     */
+    public static final String GZIP_EXTENSION = ".gz";
 
-    public static final String ENABLED_KEY = "enabled";
+    /**
+     * Syntax for a prefix inserted right before the version
+     */
+    public static final String VERSION_PREFIX = "_v";
+
+    /**
+     * Configuration key
+     */
+    public static final String DEV_MODE_KEY = "developmentMode";
     public static final String VERSION_KEY = "version";
     public static final String EXTERNAL_HOSTS_KEY = "external.hosts";
     public static final String SCRIPT_BUFFER_KEY = "net.kristianandersen.warpdrive.ScriptBuffer";
@@ -47,7 +70,7 @@ public final class Runtime {
     public static final String MULTIVAL_SEPARATOR = ",";
     private static final Map<String, List<String>> BUNDLES = new HashMap<String, List<String>>();
 
-    private static boolean enabled = false;
+    private static boolean developmentMode = false;
     private static String version = null;
     private static String[] externalHosts = null;
     private static String imagesDir = null;
@@ -58,24 +81,27 @@ public final class Runtime {
         InputStream is = null;
         try {
             Properties props = new Properties();
-            is = Thread.currentThread().getContextClassLoader().getResourceAsStream(RUNTIME_CONFIG_FILE);
+            is = Class.class.getResourceAsStream(RUNTIME_CONFIG_FILE);
             if (is != null) {
                 props.load(is);
                 configure(props);
             } else {
-                System.err.println("[WarpDrive] No config found, WarpDrive must be manually configured");
-                enabled = false;
+                is = Thread.currentThread().getContextClassLoader().getResourceAsStream(RUNTIME_CONFIG_FILE);
+                if (is != null) {
+                    props.load(is);
+                    configure(props);
+                } else {
+                    throw new IllegalStateException("Could not find configuration file");
+                }
             }
-        }
-        catch (Exception ex) {
-            throw new IllegalStateException("Caught exception while reading config, disabling WarpDrive", ex);
-        }
-        finally {
+        } catch (IOException ioex) {
+            throw new IllegalStateException("Caught IOException while reading config", ioex);
+        } finally {
             if (is != null) {
                 try {
                     is.close();
                 } catch (IOException e) {
-                    System.err.println("[WarpDrive] Ignoring IOException on close(): " + e.getMessage());
+                    //Ignore
                 }
             }
         }
@@ -113,7 +139,7 @@ public final class Runtime {
      * @return
      */
     public static String getScriptTag(final String src, final String type, final Map<String, String> params, final HttpServletRequest request) {
-        if (!enabled && isBundle(src)) {
+        if (developmentMode && isBundle(src)) {
             return unbundleScriptBundles(src, type, params, request);
         }
         return writeScriptTag(src, type, params, request);
@@ -144,7 +170,7 @@ public final class Runtime {
      * @return
      */
     public static String getStylesheetTag(final String href, final String rel, final String type, final Map<String, String> params, final HttpServletRequest request) {
-        if (!enabled && isBundle(href)) {
+        if (developmentMode && isBundle(href)) {
             return unbundleCssBundles(href, rel, type, params, request);
         }
         return writeCssTag(href, rel, type, params, request);
@@ -155,13 +181,13 @@ public final class Runtime {
      * @param config
      */
     static void configure(final Properties config) {
-        enabled = Boolean.valueOf(config.getProperty(ENABLED_KEY));
+        developmentMode = Boolean.valueOf(config.getProperty(DEV_MODE_KEY));
         version = config.getProperty(VERSION_KEY);
         imagesDir = config.getProperty(IMAGE_DIR_KEY);
         jsDir = config.getProperty(JS_DIR_KEY);
         cssDir = config.getProperty(CSS_DIR_KEY);
         setupExternalHosts(config);
-        if (!enabled) {
+        if (developmentMode) {
             setupBundles(config);
         }
     }
@@ -241,7 +267,7 @@ public final class Runtime {
      * @param buffer
      */
     private static void addAdditionalParameters(final Map<String, String> params, final StringBuilder buffer) {
-        if(params == null) {
+        if (params == null) {
             return;
         }
         for (Map.Entry<String, String> entry : params.entrySet()) {
@@ -257,13 +283,13 @@ public final class Runtime {
      * @param isTextResource
      */
     private static void appendLink(final String filename, final StringBuilder buffer, final String topLevelDir, final HttpServletRequest request, final boolean isTextResource) {
-        if (!enabled) {
+        if (developmentMode) {
             buffer.append(request.getContextPath()).append(topLevelDir).append(filename);
             return;
         }
         if (externalHosts != null) {
             int hashCode = filename.hashCode();
-            if(hashCode == Integer.MIN_VALUE) {
+            if (hashCode == Integer.MIN_VALUE) {
                 hashCode++;
             }
             buffer.append(externalHosts[Math.abs(hashCode) % externalHosts.length]);

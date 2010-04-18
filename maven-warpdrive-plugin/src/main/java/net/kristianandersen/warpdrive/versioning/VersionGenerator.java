@@ -16,16 +16,20 @@
  */package net.kristianandersen.warpdrive.versioning;
 
 /**
+ *
+ * Interface for version generation, allowing for multiple implementations.
+ *
  * Created by IntelliJ IDEA.
  * @author kriand <a href="http://mailhide.recaptcha.net/d?k=01r9lbYEAtg9V5s1Ru_jtZ1g==&c=-aIoeZ0yU0yPn2kdog349bCmN-h1pe5Ed0LsyuWMbEc=">Show email</a>
  * Date: Mar 2, 2010
  * Time: 6:03:09 PM
  */
-public interface VersioningStrategy {
+public interface VersionGenerator {
 
     /**
+     * Returns some versionumber.
      *
-     * @return
+     * @return A versionnumber.
      */
     String getVersion();
 }

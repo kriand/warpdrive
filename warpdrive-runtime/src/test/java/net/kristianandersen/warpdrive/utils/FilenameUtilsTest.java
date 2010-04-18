@@ -19,6 +19,9 @@ import org.junit.Test;
 import static junit.framework.Assert.*;
 
 /**
+ *
+ * Unittests for {@linkplain net.kristianandersen.warpdrive.utils.FilenameUtils}
+ *
  * Created by IntelliJ IDEA.
  * @author kriand <a href="http://mailhide.recaptcha.net/d?k=01r9lbYEAtg9V5s1Ru_jtZ1g==&c=-aIoeZ0yU0yPn2kdog349bCmN-h1pe5Ed0LsyuWMbEc=">Show email</a>
  * Date: Mar 30, 2010
@@ -30,42 +33,42 @@ public class FilenameUtilsTest {
     public void testAppendVersion() {
         String filename = "myscript.js";
         String result = FilenameUtils.insertVersion(filename, "123");
-        assertEquals("myscript__v123.js", result);
+        assertEquals("myscript_v123.js", result);
     }
 
     @Test
     public void testAppendVersionWithSubdir() {
         String filename = "/dir/subdir/myscript.js";
         String result = FilenameUtils.insertVersion(filename, "123");
-        assertEquals("/dir/subdir/myscript__v123.js", result);
+        assertEquals("/dir/subdir/myscript_v123.js", result);
     }
 
     @Test
     public void testAppendVersionAndGzipExtension() {
         String filename = "myscript.js";
         String result = FilenameUtils.insertVersionAndGzipExtension(filename, "123");
-        assertEquals("myscript__v123.gz.js", result);
+        assertEquals("myscript_v123.gz.js", result);
     }
 
     @Test
     public void testAppendVersionAndGzipExtensionWithSubdir() {
         String filename = "/dir/subdir/myscript.js";
         String result = FilenameUtils.insertVersionAndGzipExtension(filename, "123");
-        assertEquals("/dir/subdir/myscript__v123.gz.js", result);
+        assertEquals("/dir/subdir/myscript_v123.gz.js", result);
     }
 
     @Test
     public void testAppendVersionToNoExtension() {
         String filename = "myscript";
         String result = FilenameUtils.insertVersion(filename, "123");
-        assertEquals("myscript__v123", result);
+        assertEquals("myscript_v123", result);
     }
 
     @Test
     public void testAppendVersionAndGzipExtensionToNoExtension() {
         String filename = "myscript";
         String result = FilenameUtils.insertVersionAndGzipExtension(filename, "123");
-        assertEquals("myscript__v123.gz", result);
+        assertEquals("myscript_v123.gz", result);
     }
         
 }

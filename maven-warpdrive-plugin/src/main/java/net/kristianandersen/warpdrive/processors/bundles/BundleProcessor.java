@@ -43,7 +43,6 @@ public class BundleProcessor extends AbstractProcessor {
      * {@linkplain net.kristianandersen.warpdrive.mojo.WarpDriveMojo}.
      *
      * @param mojo The WarpDrive Maven plugin provides all configuration.
-     * @pre mojo != null
      */
     public BundleProcessor(final WarpDriveMojo mojo) {
         super(mojo);
@@ -73,7 +72,6 @@ public class BundleProcessor extends AbstractProcessor {
      *                The values are comma-separated lists containing the files in each bundle.
      * @param bundleDir The directory where the bundle will be created.
      * @throws IOException If the bundles can not be created.
-     * @pre bundleDir != null
      */
     private void createBundlesInDir(final Map<String, String> bundles, final String bundleDir) throws IOException {
         assert bundleDir == null : "Bundledir was null";

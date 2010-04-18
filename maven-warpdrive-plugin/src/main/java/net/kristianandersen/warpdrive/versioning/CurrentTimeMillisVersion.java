@@ -24,14 +24,14 @@ package net.kristianandersen.warpdrive.versioning;
  * Date: Mar 2, 2010
  * Time: 6:07:58 PM
  */
-public class CurrentTimeMillisStrategy implements VersioningStrategy {
+public class CurrentTimeMillisVersion implements VersionGenerator {
 
     /**
      *
      * Returns the version as current time in mills.
      *
      * @return The version as current time in mills.
-     * @see net.kristianandersen.warpdrive.versioning.VersioningStrategy#getVersion()
+     * @see VersionGenerator#getVersion()
      */
     public final String getVersion() {
         return String.valueOf(System.currentTimeMillis());

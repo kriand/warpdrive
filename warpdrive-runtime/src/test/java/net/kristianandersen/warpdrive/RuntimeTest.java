@@ -26,6 +26,9 @@ import java.util.Properties;
 import java.util.StringTokenizer;
 
 /**
+ *
+ * Unittests for {@linkplain net.kristianandersen.warpdrive.Runtime}
+ *
  * Created by IntelliJ IDEA.
  * @author kriand <a href="http://mailhide.recaptcha.net/d?k=01r9lbYEAtg9V5s1Ru_jtZ1g==&c=-aIoeZ0yU0yPn2kdog349bCmN-h1pe5Ed0LsyuWMbEc=">Show email</a>
  * Date: Mar 31, 2010
@@ -59,7 +62,6 @@ public class RuntimeTest {
     @Test
     public void testGetGZippedScriptTagUsingDefaultParams() throws Exception {
         Properties props = new Properties();
-        props.setProperty(Runtime.ENABLED_KEY, "true");
         props.setProperty(Runtime.VERSION_KEY, "123");
         props.setProperty(Runtime.JS_DIR_KEY, "/js/");
         Runtime.configure(props);
@@ -67,13 +69,12 @@ public class RuntimeTest {
         when(request.getHeaders("Accept-Encoding")).thenReturn(new StringTokenizer("gzip"));
         when(request.getContextPath()).thenReturn("");
         String tag = Runtime.getScriptTag("myscript.js", null, new HashMap<String, String>(), request);
-        assertEquals("<script src=\"/js/myscript__v123.gz.js\" type=\"text/javascript\" ></script>", tag);
+        assertEquals("<script src=\"/js/myscript_v123.gz.js\" type=\"text/javascript\" ></script>", tag);
     }
 
     @Test
     public void testGetGZippedScriptTag() throws Exception {
         Properties props = new Properties();
-        props.setProperty(Runtime.ENABLED_KEY, "true");
         props.setProperty(Runtime.VERSION_KEY, "123");
         props.setProperty(Runtime.JS_DIR_KEY, "/js/");
         Runtime.configure(props);
@@ -81,13 +82,12 @@ public class RuntimeTest {
         when(request.getHeaders("Accept-Encoding")).thenReturn(new StringTokenizer("gzip"));
         when(request.getContextPath()).thenReturn("");
         String tag = Runtime.getScriptTag("myscript.js", "text/myscript", new HashMap<String, String>(), request);
-        assertEquals("<script src=\"/js/myscript__v123.gz.js\" type=\"text/myscript\" ></script>", tag);
+        assertEquals("<script src=\"/js/myscript_v123.gz.js\" type=\"text/myscript\" ></script>", tag);
     }
 
     @Test
     public void testGetScriptTagUsingDefaultParams() throws Exception {
         Properties props = new Properties();
-        props.setProperty(Runtime.ENABLED_KEY, "true");
         props.setProperty(Runtime.VERSION_KEY, "123");
         props.setProperty(Runtime.JS_DIR_KEY, "/js/");
         Runtime.configure(props);
@@ -95,13 +95,12 @@ public class RuntimeTest {
         when(request.getHeaders("Accept-Encoding")).thenReturn(new StringTokenizer("nozip"));
         when(request.getContextPath()).thenReturn("");
         String tag = Runtime.getScriptTag("myscript.js", null, new HashMap<String, String>(), request);
-        assertEquals("<script src=\"/js/myscript__v123.js\" type=\"text/javascript\" ></script>", tag);
+        assertEquals("<script src=\"/js/myscript_v123.js\" type=\"text/javascript\" ></script>", tag);
     }
 
     @Test
     public void testGetScriptTag() throws Exception {
         Properties props = new Properties();
-        props.setProperty(Runtime.ENABLED_KEY, "true");
         props.setProperty(Runtime.VERSION_KEY, "123");
         props.setProperty(Runtime.JS_DIR_KEY, "/js/");
         Runtime.configure(props);
@@ -109,26 +108,24 @@ public class RuntimeTest {
         when(request.getHeaders("Accept-Encoding")).thenReturn(new StringTokenizer("nozip"));
         when(request.getContextPath()).thenReturn("");
         String tag = Runtime.getScriptTag("myscript.js", "text/myscript", new HashMap<String, String>(), request);
-        assertEquals("<script src=\"/js/myscript__v123.js\" type=\"text/myscript\" ></script>", tag);
+        assertEquals("<script src=\"/js/myscript_v123.js\" type=\"text/myscript\" ></script>", tag);
     }
 
     @Test
     public void testGetImageTag() throws Exception {
         Properties props = new Properties();
-        props.setProperty(Runtime.ENABLED_KEY, "true");
         props.setProperty(Runtime.VERSION_KEY, "123");
         props.setProperty(Runtime.IMAGE_DIR_KEY, "/image/");
         Runtime.configure(props);
         HttpServletRequest request = mock(HttpServletRequest.class);
         when(request.getContextPath()).thenReturn("");
         String tag = Runtime.getImageTag("myimage.png", new HashMap<String, String>(), request);
-        assertEquals("<img src=\"/image/myimage__v123.png\" />", tag);
+        assertEquals("<img src=\"/image/myimage_v123.png\" />", tag);
     }
 
     @Test
     public void testGetGZippedStylesheetTagUsingDefaultParams() throws Exception {
         Properties props = new Properties();
-        props.setProperty(Runtime.ENABLED_KEY, "true");
         props.setProperty(Runtime.VERSION_KEY, "123");
         props.setProperty(Runtime.CSS_DIR_KEY, "/css/");
         Runtime.configure(props);
@@ -136,13 +133,12 @@ public class RuntimeTest {
         when(request.getHeaders("Accept-Encoding")).thenReturn(new StringTokenizer("gzip"));
         when(request.getContextPath()).thenReturn("");
         String tag = Runtime.getStylesheetTag("mystyle.css", null, null, new HashMap<String, String>(), request);
-        assertEquals("<link href=\"/css/mystyle__v123.gz.css\" rel=\"stylesheet\" type=\"text/css\" />", tag);
+        assertEquals("<link href=\"/css/mystyle_v123.gz.css\" rel=\"stylesheet\" type=\"text/css\" />", tag);
     }
 
     @Test
     public void testGetGZippedStylesheetTag() throws Exception {
         Properties props = new Properties();
-        props.setProperty(Runtime.ENABLED_KEY, "true");
         props.setProperty(Runtime.VERSION_KEY, "123");
         props.setProperty(Runtime.CSS_DIR_KEY, "/css/");
         Runtime.configure(props);
@@ -150,13 +146,12 @@ public class RuntimeTest {
         when(request.getHeaders("Accept-Encoding")).thenReturn(new StringTokenizer("gzip"));
         when(request.getContextPath()).thenReturn("");
         String tag = Runtime.getStylesheetTag("mystyle.css", "mystylesheet", "text/mycss", new HashMap<String, String>(), request);
-        assertEquals("<link href=\"/css/mystyle__v123.gz.css\" rel=\"mystylesheet\" type=\"text/mycss\" />", tag);
+        assertEquals("<link href=\"/css/mystyle_v123.gz.css\" rel=\"mystylesheet\" type=\"text/mycss\" />", tag);
     }
 
     @Test
     public void testGetStylesheetTagUsingDefaultParams() throws Exception {
         Properties props = new Properties();
-        props.setProperty(Runtime.ENABLED_KEY, "true");
         props.setProperty(Runtime.VERSION_KEY, "123");
         props.setProperty(Runtime.CSS_DIR_KEY, "/css/");
         Runtime.configure(props);
@@ -164,13 +159,12 @@ public class RuntimeTest {
         when(request.getHeaders("Accept-Encoding")).thenReturn(new StringTokenizer("nozip"));
         when(request.getContextPath()).thenReturn("");
         String tag = Runtime.getStylesheetTag("mystyle.css", null, null, new HashMap<String, String>(), request);
-        assertEquals("<link href=\"/css/mystyle__v123.css\" rel=\"stylesheet\" type=\"text/css\" />", tag);
+        assertEquals("<link href=\"/css/mystyle_v123.css\" rel=\"stylesheet\" type=\"text/css\" />", tag);
     }
 
     @Test
     public void testGetStylesheetTag() throws Exception {
         Properties props = new Properties();
-        props.setProperty(Runtime.ENABLED_KEY, "true");
         props.setProperty(Runtime.VERSION_KEY, "123");
         props.setProperty(Runtime.CSS_DIR_KEY, "/css/");
         Runtime.configure(props);
@@ -178,13 +172,13 @@ public class RuntimeTest {
         when(request.getHeaders("Accept-Encoding")).thenReturn(new StringTokenizer("nozip"));
         when(request.getContextPath()).thenReturn("");
         String tag = Runtime.getStylesheetTag("mystyle.css", "mystylesheet", "text/mycss", new HashMap<String, String>(), request);
-        assertEquals("<link href=\"/css/mystyle__v123.css\" rel=\"mystylesheet\" type=\"text/mycss\" />", tag);
+        assertEquals("<link href=\"/css/mystyle_v123.css\" rel=\"mystylesheet\" type=\"text/mycss\" />", tag);
     }
 
     @Test
     public void testJsUnbundle() throws Exception {
         Properties props = new Properties();
-        props.setProperty(Runtime.ENABLED_KEY, "false");
+        props.setProperty(Runtime.DEV_MODE_KEY, "true");
         props.setProperty(Runtime.VERSION_KEY, "123");
         props.setProperty(Runtime.JS_DIR_KEY, "/js/");
         props.setProperty(Runtime.BUNDLE_PREFIX_KEY + "mybundle.js", "script.js,dir/myscript.js");
@@ -198,7 +192,7 @@ public class RuntimeTest {
     @Test
     public void testJsUnbundleUsingDefaultParams() throws Exception {
         Properties props = new Properties();
-        props.setProperty(Runtime.ENABLED_KEY, "false");
+        props.setProperty(Runtime.DEV_MODE_KEY, "true");
         props.setProperty(Runtime.VERSION_KEY, "123");
         props.setProperty(Runtime.JS_DIR_KEY, "/js/");
         props.setProperty(Runtime.BUNDLE_PREFIX_KEY + "mybundle.js", "script.js,dir/myscript.js");
@@ -212,7 +206,7 @@ public class RuntimeTest {
     @Test
     public void testCssUnbundle() throws Exception {
         Properties props = new Properties();
-        props.setProperty(Runtime.ENABLED_KEY, "false");
+        props.setProperty(Runtime.DEV_MODE_KEY, "true");
         props.setProperty(Runtime.VERSION_KEY, "123");
         props.setProperty(Runtime.CSS_DIR_KEY, "/css/");
         props.setProperty(Runtime.BUNDLE_PREFIX_KEY + "mybundle.css", "stylesheet.css,dir/mystylesheet.css");
@@ -226,7 +220,7 @@ public class RuntimeTest {
     @Test
     public void testCssUnbundleUsingDefaultParams() throws Exception {
         Properties props = new Properties();
-        props.setProperty(Runtime.ENABLED_KEY, "false");
+        props.setProperty(Runtime.DEV_MODE_KEY, "true");
         props.setProperty(Runtime.VERSION_KEY, "123");
         props.setProperty(Runtime.CSS_DIR_KEY, "/css/");
         props.setProperty(Runtime.BUNDLE_PREFIX_KEY + "mybundle.css", "stylesheet.css,dir/mystylesheet.css");
@@ -240,7 +234,6 @@ public class RuntimeTest {
     @Test
     public void testExternalHost() throws Exception {
         Properties props = new Properties();
-        props.setProperty(Runtime.ENABLED_KEY, "true");
         props.setProperty(Runtime.VERSION_KEY, "123");
         props.setProperty(Runtime.CSS_DIR_KEY, "/css/");
         props.setProperty(Runtime.EXTERNAL_HOSTS_KEY, "http://www.example.com");
@@ -248,7 +241,7 @@ public class RuntimeTest {
         HttpServletRequest request = mock(HttpServletRequest.class);
         when(request.getContextPath()).thenReturn("");
         when(request.getHeaders("Accept-Encoding")).thenReturn(new StringTokenizer("gzip"));
-        String expected = "<link href=\"http://www.example.com/css/stylesheet__v123.gz.css\" rel=\"stylesheet\" type=\"text/css\" />";
+        String expected = "<link href=\"http://www.example.com/css/stylesheet_v123.gz.css\" rel=\"stylesheet\" type=\"text/css\" />";
         assertEquals(expected, Runtime.getStylesheetTag("stylesheet.css", null, null, null, request));
     }
 }

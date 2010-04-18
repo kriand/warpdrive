@@ -23,8 +23,8 @@ import net.kristianandersen.warpdrive.processors.images.DefaultImageProcessor;
 import net.kristianandersen.warpdrive.processors.js.YuiJsProcessor;
 import net.kristianandersen.warpdrive.processors.upload.ExternalUploadProcessor;
 import net.kristianandersen.warpdrive.processors.webxml.WebXmlProcessor;
-import net.kristianandersen.warpdrive.versioning.CurrentTimeMillisStrategy;
-import net.kristianandersen.warpdrive.versioning.VersioningStrategy;
+import net.kristianandersen.warpdrive.versioning.CurrentTimeMillisVersion;
+import net.kristianandersen.warpdrive.versioning.VersionGenerator;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
@@ -82,9 +82,9 @@ public class WarpDriveMojo extends AbstractMojo {
     private String webappTargetDir;
 
     /**
-     * @parameter default-value=true
+     * @parameter default-value=false
      */
-    private boolean active;
+    private boolean developmentMode;
 
     /**
      * @parameter default-value="${basedir}/src/main/webapp/WEB-INF/web.xml"
@@ -168,15 +168,15 @@ public class WarpDriveMojo extends AbstractMojo {
 
     private String version;
 
-    private final VersioningStrategy versioningStrategy = new CurrentTimeMillisStrategy();
+    private final VersionGenerator versionGenerator = new CurrentTimeMillisVersion();
 
     public void execute() throws MojoExecutionException {
         try {
             assertWarModule();
             normalizeDirectories();
-            version = versioningStrategy.getVersion();
+            version = versionGenerator.getVersion();
             writeWarpDriveConfigFile();
-            if (!isActive()) {
+            if (isDevelopmentMode()) {
                 return;
             }
             printEyeCatcher();
@@ -218,12 +218,12 @@ public class WarpDriveMojo extends AbstractMojo {
         this.webappTargetDir = webappTargetDir;
     }
 
-    public boolean isActive() {
-        return active;
+    public boolean isDevelopmentMode() {
+        return developmentMode;
     }
 
-    public void setActive(boolean active) {
-        this.active = active;
+    public void setDevelopmentMode(boolean developmentMode) {
+        this.developmentMode = developmentMode;
     }
 
     public String getWebXmlSource() {
@@ -402,7 +402,7 @@ public class WarpDriveMojo extends AbstractMojo {
         getLog().info("Writing WarpDrive configfile to: " + file.getName());
         try {
             writer = new FileWriter(file);
-            writeBooleanValue(Runtime.ENABLED_KEY, isActive(), writer);
+            writeBooleanValue(Runtime.DEV_MODE_KEY, isDevelopmentMode(), writer);
             writeStringValue(Runtime.VERSION_KEY, version, writer);
             writeStringValue(Runtime.IMAGE_DIR_KEY, getImageDir(), writer);
             writeStringValue(Runtime.JS_DIR_KEY, getJsDir(), writer);
