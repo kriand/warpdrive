@@ -19,7 +19,7 @@ import net.kristianandersen.warpdrive.mojo.WarpDriveMojo;
 
 /**
  *
- * Simple versioning strategy, just returning the currenttime in millis.
+ * Simple versiongenerator, just returning the currenttime in millis.
  *
  * Created by IntelliJ IDEA.
  * @author kriand <a href="http://mailhide.recaptcha.net/d?k=01r9lbYEAtg9V5s1Ru_jtZ1g==&c=-aIoeZ0yU0yPn2kdog349bCmN-h1pe5Ed0LsyuWMbEc=">Show email</a>
@@ -28,7 +28,12 @@ import net.kristianandersen.warpdrive.mojo.WarpDriveMojo;
  */
 public class CurrentTimeMillisGenerator extends AbstractVersionGenerator {
 
-
+    /**
+     * Constructor.
+     *
+     * @param mojo The WarpDrive plugin
+     * @see net.kristianandersen.warpdrive.versioning.AbstractVersionGenerator#AbstractVersionGenerator(net.kristianandersen.warpdrive.mojo.WarpDriveMojo)
+     */
     public CurrentTimeMillisGenerator(final WarpDriveMojo mojo) {
         super(mojo);
     }
@@ -38,9 +43,9 @@ public class CurrentTimeMillisGenerator extends AbstractVersionGenerator {
      * Returns the version as current time in mills.
      *
      * @return The version as current time in mills.
-     * @see AbstractVersionGenerator#getVersion()
+     * @see AbstractVersionGenerator#getVersionNumber()
      */
-    public final String getVersion() {
+    public final String getVersionNumber() {
         return String.valueOf(System.currentTimeMillis());
     }
 }

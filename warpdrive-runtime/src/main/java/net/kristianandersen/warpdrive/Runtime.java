@@ -57,26 +57,88 @@ public final class Runtime {
     public static final String VERSION_PREFIX = "_v";
 
     /**
-     * Configuration key
+     * Configuration key for developmentmode.
      */
     public static final String DEV_MODE_KEY = "developmentMode";
+
+    /**
+     * Configuration key, the version of the current build.
+     */
     public static final String VERSION_KEY = "version";
+
+    /**
+     * Configuration key for external hosts.
+     */
     public static final String EXTERNAL_HOSTS_KEY = "external.hosts";
-    public static final String SCRIPT_BUFFER_KEY = "net.kristianandersen.warpdrive.ScriptBuffer";
+
+    /**
+     * Configuration key, the image directory, relative to src/main/webapp.
+     */
     public static final String IMAGE_DIR_KEY = "image.dir";
+
+    /**
+     * Configuration key, the javascript directory, relative to src/main/webapp.
+     */
     public static final String JS_DIR_KEY = "js.dir";
+
+    /**
+     * Configuration key, the css directory, relative to src/main/webapp.
+     */
     public static final String CSS_DIR_KEY = "css.dir";
+
+    /**
+     * Configuration key, prefix used to specify bundles.
+     */
     public static final String BUNDLE_PREFIX_KEY = "bundle.";
+
+    /**
+     * The character sequence used to separate values in multivalue config elements.
+     */
     public static final String MULTIVAL_SEPARATOR = ",";
+
+    /**
+     * The key to use when storing the javascript buffer on the request.
+     */
+    public static final String SCRIPT_BUFFER_KEY = "net.kristianandersen.warpdrive.ScriptBuffer";
+
+    /**
+     * Holds the configured bundles, populated from config.
+     */
     private static final Map<String, List<String>> BUNDLES = new HashMap<String, List<String>>();
 
+    /**
+     * Indicates if development mode is enabled, populated from config.
+     */
     private static boolean developmentMode = false;
+
+    /**
+     * Holds the current version, populated from config.
+     */
     private static String version = null;
+
+    /**
+     * Holds the currently configured external hosts, if any. Populated from config.
+     */
     private static String[] externalHosts = null;
+
+    /**
+     * Holds the current image dir, populated from config.
+     */
     private static String imagesDir = null;
+
+    /**
+     * Holds the current javascript dir, populated from config.
+     */
     private static String jsDir = null;
+
+    /**
+     * Holds the current css dir, populated from config.
+     */
     private static String cssDir = null;
 
+    /**
+     * Initializes the Runtime by reading the configfile from classpath. 
+     */
     static {
         InputStream is = null;
         try {
@@ -115,8 +177,12 @@ public final class Runtime {
     }
 
     /**
-     * @param request
-     * @param scriptsToBuffer
+     *
+     * This method is exposed as a jstl function and called from taglib. Buffers the provided contents using a StringBuilder
+     * stored on the request.
+     *
+     * @param request The HttpServletRequest
+     * @param scriptsToBuffer The scriptdata to buffer.
      */
     public static void bufferScripts(final HttpServletRequest request, final String scriptsToBuffer) {
         StringBuilder scriptBuffer = getScriptBuffer(request);
@@ -124,19 +190,35 @@ public final class Runtime {
     }
 
     /**
-     * @param request
-     * @return
+     *
+     * This method is exposed as a jstl function and called from taglib.
+     * Returns all javascripttags buffered during the current request. This method
+     * also clears the buffer as it should only be called once per request.
+     *
+     * @param request The HttpServletRequest
+     * @return All buffered scripttags.
      */
     public static String getBufferedScripts(final HttpServletRequest request) {
-        return getScriptBuffer(request).toString();
+        final StringBuilder scriptBuffer = getScriptBuffer(request);
+        final String result = scriptBuffer.toString();
+        clearScriptBuffer(request);
+        return result; 
     }
 
     /**
-     * @param src
-     * @param type
-     * @param params
-     * @param request
-     * @return
+     *
+     * This method is exposed as a jstl function and called from taglib.
+     * Returns a javascript tag, ready to be included in page,
+     * with versioned url. (Assuming developmentMode is not active, in that case
+     * urls are returned without versionnumber)
+     * If the src param points to a bundle and developmentMode is active, each
+     * script in the bundle is returned in its own script tag.
+     *
+     * @param src The src attribute in a script tag. From tag parameter.
+     * @param type Script type, default is text/javascript. From tag parameter.
+     * @param params additional attributes specified in tag. From tag parameters.
+     * @param request The HttpServlet request.
+     * @return Script tag ready to be included in page.
      */
     public static String getScriptTag(final String src, final String type, final Map<String, String> params, final HttpServletRequest request) {
         if (developmentMode && isBundle(src)) {
@@ -146,6 +228,9 @@ public final class Runtime {
     }
 
     /**
+     *
+     * This method is exposed as a jstl function and called from taglib.
+     *
      * @param src
      * @param params
      * @param request
@@ -162,6 +247,9 @@ public final class Runtime {
     }
 
     /**
+     *
+     * This method is exposed as a jstl function and called from taglib.
+     *
      * @param href
      * @param rel
      * @param type
@@ -178,6 +266,9 @@ public final class Runtime {
 
 
     /**
+     *
+     * Configures the WarpDrive Runtime.
+     *
      * @param config
      */
     static void configure(final Properties config) {
@@ -186,9 +277,9 @@ public final class Runtime {
         imagesDir = config.getProperty(IMAGE_DIR_KEY);
         jsDir = config.getProperty(JS_DIR_KEY);
         cssDir = config.getProperty(CSS_DIR_KEY);
-        setupExternalHosts(config);
+        configureExternalHosts(config);
         if (developmentMode) {
-            setupBundles(config);
+            configureBundles(config);
         }
     }
 
@@ -203,6 +294,14 @@ public final class Runtime {
             request.setAttribute(SCRIPT_BUFFER_KEY, scriptBuffer);
         }
         return scriptBuffer;
+    }
+
+    /**
+     *
+     * @param request
+     */
+    private static void clearScriptBuffer(HttpServletRequest request) {
+        request.removeAttribute(SCRIPT_BUFFER_KEY);
     }
 
     /**
@@ -367,7 +466,7 @@ public final class Runtime {
     /**
      * @param config
      */
-    private static void setupBundles(final Properties config) {
+    private static void configureBundles(final Properties config) {
         Enumeration properties = config.propertyNames();
         while (properties.hasMoreElements()) {
             String property = (String) properties.nextElement();
@@ -380,13 +479,13 @@ public final class Runtime {
     /**
      * @param config
      */
-    private static void setupExternalHosts(final Properties config) {
+    private static void configureExternalHosts(final Properties config) {
         if (config.getProperty(EXTERNAL_HOSTS_KEY) != null) {
             externalHosts = config.getProperty(EXTERNAL_HOSTS_KEY).split(MULTIVAL_SEPARATOR);
-            for (int i = 0; i < externalHosts.length; i++) {
-                externalHosts[i] = externalHosts[i].trim();
-                if (externalHosts[i].endsWith("/")) {
-                    externalHosts[i] = externalHosts[i].substring(0, externalHosts[i].length() - 1);
+            for(String externalHost : externalHosts) {
+                externalHost = externalHost.trim();
+                 if (externalHost.endsWith("/")) {
+                    externalHost = externalHost.substring(0, externalHost.length() - 1);
                 }
             }
             if (externalHosts.length < 1) {
