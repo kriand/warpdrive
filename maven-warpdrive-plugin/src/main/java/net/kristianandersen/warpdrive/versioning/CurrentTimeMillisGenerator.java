@@ -1,4 +1,3 @@
-
 /*
    Copyright 2010 Kristian Andersen
 
@@ -13,23 +12,35 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
- */package net.kristianandersen.warpdrive.versioning;
+ */
+package net.kristianandersen.warpdrive.versioning;
+
+import net.kristianandersen.warpdrive.mojo.WarpDriveMojo;
 
 /**
  *
- * Interface for version generation, allowing for multiple implementations.
+ * Simple versioning strategy, just returning the currenttime in millis.
  *
  * Created by IntelliJ IDEA.
  * @author kriand <a href="http://mailhide.recaptcha.net/d?k=01r9lbYEAtg9V5s1Ru_jtZ1g==&c=-aIoeZ0yU0yPn2kdog349bCmN-h1pe5Ed0LsyuWMbEc=">Show email</a>
  * Date: Mar 2, 2010
- * Time: 6:03:09 PM
+ * Time: 6:07:58 PM
  */
-public interface VersionGenerator {
+public class CurrentTimeMillisGenerator extends AbstractVersionGenerator {
+
+
+    public CurrentTimeMillisGenerator(final WarpDriveMojo mojo) {
+        super(mojo);
+    }
 
     /**
-     * Returns some versionumber.
      *
-     * @return A versionnumber.
+     * Returns the version as current time in mills.
+     *
+     * @return The version as current time in mills.
+     * @see AbstractVersionGenerator#getVersion()
      */
-    String getVersion();
+    public final String getVersion() {
+        return String.valueOf(System.currentTimeMillis());
+    }
 }

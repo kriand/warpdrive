@@ -23,8 +23,9 @@ import net.kristianandersen.warpdrive.processors.images.DefaultImageProcessor;
 import net.kristianandersen.warpdrive.processors.js.YuiJsProcessor;
 import net.kristianandersen.warpdrive.processors.upload.ExternalUploadProcessor;
 import net.kristianandersen.warpdrive.processors.webxml.WebXmlProcessor;
-import net.kristianandersen.warpdrive.versioning.CurrentTimeMillisVersion;
-import net.kristianandersen.warpdrive.versioning.VersionGenerator;
+import net.kristianandersen.warpdrive.versioning.CurrentTimeMillisGenerator;
+import net.kristianandersen.warpdrive.versioning.AbstractVersionGenerator;
+import net.kristianandersen.warpdrive.versioning.VersionProvider;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
@@ -166,15 +167,18 @@ public class WarpDriveMojo extends AbstractMojo {
      */
     private File s3SettingsFile;
 
-    private String version;
+    /**
+     * @parameter
+     */
+    private String versionGeneratorClass;
 
-    private final VersionGenerator versionGenerator = new CurrentTimeMillisVersion();
+    private String version;
 
     public void execute() throws MojoExecutionException {
         try {
             assertWarModule();
             normalizeDirectories();
-            version = versionGenerator.getVersion();
+            version = new VersionProvider(this).getVersion();
             writeWarpDriveConfigFile();
             if (isDevelopmentMode()) {
                 return;
@@ -352,6 +356,14 @@ public class WarpDriveMojo extends AbstractMojo {
 
     public void setS3SettingsFile(File s3SettingsFile) {
         this.s3SettingsFile = s3SettingsFile;
+    }
+
+    public String getVersionGeneratorClass() {
+        return versionGeneratorClass;
+    }
+
+    public void setVersionGeneratorClass(String versionGeneratorClass) {
+        this.versionGeneratorClass = versionGeneratorClass;
     }
 
     private List<AbstractProcessor> setupProcessors() {
