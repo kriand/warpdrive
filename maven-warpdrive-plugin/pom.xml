@@ -6,15 +6,15 @@
     <packaging>maven-plugin</packaging>
     <name>WarpDrive Maven Plugin</name>
     <parent>
-        <groupId>net.kristianandersen.warpdrive</groupId>
+        <groupId>org.kriand.warpdrive</groupId>
         <artifactId>warpdrive</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <url>http://kristianandersen.net/warpdrive/${pom.artifactId}</url>
+    <url>http://kriand.org/warpdrive/${pom.artifactId}</url>
     <distributionManagement>
         <site>
             <id>warpdrive.site</id>
-            <url>ftp://web3.netbox.no/kristianandersen.net/warpdrive/${pom.artifactId}</url>
+            <url>ftp://ftp.kriand.org/warpdrive/${pom.artifactId}</url>
         </site>
     </distributionManagement>
     <scm>
@@ -37,7 +37,7 @@
     </build>
     <dependencies>
         <dependency>
-            <groupId>net.kristianandersen.warpdrive</groupId>
+            <groupId>org.kriand.warpdrive</groupId>
             <artifactId>warpdrive-runtime</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -83,4 +83,12 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-plugin-plugin</artifactId>                
+            </plugin>
+        </plugins>
+    </reporting>
 </project>

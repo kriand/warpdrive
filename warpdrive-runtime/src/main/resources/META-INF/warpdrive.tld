@@ -27,31 +27,31 @@
     </tag-file>
     <function>
         <name>getScriptTag</name>
-        <function-class>net.kristianandersen.warpdrive.Runtime</function-class>
+        <function-class>org.kriand.warpdrive.Runtime</function-class>
         <function-signature>java.lang.String getScriptTag(java.lang.String, java.lang.String, java.util.Map, javax.servlet.http.HttpServletRequest)
         </function-signature>
     </function>
     <function>
         <name>getImageTag</name>
-        <function-class>net.kristianandersen.warpdrive.Runtime</function-class>
+        <function-class>org.kriand.warpdrive.Runtime</function-class>
         <function-signature>java.lang.String getImageTag(java.lang.String, java.util.Map, javax.servlet.http.HttpServletRequest)
         </function-signature>
     </function>
     <function>
         <name>getStylesheetTag</name>
-        <function-class>net.kristianandersen.warpdrive.Runtime</function-class>
+        <function-class>org.kriand.warpdrive.Runtime</function-class>
         <function-signature>java.lang.String getStylesheetTag(java.lang.String, java.lang.String, java.lang.String, java.util.Map, javax.servlet.http.HttpServletRequest)
         </function-signature>
     </function>
     <function>
         <name>bufferScripts</name>
-        <function-class>net.kristianandersen.warpdrive.Runtime</function-class>
+        <function-class>org.kriand.warpdrive.Runtime</function-class>
         <function-signature>void bufferScripts(javax.servlet.http.HttpServletRequest, java.lang.String)
         </function-signature>
     </function>
     <function>
         <name>getBufferedScripts</name>
-        <function-class>net.kristianandersen.warpdrive.Runtime</function-class>
+        <function-class>org.kriand.warpdrive.Runtime</function-class>
         <function-signature>java.lang.String getBufferedScripts(javax.servlet.http.HttpServletRequest)
         </function-signature>
     </function>

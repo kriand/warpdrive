@@ -4,7 +4,7 @@
                       http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>net.kristianandersen.warpdrive</groupId>
+    <groupId>org.kriand.warpdrive</groupId>
     <artifactId>warpdrive</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
@@ -47,14 +47,14 @@
     <distributionManagement>
         <site>
             <id>warpdrive.site</id>
-            <url>ftp://web3.netbox.no/kristianandersen.net/warpdrive/</url>
+            <url>ftp://ftp.kriand.org/warpdrive/</url>
         </site>
         <repository>
             <id>warpdrive.repo</id>
-            <url>ftp://web3.netbox.no/kristianandersen.net/repo</url>
+            <url>ftp://ftp.kriand.org/repo</url>
         </repository>
     </distributionManagement>
-    <url>http://kristianandersen.net/warpdrive/</url>
+    <url>http://kriand.org/warpdrive/</url>    
     <licenses>
         <license>
             <name>Apache License, Version 2.0</name>
@@ -62,10 +62,9 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
-    <inceptionYear>2010</inceptionYear>
+    <inceptionYear>2010</inceptionYear>    
     <build>
         <extensions>
-            <!-- Enabling the use of FTP -->
             <extension>
                 <groupId>org.apache.maven.wagon</groupId>
                 <artifactId>wagon-ftp</artifactId>
