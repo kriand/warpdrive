@@ -4,7 +4,7 @@
     <description>WarpDrive TagLib</description>
     <display-name>WarpDrive</display-name>
     <tlib-version>${project.version}</tlib-version>
-    <uri>http://kristianandersen.net/warpdrive/taglib</uri>
+    <uri>http://kriand.org/warpdrive/taglib</uri>
     <tag-file>
         <name>stylesheet</name>
         <path>/META-INF/tags/stylesheet.tag</path>

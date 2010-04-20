@@ -13,7 +13,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
-package org.kriand.warpdrive.processors.versioning;
+package org.kriand.warpdrive.versioning;
 
 import org.kriand.warpdrive.mojo.WarpDriveMojo;
 
@@ -32,7 +32,7 @@ public class CurrentTimeMillisGenerator extends AbstractVersionGenerator {
      * Constructor.
      *
      * @param mojo The WarpDrive plugin
-     * @see org.kriand.warpdrive.processors.versioning.AbstractVersionGenerator#AbstractVersionGenerator(org.kriand.warpdrive.mojo.WarpDriveMojo)
+     * @see org.kriand.warpdrive.versioning.AbstractVersionGenerator#AbstractVersionGenerator(org.kriand.warpdrive.mojo.WarpDriveMojo)
      */
     public CurrentTimeMillisGenerator(final WarpDriveMojo mojo) {
         super(mojo);

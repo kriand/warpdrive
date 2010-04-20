@@ -13,7 +13,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
-package org.kriand.warpdrive.processors.versioning;
+package org.kriand.warpdrive.versioning;
 
 import org.kriand.warpdrive.mojo.WarpDriveMojo;
 import org.apache.maven.model.Scm;
@@ -58,7 +58,7 @@ public class VersionProvider {
      * Determines which versiongenerator to use by inspecting the project pom. Fallback to default.
      *
      * @param mojo The WarpDrive plugin
-     * @return A suitable implementation of {@linkplain org.kriand.warpdrive.processors.versioning.AbstractVersionGenerator}
+     * @return A suitable implementation of {@linkplain org.kriand.warpdrive.versioning.AbstractVersionGenerator}
      * @throws IllegalArgumentException If the project pom specifies a class that can not be found.
      */
     private Class<? extends AbstractVersionGenerator> determineVersionGeneratorClass(final WarpDriveMojo mojo) throws IllegalArgumentException {
@@ -87,7 +87,7 @@ public class VersionProvider {
 
     /**
      * Checks if a project is using SVN by inspecting the scm element of the pom.
-     * Projects using SVN should use {@linkplain org.kriand.warpdrive.processors.versioning.SvnRevNumberGenerator}
+     * Projects using SVN should use {@linkplain org.kriand.warpdrive.versioning.SvnRevNumberGenerator}
      *
      * @param mojo The WarpDrive plugin
      * @return True if the project is configured to use SVN, false otherwise.

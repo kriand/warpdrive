@@ -13,7 +13,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
-package org.kriand.warpdrive.processors.versioning;
+package org.kriand.warpdrive.versioning;
 
 import org.kriand.warpdrive.mojo.WarpDriveMojo;
 import org.apache.commons.io.FileUtils;
@@ -42,7 +42,7 @@ public class SvnRevNumberGenerator extends AbstractVersionGenerator {
      * Constructor.
      *
      * @param mojo The WarpDrive plugin
-     * @see org.kriand.warpdrive.processors.versioning.AbstractVersionGenerator#AbstractVersionGenerator(org.kriand.warpdrive.mojo.WarpDriveMojo)
+     * @see org.kriand.warpdrive.versioning.AbstractVersionGenerator#AbstractVersionGenerator(org.kriand.warpdrive.mojo.WarpDriveMojo)
      */
     public SvnRevNumberGenerator(final WarpDriveMojo mojo) {
         super(mojo);
@@ -52,7 +52,7 @@ public class SvnRevNumberGenerator extends AbstractVersionGenerator {
      * Returns the current svn revisionnumber from the basedir as the version.
      *
      * @return The current svn revisionnumber from the basedir.
-     * @see org.kriand.warpdrive.processors.versioning.AbstractVersionGenerator#getVersionNumber()
+     * @see org.kriand.warpdrive.versioning.AbstractVersionGenerator#getVersionNumber()
      * @throws IllegalStateException If the svn-entries file could not be found.
      */
     public final String getVersionNumber() throws IllegalStateException {

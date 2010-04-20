@@ -1,1 +1,1 @@
-<%@ taglib prefix="wd" uri="http://kristianandersen.net/warpdrive/taglib" %><%@ tag body-content="empty" %>${wd:getBufferedScripts(pageContext.request)}
+<%@ taglib prefix="wd" uri="http://kriand.org/warpdrive/taglib" %><%@ tag body-content="empty" %>${wd:getBufferedScripts(pageContext.request)}

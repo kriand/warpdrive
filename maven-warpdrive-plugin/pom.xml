@@ -64,7 +64,7 @@
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-project</artifactId>
-        </dependency>       
+        </dependency>
         <dependency>
             <groupId>org.jdom</groupId>
             <artifactId>jdom</artifactId>
@@ -84,10 +84,10 @@
         </dependency>
     </dependencies>
     <reporting>
-        <plugins>
+        <plugins>           
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-plugin-plugin</artifactId>                
+                <artifactId>maven-plugin-plugin</artifactId>
             </plugin>
         </plugins>
     </reporting>

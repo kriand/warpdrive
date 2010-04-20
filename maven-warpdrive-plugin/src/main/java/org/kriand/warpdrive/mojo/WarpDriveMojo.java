@@ -23,7 +23,7 @@ import org.kriand.warpdrive.processors.images.DefaultImageProcessor;
 import org.kriand.warpdrive.processors.js.YuiJsProcessor;
 import org.kriand.warpdrive.processors.upload.ExternalUploadProcessor;
 import org.kriand.warpdrive.processors.webxml.WebXmlProcessor;
-import org.kriand.warpdrive.processors.versioning.VersionProvider;
+import org.kriand.warpdrive.versioning.VersionProvider;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
@@ -46,6 +46,7 @@ import java.util.Map;
  * @goal warpspeed
  * @phase prepare-package
  * @requiresProject
+ * 
  */
 public class WarpDriveMojo extends AbstractMojo {
 
@@ -172,7 +173,7 @@ public class WarpDriveMojo extends AbstractMojo {
 
     private String version;
 
-    public void execute() throws MojoExecutionException {
+    public final void execute() throws MojoExecutionException {
         try {
             assertWarModule();
             normalizeDirectories();
@@ -186,182 +187,181 @@ public class WarpDriveMojo extends AbstractMojo {
             for (AbstractProcessor processor : processors) {
                 processor.process();
             }
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             throw new MojoExecutionException("Caught Exception", ex);
         }
     }
 
-    public String getVersion() {
+    public final String getVersion() {
         return version;
     }
 
-    public MavenProject getProject() {
+    public final MavenProject getProject() {
         return project;
     }
 
-    public void setProject(MavenProject project) {
-        this.project = project;
+    public final void setProject(final MavenProject inProject) {
+        this.project = inProject;
     }
 
-    public String getWebappSourceDir() {
+    public final String getWebappSourceDir() {
         return webappSourceDir;
     }
 
-    public void setWebappSourceDir(String webappSourceDir) {
-        this.webappSourceDir = webappSourceDir;
+    public final void setWebappSourceDir(final String inWebappSourceDir) {
+        this.webappSourceDir = inWebappSourceDir;
     }
 
-    public String getWebappTargetDir() {
+    public final String getWebappTargetDir() {
         return webappTargetDir;
     }
 
-    public void setWebappTargetDir(String webappTargetDir) {
-        this.webappTargetDir = webappTargetDir;
+    public final void setWebappTargetDir(final String inWebappTargetDir) {
+        this.webappTargetDir = inWebappTargetDir;
     }
 
-    public boolean isDevelopmentMode() {
+    public final boolean isDevelopmentMode() {
         return developmentMode;
     }
 
-    public void setDevelopmentMode(boolean developmentMode) {
-        this.developmentMode = developmentMode;
+    public final void setDevelopmentMode(final boolean inDevelopmentMode) {
+        this.developmentMode = inDevelopmentMode;
     }
 
-    public String getWebXmlSource() {
+    public final String getWebXmlSource() {
         return webXmlSource;
     }
 
-    public void setWebXmlSource(String webXmlSource) {
-        this.webXmlSource = webXmlSource;
+    public final void setWebXmlSource(final String inWebXmlSource) {
+        this.webXmlSource = inWebXmlSource;
     }
 
-    public String getJsDir() {
+    public final String getJsDir() {
         return jsDir;
     }
 
-    public void setJsDir(String jsDir) {
-        this.jsDir = jsDir;
+    public final void setJsDir(final String inJsDir) {
+        this.jsDir = inJsDir;
     }
 
-    public String getImageDir() {
+    public final String getImageDir() {
         return imageDir;
     }
 
-    public void setImageDir(String imageDir) {
-        this.imageDir = imageDir;
+    public final void setImageDir(final String inImageDir) {
+        this.imageDir = inImageDir;
     }
 
-    public String getCssDir() {
+    public final String getCssDir() {
         return cssDir;
     }
 
-    public void setCssDir(String cssDir) {
-        this.cssDir = cssDir;
+    public final void setCssDir(final String inCssDir) {
+        this.cssDir = inCssDir;
     }
 
-    public List<String> getExternalHosts() {
+    public final List<String> getExternalHosts() {
         return externalHosts;
     }
 
-    public void setExternalHosts(List<String> externalHosts) {
-        this.externalHosts = externalHosts;
+    public final void setExternalHosts(final List<String> inExternalHosts) {
+        this.externalHosts = inExternalHosts;
     }
 
-    public Map<String, String> getJsBundles() {
+    public final Map<String, String> getJsBundles() {
         return jsBundles;
     }
 
-    public void setJsBundles(Map<String, String> jsBundles) {
-        this.jsBundles = jsBundles;
+    public final void setJsBundles(final Map<String, String> inJsBundles) {
+        this.jsBundles = inJsBundles;
     }
 
-    public Map<String, String> getCssBundles() {
+    public final Map<String, String> getCssBundles() {
         return cssBundles;
     }
 
-    public void setCssBundles(Map<String, String> cssBundles) {
-        this.cssBundles = cssBundles;
+    public final void setCssBundles(final Map<String, String> inCssBundles) {
+        this.cssBundles = inCssBundles;
     }
 
-    public boolean isGenerateWebXml() {
+    public final boolean isGenerateWebXml() {
         return generateWebXml;
     }
 
-    public void setGenerateWebXml(boolean generateWebXml) {
-        this.generateWebXml = generateWebXml;
+    public final void setGenerateWebXml(final boolean inGenerateWebXml) {
+        this.generateWebXml = inGenerateWebXml;
     }
 
-    public int getYuiJsLineBreak() {
+    public final int getYuiJsLineBreak() {
         return yuiJsLineBreak;
     }
 
-    public void setYuiJsLineBreak(int yuiJsLineBreak) {
-        this.yuiJsLineBreak = yuiJsLineBreak;
+    public final void setYuiJsLineBreak(final int inYuiJsLineBreak) {
+        this.yuiJsLineBreak = inYuiJsLineBreak;
     }
 
-    public boolean isYuiJsMunge() {
+    public final boolean isYuiJsMunge() {
         return yuiJsMunge;
     }
 
-    public void setYuiJsMunge(boolean yuiJsMunge) {
-        this.yuiJsMunge = yuiJsMunge;
+    public final void setYuiJsMunge(final boolean inYuiJsMunge) {
+        this.yuiJsMunge = inYuiJsMunge;
     }
 
-    public boolean isYuiJsVerbose() {
+    public final boolean isYuiJsVerbose() {
         return yuiJsVerbose;
     }
 
-    public void setYuiJsVerbose(boolean yuiJsVerbose) {
-        this.yuiJsVerbose = yuiJsVerbose;
+    public final void setYuiJsVerbose(final boolean inyuiJsVerbose) {
+        this.yuiJsVerbose = inyuiJsVerbose;
     }
 
-    public boolean isYuiJsPreserveAllSemicolons() {
+    public final boolean isYuiJsPreserveAllSemicolons() {
         return yuiJsPreserveAllSemicolons;
     }
 
-    public void setYuiJsPreserveAllSemicolons(boolean yuiJsPreserveAllSemicolons) {
-        this.yuiJsPreserveAllSemicolons = yuiJsPreserveAllSemicolons;
+    public final void setYuiJsPreserveAllSemicolons(final boolean inYuiJsPreserveAllSemicolons) {
+        this.yuiJsPreserveAllSemicolons = inYuiJsPreserveAllSemicolons;
     }
 
-    public boolean isYuiJsDisableOptimizations() {
+    public final boolean isYuiJsDisableOptimizations() {
         return yuiJsDisableOptimizations;
     }
 
-    public void setYuiJsDisableOptimizations(boolean yuiJsDisableOptimizations) {
-        this.yuiJsDisableOptimizations = yuiJsDisableOptimizations;
+    public final void setYuiJsDisableOptimizations(final boolean inYuiJsDisableOptimizations) {
+        this.yuiJsDisableOptimizations = inYuiJsDisableOptimizations;
     }
 
-    public int getYuiCssLineBreak() {
+    public final int getYuiCssLineBreak() {
         return yuiCssLineBreak;
     }
 
-    public void setYuiCssLineBreak(int yuiCssLineBreak) {
-        this.yuiCssLineBreak = yuiCssLineBreak;
+    public final void setYuiCssLineBreak(final int inYuiCssLineBreak) {
+        this.yuiCssLineBreak = inYuiCssLineBreak;
     }
 
-    public boolean isUploadFiles() {
+    public final boolean isUploadFiles() {
         return uploadFiles;
     }
 
-    public void setUploadFiles(boolean uploadFiles) {
-        this.uploadFiles = uploadFiles;
+    public final void setUploadFiles(final boolean inUploadFiles) {
+        this.uploadFiles = inUploadFiles;
     }
 
-    public File getS3SettingsFile() {
+    public final File getS3SettingsFile() {
         return s3SettingsFile;
     }
 
-    public void setS3SettingsFile(File s3SettingsFile) {
-        this.s3SettingsFile = s3SettingsFile;
+    public final void setS3SettingsFile(final File inS3SettingsFile) {
+        this.s3SettingsFile = inS3SettingsFile;
     }
 
-    public String getVersionGeneratorClass() {
+    public final String getVersionGeneratorClass() {
         return versionGeneratorClass;
     }
 
-    public void setVersionGeneratorClass(String versionGeneratorClass) {
-        this.versionGeneratorClass = versionGeneratorClass;
+    public final void setVersionGeneratorClass(final String inVersionGeneratorClass) {
+        this.versionGeneratorClass = inVersionGeneratorClass;
     }
 
     private List<AbstractProcessor> setupProcessors() {
@@ -392,12 +392,24 @@ public class WarpDriveMojo extends AbstractMojo {
     }
 
     private void normalizeDirectories() {
-        if (!getCssDir().endsWith("/")) setCssDir(getCssDir() + "/");
-        if (!getJsDir().endsWith("/")) setJsDir(jsDir + "/");
-        if (!getImageDir().endsWith("/")) setImageDir(getImageDir() + "/");
-        if (!getCssDir().startsWith("/")) setCssDir("/" + getCssDir());
-        if (!getJsDir().startsWith("/")) setJsDir("/" + getJsDir());
-        if (!getImageDir().startsWith("/")) setImageDir("/" + imageDir);
+        if (!getCssDir().endsWith("/")) {
+            setCssDir(getCssDir() + "/");
+        }
+        if (!getJsDir().endsWith("/")) {
+            setJsDir(jsDir + "/");
+        }
+        if (!getImageDir().endsWith("/")) {
+            setImageDir(getImageDir() + "/");
+        }
+        if (!getCssDir().startsWith("/")) {
+            setCssDir("/" + getCssDir());
+        }
+        if (!getJsDir().startsWith("/")) {
+            setJsDir("/" + getJsDir());
+        }
+        if (!getImageDir().startsWith("/")) {
+            setImageDir("/" + imageDir);
+        }
     }
 
     private void writeWarpDriveConfigFile() throws IOException {
@@ -421,29 +433,28 @@ public class WarpDriveMojo extends AbstractMojo {
             writeBundleConfig(getCssBundles(), writer);
             writeBundleConfig(getJsBundles(), writer);
 
-        }
-        finally {
+        } finally {
             if (writer != null) {
                 writer.close();
             }
         }
     }
 
-    private void writeStringValue(String key, String value, Writer writer) throws IOException {
+    private void writeStringValue(final String key, final String value, final Writer writer) throws IOException {
         writer.write(key);
         writer.write('=');
         writer.write(value);
         writer.write('\n');
     }
 
-    private void writeBooleanValue(String key, boolean value, Writer writer) throws IOException {
+    private void writeBooleanValue(final String key, final boolean value, final Writer writer) throws IOException {
         writer.write(key);
         writer.write('=');
         writer.write(String.valueOf(value));
         writer.write('\n');
     }
 
-    private void writeExternalHostsConfig(Writer writer) throws IOException {
+    private void writeExternalHostsConfig(final Writer writer) throws IOException {
         if (getExternalHosts() == null || getExternalHosts().isEmpty()) {
             return;
         }
@@ -457,7 +468,7 @@ public class WarpDriveMojo extends AbstractMojo {
         writer.write('\n');
     }
 
-    private void writeBundleConfig(Map<String, String> bundle, Writer writer) throws IOException {
+    private void writeBundleConfig(final Map<String, String> bundle, final Writer writer) throws IOException {
         if (bundle == null || bundle.isEmpty()) {
             return;
         }

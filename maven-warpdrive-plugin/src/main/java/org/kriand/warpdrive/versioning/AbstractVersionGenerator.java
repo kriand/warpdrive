@@ -13,7 +13,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
-package org.kriand.warpdrive.processors.versioning;
+package org.kriand.warpdrive.versioning;
 
 import org.kriand.warpdrive.mojo.WarpDriveMojo;
 
@@ -44,7 +44,7 @@ public abstract class AbstractVersionGenerator {
 
     /**
      *
-     * Called by {@linkplain org.kriand.warpdrive.processors.versioning.VersionProvider}
+     * Called by {@linkplain org.kriand.warpdrive.versioning.VersionProvider}
      * Gets the versionnumber by calling {@linkplain AbstractVersionGenerator#getVersionNumber()} and makes sure it gets logged.
      *
      * @return The versionnumber WarpDrive will use for this build.

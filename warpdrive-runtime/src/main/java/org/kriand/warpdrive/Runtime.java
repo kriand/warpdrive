@@ -20,7 +20,12 @@ import org.kriand.warpdrive.utils.FilenameUtils;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 
 /**
@@ -39,7 +44,7 @@ public final class Runtime {
     /**
      * Where to look for the configuration file in classpath.
      */
-    public static final String RUNTIME_CONFIG_FILE = "/net/kristianandersen/warpdrive/config.properties";
+    public static final String RUNTIME_CONFIG_FILE = "/org/kriand/warpdrive/config.properties";
 
     /**
      * Syntax for the gzip extension.
@@ -47,7 +52,7 @@ public final class Runtime {
     public static final String GZIP_EXTENSION = ".gz";
 
     /**
-     * Syntax for a prefix inserted right before the version
+     * Syntax for a prefix inserted right before the version.
      */
     public static final String VERSION_PREFIX = "_v";
 
@@ -158,7 +163,7 @@ public final class Runtime {
                 try {
                     is.close();
                 } catch (IOException e) {
-                    //Ignore
+                    System.err.println("[WarpDrive] Caught IOException on close(): " + e.getMessage());
                 }
             }
         }
@@ -221,11 +226,13 @@ public final class Runtime {
 
     /**
      * This method is exposed as a jstl function and called from taglib.
+     * Returns an image tag, with a versioned imageurl. If developmentMode is enabled, the
+     * url is not versioned.
      *
-     * @param src
-     * @param params
-     * @param request
-     * @return
+     * @param src The src attribute pointing to the image. From tag parameter
+     * @param params Additional parameters, like border, with, etc. From tag parameter.
+     * @param request The current servlet request
+     * @return An img tag ready to be included in page.
      */
     public static String getImageTag(final String src, final Map<String, String> params, final HttpServletRequest request) {
         StringBuilder buffer = new StringBuilder();
@@ -239,13 +246,18 @@ public final class Runtime {
 
     /**
      * This method is exposed as a jstl function and called from taglib.
+     * Returns a link tag with href pointing to versioned URL.
+     * If developmentMode is enabled, the url is not versioned and if
+     * href points to a bundle, the files in the bundle are printed
+     * as individual link tags.
      *
-     * @param href
-     * @param rel
-     * @param type
-     * @param params
-     * @param request
-     * @return
+     *
+     * @param href The url to the resource. From tag parameter.
+     * @param rel The rel attribute. Optional, default is <b>stylesheet</b>. From tag parameter.
+     * @param type The type attribute. Optional, default is <b>text/css</b>. From tag parameter.
+     * @param params Additional parameters from tag.
+     * @param request The current request.
+     * @return A link tag with versioned href, ready to use in page.
      */
     public static String getStylesheetTag(final String href, final String rel, final String type, final Map<String, String> params, final HttpServletRequest request) {
         if (developmentMode && isBundle(href)) {
@@ -258,7 +270,7 @@ public final class Runtime {
     /**
      * Configures the WarpDrive Runtime.
      *
-     * @param config
+     * @param config The configuration values to use.
      */
     static void configure(final Properties config) {
         developmentMode = Boolean.valueOf(config.getProperty(DEV_MODE_KEY));
@@ -273,8 +285,12 @@ public final class Runtime {
     }
 
     /**
-     * @param request
-     * @return
+     *
+     * Gets the buffer used to store buffered scripts during a request.
+     * The buffer is created first time this method is called.
+     *
+     * @param request The current request.
+     * @return The scriptbuffer for current request.
      */
     private static StringBuilder getScriptBuffer(final HttpServletRequest request) {
         StringBuilder scriptBuffer = (StringBuilder) request.getAttribute(SCRIPT_BUFFER_KEY);
@@ -286,9 +302,11 @@ public final class Runtime {
     }
 
     /**
-     * @param request
+     * Removes the scriptbuffer from the request.
+     *
+     * @param request The current request.
      */
-    private static void clearScriptBuffer(HttpServletRequest request) {
+    private static void clearScriptBuffer(final HttpServletRequest request) {
         request.removeAttribute(SCRIPT_BUFFER_KEY);
     }
 

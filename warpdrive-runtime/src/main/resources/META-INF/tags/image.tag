@@ -1,1 +1,1 @@
-<%@ taglib prefix="wd" uri="http://kristianandersen.net/warpdrive/taglib" %><%@ attribute name="src" required="true" %><%@ tag dynamic-attributes="dynattrs" body-content="empty"%>${wd:getImageTag(src, dynattrs, pageContext.request)}
+<%@ taglib prefix="wd" uri="http://kriand.org/warpdrive/taglib" %><%@ attribute name="src" required="true" %><%@ tag dynamic-attributes="dynattrs" body-content="empty"%>${wd:getImageTag(src, dynattrs, pageContext.request)}
