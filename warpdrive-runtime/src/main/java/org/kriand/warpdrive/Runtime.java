@@ -137,7 +137,8 @@ public final class Runtime {
     private static String cssDir = null;
 
     /**
-     * Initializes the Runtime by reading the configfile from classpath. 
+     * Initializes the Runtime by reading the configfile from classpath.
+     * TODO: Get rid of this. 
      */
     static {
         InputStream is = null;
@@ -219,7 +220,7 @@ public final class Runtime {
      */
     public static String getScriptTag(final String src, final String type, final Map<String, String> params, final HttpServletRequest request) {
         if (developmentMode && isBundle(src)) {
-            return unbundleScriptBundles(src, type, params, request);
+            return unbundleScriptBundle(src, type, params, request);
         }
         return writeScriptTag(src, type, params, request);
     }
@@ -237,7 +238,7 @@ public final class Runtime {
     public static String getImageTag(final String src, final Map<String, String> params, final HttpServletRequest request) {
         StringBuilder buffer = new StringBuilder();
         buffer.append("<img src=\"");
-        appendLink(src, buffer, imagesDir, request, false);
+        appendVersionedLink(src, buffer, imagesDir, request, false);
         buffer.append("\" ");
         addAdditionalParameters(params, buffer);
         buffer.append("/>");
@@ -261,7 +262,7 @@ public final class Runtime {
      */
     public static String getStylesheetTag(final String href, final String rel, final String type, final Map<String, String> params, final HttpServletRequest request) {
         if (developmentMode && isBundle(href)) {
-            return unbundleCssBundles(href, rel, type, params, request);
+            return unbundleCssBundle(href, rel, type, params, request);
         }
         return writeCssTag(href, rel, type, params, request);
     }
@@ -311,17 +312,20 @@ public final class Runtime {
     }
 
     /**
-     * @param href
-     * @param rel
-     * @param type
-     * @param params
-     * @param request
-     * @return
+     *
+     * Creates link tag.
+     *
+     * @param href The url to the unversioned css file.
+     * @param rel The rel attribute. Optional, default is stylesheet.
+     * @param type The type attribute. Optional, default is text/css.
+     * @param params Additional parameters.
+     * @param request The current request.
+     * @return Complete link tag for use in page.
      */
     private static String writeCssTag(final String href, final String rel, final String type, final Map<String, String> params, final HttpServletRequest request) {
         StringBuilder buffer = new StringBuilder();
         buffer.append("<link href=\"");
-        appendLink(href, buffer, cssDir, request, true);
+        appendVersionedLink(href, buffer, cssDir, request, true);
         buffer.append("\" rel=\"");
         if (rel == null || "".equals(rel)) {
             buffer.append("stylesheet");
@@ -341,18 +345,21 @@ public final class Runtime {
     }
 
     /**
-     * @param src
-     * @param type
-     * @param params
-     * @param request
-     * @return
+     *
+     * Creates script tag.
+     *
+     * @param src The script source.
+     * @param type The type attribute. Optional, default is text/javascript.
+     * @param params Additional parameters.
+     * @param request The current request.
+     * @return A complete script tag for use in page.
      */
     private static String writeScriptTag(final String src, final String type, final Map<String, String> params, final HttpServletRequest request) {
 
         final StringBuilder buffer = new StringBuilder();
 
         buffer.append("<script src=\"");
-        appendLink(src, buffer, jsDir, request, true);
+        appendVersionedLink(src, buffer, jsDir, request, true);
 
         buffer.append("\" type=\"");
         if (type == null || "".equals(type)) {
@@ -367,8 +374,11 @@ public final class Runtime {
     }
 
     /**
-     * @param params
-     * @param buffer
+     *
+     * Adds additional parameters to a tag.
+     *
+     * @param params Parameters to add
+     * @param buffer Buffer currently in use to create a tag.
      */
     private static void addAdditionalParameters(final Map<String, String> params, final StringBuilder buffer) {
         if (params == null) {
@@ -380,13 +390,16 @@ public final class Runtime {
     }
 
     /**
-     * @param filename
-     * @param buffer
-     * @param topLevelDir
-     * @param request
-     * @param isTextResource
+     *
+     * Creates a url with version.
+     *
+     * @param filename Original, unversioned file.
+     * @param buffer The buffer currently in use to create a tag.
+     * @param topLevelDir The url is prepended with this directory. /js, /image, /css, etc.
+     * @param request The current request.
+     * @param isTextResource Flag indicating if the requested resource is a text resource. (script or stylesheet).
      */
-    private static void appendLink(final String filename, final StringBuilder buffer, final String topLevelDir, final HttpServletRequest request, final boolean isTextResource) {
+    private static void appendVersionedLink(final String filename, final StringBuilder buffer, final String topLevelDir, final HttpServletRequest request, final boolean isTextResource) {
         if (developmentMode) {
             buffer.append(request.getContextPath()).append(topLevelDir).append(filename);
             return;
@@ -399,7 +412,7 @@ public final class Runtime {
             buffer.append(externalHosts[Math.abs(hashCode) % externalHosts.length]);
         }
         buffer.append(request.getContextPath()).append(topLevelDir);
-        String versionedSrc = null;
+        String versionedSrc;
         if (isTextResource && isGzipAccepted(request)) {
             versionedSrc = FilenameUtils.insertVersionAndGzipExtension(filename, version);
         } else {
@@ -410,21 +423,29 @@ public final class Runtime {
     }
 
     /**
-     * @param name
-     * @return
+     *
+     * Checks if a requested resource is a bundles.
+     * Used to unbundle bundles in development mode.
+     *
+     * @param filename The requested file.
+     * @return True if the file is a bundle created by the WarpDrive plugin.
      */
-    private static boolean isBundle(final String name) {
-        return BUNDLES.containsKey(name);
+    private static boolean isBundle(final String filename) {
+        return BUNDLES.containsKey(filename);
     }
 
     /**
-     * @param src
-     * @param type
-     * @param params
-     * @param request
-     * @return
+     *
+     * Unbundles a script bundles, writing each of the bundled
+     * scripts in its own script tag. Used in development mode.
+     *
+     * @param src The file, presumably a bundle.
+     * @param type The type attribute of the script tags. Optional, default is javascript.
+     * @param params Additional parameters to pass to the script tags.
+     * @param request The current request.
+     * @return Script tags, one for each tag in the bundle.
      */
-    private static String unbundleScriptBundles(final String src, final String type, final Map<String, String> params, final HttpServletRequest request) {
+    private static String unbundleScriptBundle(final String src, final String type, final Map<String, String> params, final HttpServletRequest request) {
         StringBuilder builder = new StringBuilder();
         for (String script : BUNDLES.get(src)) {
             builder.append(writeScriptTag(script, type, params, request));
@@ -433,14 +454,18 @@ public final class Runtime {
     }
 
     /**
-     * @param href
-     * @param rel
-     * @param type
-     * @param params
-     * @param request
-     * @return
+     *
+     * Unbundles a scc bundles, writing each of the bundled
+     * stylesheets in its own link tag. Used in development mode.
+     *
+     * @param href The requested stylesheet, presumably a bundle.
+     * @param rel The rel attribute to pass to link tags. Optional, default is stylesheet.
+     * @param type The type attribute to pass to link tags. Optional, default is text/css.
+     * @param params Additonal parameters to pass to the link tags.
+     * @param request The current request.
+     * @return link tags, one for each stylesheet in bundle.
      */
-    private static String unbundleCssBundles(final String href, final String rel, final String type, final Map<String, String> params, final HttpServletRequest request) {
+    private static String unbundleCssBundle(final String href, final String rel, final String type, final Map<String, String> params, final HttpServletRequest request) {
         StringBuilder builder = new StringBuilder();
         for (String stylesheet : BUNDLES.get(href)) {
             builder.append(writeCssTag(stylesheet, rel, type, params, request));
@@ -449,8 +474,11 @@ public final class Runtime {
     }
 
     /**
-     * @param request
-     * @return
+     *
+     * Checks if the client accepts gzipped content.
+     *
+     * @param request The current request.
+     * @return True if the Accept-Encoding header contains the value <i>gzip</i>.
      */
     private static boolean isGzipAccepted(final HttpServletRequest request) {
         Enumeration acceptEncoding = request.getHeaders("Accept-Encoding");
@@ -465,7 +493,10 @@ public final class Runtime {
     }
 
     /**
-     * @param config
+     *
+     * Configure bundles from config parameters.
+     *
+     * @param config Config parameters to use. 
      */
     private static void configureBundles(final Properties config) {
         Enumeration properties = config.propertyNames();
@@ -478,15 +509,18 @@ public final class Runtime {
     }
 
     /**
-     * @param config
+     *
+     * Configure external hosts from config parameteres.
+     *
+     * @param config Config parameters to use. 
      */
     private static void configureExternalHosts(final Properties config) {
         if (config.getProperty(EXTERNAL_HOSTS_KEY) != null) {
             externalHosts = config.getProperty(EXTERNAL_HOSTS_KEY).split(MULTIVAL_SEPARATOR);
-            for (String externalHost : externalHosts) {
-                externalHost = externalHost.trim();
-                if (externalHost.endsWith("/")) {
-                    externalHost = externalHost.substring(0, externalHost.length() - 1);
+            for (int i = 0; i < externalHosts.length; i++) {
+                externalHosts[i] = externalHosts[i].trim();
+                if (externalHosts[i].endsWith("/")) {
+                    externalHosts[i] = externalHosts[i].substring(0, externalHosts[i].length() - 1);
                 }
             }
             if (externalHosts.length < 1) {

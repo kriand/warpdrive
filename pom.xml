@@ -9,6 +9,11 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <name>WarpDrive</name>
+    <parent>
+		<groupId>org.kriand</groupId>
+		<artifactId>kriand-org-parent</artifactId>
+		<version>1.0</version>
+	</parent>
     <properties>
         <maven.version>2.2.1</maven.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -36,6 +41,10 @@
             </roles>
         </developer>
     </developers>
+    <organization>
+        <name>Kristian Andersen</name>
+        <url>http://kriand.org</url>
+    </organization>
     <issueManagement>
         <system>github</system>
         <url>http://github.com/kriand/warpdrive/issues</url>
@@ -48,15 +57,7 @@
         <site>
             <id>warpdrive.site</id>
             <url>ftp://ftp.kriand.org/warpdrive/</url>
-        </site>
-        <repository>
-            <id>kriand.org.repo</id>
-            <url>ftp://ftp.kriand.org/repo</url>
-        </repository>
-        <snapshotRepository>
-            <id>kriand.org.repo.snapshots</id>
-            <url>ftp://ftp.kriand.org/repo-snapshots</url>
-        </snapshotRepository>
+        </site>       
     </distributionManagement>
     <url>http://kriand.org/warpdrive/</url>
     <licenses>
@@ -67,14 +68,7 @@
         </license>
     </licenses>
     <inceptionYear>2010</inceptionYear>
-    <build>
-        <extensions>
-            <extension>
-                <groupId>org.apache.maven.wagon</groupId>
-                <artifactId>wagon-ftp</artifactId>
-                <version>1.0-beta-6</version>
-            </extension>
-        </extensions>
+    <build>        
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -127,6 +121,11 @@
                     <artifactId>maven-plugin-plugin</artifactId>
                     <version>2.4.3</version>
                 </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>taglist-maven-plugin</artifactId>
+                    <version>2.4</version>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
@@ -157,13 +156,7 @@
                 </dependencies>
             </plugin>
         </plugins>
-    </build>
-    <repositories>
-        <repository>
-            <id>smartsprites.repository</id>
-            <url>http://download.csssprites.org/maven2/</url>
-        </repository>
-    </repositories>
+    </build>    
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -276,6 +269,10 @@
                     </links>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>taglist-maven-plugin</artifactId>
+            </plugin>            
         </plugins>
     </reporting>
 </project>

@@ -25,8 +25,6 @@ import java.util.HashMap;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
-import org.kriand.warpdrive.Runtime;
-
 /**
  *
  * Unittests for {@linkplain Runtime}
