@@ -53,6 +53,10 @@
             <id>kriand.org.repo</id>
             <url>ftp://ftp.kriand.org/repo</url>
         </repository>
+        <snapshotRepository>
+            <id>kriand.org.repo.snapshots</id>
+            <url>ftp://ftp.kriand.org/repo-snapshots</url>
+        </snapshotRepository>
     </distributionManagement>
     <url>http://kriand.org/warpdrive/</url>
     <licenses>
