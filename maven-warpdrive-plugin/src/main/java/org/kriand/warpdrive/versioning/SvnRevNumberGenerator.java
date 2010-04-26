@@ -24,7 +24,7 @@ import java.io.IOException;
 /**
  * Version generator suited for projects using SVN. Uses the SVN revisionnumber in the project basedir.
  * <p/>
- * Created by IntelliJ IDEA.
+ *  IDEA.
  *
  * @author kriand <a href="http://mailhide.recaptcha.net/d?k=01r9lbYEAtg9V5s1Ru_jtZ1g==&c=-aIoeZ0yU0yPn2kdog349bCmN-h1pe5Ed0LsyuWMbEc=">Show email</a>
  * Date: Mar 2, 2010

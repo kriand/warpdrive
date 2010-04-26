@@ -22,7 +22,7 @@ import static junit.framework.Assert.*;
  *
  * Unittests for {@linkplain org.kriand.warpdrive.utils.FilenameUtils}
  *
- * Created by IntelliJ IDEA.
+ *  IDEA.
  * @author kriand <a href="http://mailhide.recaptcha.net/d?k=01r9lbYEAtg9V5s1Ru_jtZ1g==&c=-aIoeZ0yU0yPn2kdog349bCmN-h1pe5Ed0LsyuWMbEc=">Show email</a>
  * Date: Mar 30, 2010
  * Time: 8:14:24 PM

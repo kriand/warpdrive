@@ -32,9 +32,9 @@ import java.util.zip.GZIPOutputStream;
 
 /**
  *
- * Baseclass with common functionality for all WarpDrive processors
+ * Baseclass with common functionality for all WarpDrive processors.
  *
- * Created by IntelliJ IDEA.
+ * 
  * @author kriand <a href="http://mailhide.recaptcha.net/d?k=01r9lbYEAtg9V5s1Ru_jtZ1g==&c=-aIoeZ0yU0yPn2kdog349bCmN-h1pe5Ed0LsyuWMbEc=">Show email</a>
  * Date: Mar 2, 2010
  * Time: 8:44:20 PM
@@ -62,7 +62,7 @@ public abstract class AbstractProcessor {
     /**
      *
      * Default constructor, for processors that do not operate
-     * versioned resources
+     * versioned resources.
      *
      * @param inMojo Maven plugin, for config.
      */
@@ -117,7 +117,7 @@ public abstract class AbstractProcessor {
     /**
      *
      * Gets the set of files that the processor should process, based on
-     * the provided workdir(s) and fileextensions
+     * the provided workdir(s) and fileextensions.
      *
       * @return A collection of files that the processor should process.
      */
@@ -144,13 +144,13 @@ public abstract class AbstractProcessor {
         final File output = new File(getMojo().getWebappTargetDir() + filenameWithVersion);
         final File gzippedOutput = new File(getMojo().getWebappTargetDir() + filenameWithVersionAndGzipExtension);
         final boolean created = output.getParentFile().mkdirs();
-        if(created) {
+        if (created) {
             getLog().info(String.format("Created directoty %s", output.getParentFile()));
         }
         FileWriter writer = null;
         OutputStreamWriter zipWriter = null;
         try {
-            writer= new FileWriter(output);
+            writer = new FileWriter(output);
             zipWriter = new OutputStreamWriter((new GZIPOutputStream(new FileOutputStream(gzippedOutput))));
             writer.write(data);
             zipWriter.write(data);
@@ -176,7 +176,7 @@ public abstract class AbstractProcessor {
         final String filenameWithVersion = FilenameUtils.insertVersion(baseFilename, getMojo().getVersion());
         final File output = new File(getMojo().getWebappTargetDir() + filenameWithVersion);
         final boolean created = output.getParentFile().mkdirs();
-        if(created) {
+        if (created) {
             getLog().info(String.format("Created directoty %s", output.getParentFile()));
         }
         FileInputStream fis = null;
@@ -201,7 +201,7 @@ public abstract class AbstractProcessor {
 
     /**
      *
-     * Gives subclasses access to the Maven plugin
+     * Gives subclasses access to the Maven plugin.
      *
      * @return The Maven plugin
      */

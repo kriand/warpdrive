@@ -33,7 +33,7 @@ import java.util.Properties;
  * in here. It relies on a static initializer looking for a configuration file in the classpath at
  * {@linkplain Runtime#RUNTIME_CONFIG_FILE}
  * <p/>
- * Created by IntelliJ IDEA.
+ *  IDEA.
  *
  * @author kriand <a href="http://mailhide.recaptcha.net/d?k=01r9lbYEAtg9V5s1Ru_jtZ1g==&c=-aIoeZ0yU0yPn2kdog349bCmN-h1pe5Ed0LsyuWMbEc=">Show email</a>
  *         Date: Mar 2, 2010

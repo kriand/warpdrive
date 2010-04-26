@@ -26,6 +26,4 @@
 ~~ NOTE: For help with the syntax of this file, see:
 ~~ http://maven.apache.org/doxia/references/apt-format.html
 
-WarpDrive is a tool that helps you employ efficient handling of static content
-like javascripts, stylesheets and images in your web application.
- 
+TODO 

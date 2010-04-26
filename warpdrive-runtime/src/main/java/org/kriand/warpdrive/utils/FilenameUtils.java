@@ -22,7 +22,7 @@ import org.kriand.warpdrive.Runtime;
  * Utilityclass for manipulating filenames, inserting version etc.
  * Used both runtime and buildtime.
  *
- * Created by IntelliJ IDEA.
+ *  IDEA.
  * @author kriand <a href="http://mailhide.recaptcha.net/d?k=01r9lbYEAtg9V5s1Ru_jtZ1g==&c=-aIoeZ0yU0yPn2kdog349bCmN-h1pe5Ed0LsyuWMbEc=">Show email</a>
  * Date: Mar 3, 2010
  * Time: 6:42:39 PM

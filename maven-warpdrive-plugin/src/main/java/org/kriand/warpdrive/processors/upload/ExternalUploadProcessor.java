@@ -26,7 +26,7 @@ import java.util.Collection;
  * Processor for handling uploads of resources to external locations.
  * Currently, only <a href="http://aws.amazon.com/s3/">Amazon S3</a> is supported.
  *
- * Created by IntelliJ IDEA.
+ *
  * @author kriand <a href="http://mailhide.recaptcha.net/d?k=01r9lbYEAtg9V5s1Ru_jtZ1g==&c=-aIoeZ0yU0yPn2kdog349bCmN-h1pe5Ed0LsyuWMbEc=">Show email</a>
  * Date: Mar 23, 2010
  * Time: 10:44:15 PM

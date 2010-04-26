@@ -15,14 +15,13 @@
  */
 package org.kriand.warpdrive.versioning;
 
-import org.kriand.warpdrive.mojo.WarpDriveMojo;
-import org.apache.maven.model.Scm;
 import org.apache.maven.project.MavenProject;
+import org.kriand.warpdrive.mojo.WarpDriveMojo;
 
 /**
  * Factory for obtaining versionnumbers.
  * <p/>
- * Created by IntelliJ IDEA.
+ *  IDEA.
  *
  * @author kriand <a href="http://mailhide.recaptcha.net/d?k=01r9lbYEAtg9V5s1Ru_jtZ1g==&c=-aIoeZ0yU0yPn2kdog349bCmN-h1pe5Ed0LsyuWMbEc=">Show email</a>
  *         Date: Apr 19, 2010
@@ -94,13 +93,11 @@ public class VersionProvider {
      */
     private boolean isProjectUsingSvn(final WarpDriveMojo mojo) {
         MavenProject project = mojo.getProject();
-        if (project != null) {
-            Scm scm = project.getScm();
-            if (scm != null) {
-                if (scm.getConnection() != null && scm.getConnection().startsWith("scm:svn")) {
-                    return true;
-                }
-            }
+        if (project != null
+                && project.getScm() != null
+                && project.getScm().getConnection() != null
+                && project.getScm().getConnection().startsWith("scm:svn")) {
+            return true;
         }
         return false;
     }

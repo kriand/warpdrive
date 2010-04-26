@@ -21,7 +21,7 @@ import org.kriand.warpdrive.mojo.WarpDriveMojo;
  *
  * Simple versiongenerator, just returning the currenttime in millis.
  *
- * Created by IntelliJ IDEA.
+ *  IDEA.
  * @author kriand <a href="http://mailhide.recaptcha.net/d?k=01r9lbYEAtg9V5s1Ru_jtZ1g==&c=-aIoeZ0yU0yPn2kdog349bCmN-h1pe5Ed0LsyuWMbEc=">Show email</a>
  * Date: Mar 2, 2010
  * Time: 6:07:58 PM

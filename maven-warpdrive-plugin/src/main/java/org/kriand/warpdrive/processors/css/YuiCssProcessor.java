@@ -29,7 +29,7 @@ import java.util.Collection;
  * Compresses CSS files using <a href="http://developer.yahoo.com/yui/compressor/">YUI Compressor</a>.
  * Also handles rewriting of URLs inside CSS to access versioned resources created by WarpDrive.
  *
- * Created by IntelliJ IDEA.
+ *
  * @author kriand <a href="http://mailhide.recaptcha.net/d?k=01r9lbYEAtg9V5s1Ru_jtZ1g==&c=-aIoeZ0yU0yPn2kdog349bCmN-h1pe5Ed0LsyuWMbEc=">Show email</a>
  * Date: Mar 2, 2010
  * Time: 9:56:45 PM

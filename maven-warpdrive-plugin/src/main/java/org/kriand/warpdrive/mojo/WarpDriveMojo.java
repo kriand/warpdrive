@@ -15,6 +15,9 @@
  */
 package org.kriand.warpdrive.mojo;
 
+import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.project.MavenProject;
 import org.kriand.warpdrive.Runtime;
 import org.kriand.warpdrive.processors.AbstractProcessor;
 import org.kriand.warpdrive.processors.bundles.BundleProcessor;
@@ -24,9 +27,6 @@ import org.kriand.warpdrive.processors.js.YuiJsProcessor;
 import org.kriand.warpdrive.processors.upload.ExternalUploadProcessor;
 import org.kriand.warpdrive.processors.webxml.WebXmlProcessor;
 import org.kriand.warpdrive.versioning.VersionProvider;
-import org.apache.maven.plugin.AbstractMojo;
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.project.MavenProject;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -37,22 +37,22 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * The WarpDrive Maven plugin performs all the work required at buildtime.
- * 
- * Created by IntelliJ IDEA.
+ * The warpdrive:warpspeed goal processes static resources in your webapps and
+ * prepares it for warpspeed.
+ * <p/>
+ *
  * @author kriand <a href="http://mailhide.recaptcha.net/d?k=01r9lbYEAtg9V5s1Ru_jtZ1g==&c=-aIoeZ0yU0yPn2kdog349bCmN-h1pe5Ed0LsyuWMbEc=">Show email</a>
- * Date: Mar 2, 2010
- * Time: 5:46:05 PM
+ *         Date: Mar 2, 2010
+ *         Time: 5:46:05 PM
  * @goal warpspeed
  * @phase prepare-package
  * @requiresProject
- * 
  */
 public class WarpDriveMojo extends AbstractMojo {
 
 
     /**
-     *
+     * Buffersize for filewrites.
      */
     public static final int WRITE_BUFFER_SIZE = 32768;
 
@@ -69,7 +69,7 @@ public class WarpDriveMojo extends AbstractMojo {
      * Webapp source directory.
      *
      * @parameter default-value="${basedir}/src/main/webapp"
-     * @required
+     * @since 1.0
      */
     private String webappSourceDir;
 
@@ -77,102 +77,235 @@ public class WarpDriveMojo extends AbstractMojo {
      * Webapp target directory.
      *
      * @parameter default-value="${project.build.directory}/${project.build.finalName}"
-     * @required
+     * @since 1.0
      */
     private String webappTargetDir;
 
     /**
+     * Set WarpDrive in development mode. In development mode WarpDrive will stay out of your
+     * way and not alter any files.
+     *
      * @parameter default-value=false
+     * @since 1.0
      */
     private boolean developmentMode;
 
     /**
+     * Path to the projects web.xml. Used when <b>generateWebXml</b> is true.
+     *
      * @parameter default-value="${basedir}/src/main/webapp/WEB-INF/web.xml"
+     * @since 1.0
      */
     private String webXmlSource;
 
     /**
+     * The directory where the projects javascript files are stored. Relative to webapp/
+     *
      * @parameter default-value="js"
+     * @since 1.0
      */
     private String jsDir;
 
     /**
+     * The directory where the projects image files are stored. Relative to webapp/
+     *
      * @parameter default-value="images"
+     * @since 1.0
      */
     private String imageDir;
 
     /**
+     * The directory where the projects stylesheets are stored. Relative to webapp/
+     *
      * @parameter default-value="css"
+     * @since 1.0
      */
     private String cssDir;
 
     /**
+     *
+     * If static resources are served from a separate domain, specify a comma-separated
+     * list of URLs pointing to it. This wil be prepended to alle resources in page.
+     * For example <code>http://cdn1.example.com, http://cdn1.example.com</code>
+     *
+     *
      * @parameter
+     * @since 1.0
      */
     private List<String> externalHosts;
 
     /**
+     *
+     * Combine multiple scripts into a single script to reduce number of requests.
+     * For example &lt;jquery-all.js&gt;js/jquery-1.4.1.js, js/jquery-ui-1.7.2.js&lt;/jquery-all.js&gt;
+     * will create a new file jquery-all.js which contains both jquery and jquery-ui.
+     *
+     * The new bundle is created in <code>jsDir</code>
+     *
+     * Scripts are concatenated in the order they appear in the list.
+     *
      * @parameter
+     * @since 1.0
      */
     private Map<String, String> jsBundles;
 
     /**
+     *
+     * Combine multiple stylesheets into a single stylesheets to reduce number of requests.
+     * For example &lt;common-stylesheet.css&gt;css/reset.css, css/fonts.css&lt;/common-stylesheet.css&gt;
+     * will create a new file common-stylesheet.css which contains both reset.css and fonts.css.
+     *
+     * The new bundle is created in <code>cssDir</code>
+     *
+     * Stylesheets are concatenated in the order they appear in the list.
+     *
      * @parameter
+     * @since 1.0
      */
     private Map<String, String> cssBundles;
 
     /**
+     * Specifies if WarpDrive should generate a new web.xml including the
+     * expires header filter for static resources.
+     * Leave as default if dont have a separate handling to responseheaders for static resources.
+     *
      * @parameter default-value=true
+     * @since 1.0
      */
     private boolean generateWebXml;
 
     /**
+     *
+     * Passed to YUI Compressor when processing javascript files.
+     * From the <a href="http://www.julienlecomte.net/yuicompressor/README">YUI Compressor documentation</a>:
+     * <pre>
+     * Some source control tools don't like files containing lines longer than,
+     * say 8000 characters. The linebreak option is used in that case to split
+     * long lines after a specific column. It can also be used to make the code
+     * more readable, easier to debug (especially with the MS Script Debugger)
+     * Specify 0 to get a line break after each semi-colon in JavaScript, and
+     * after each rule in CSS.
+     * </pre>
+     *
      * @parameter default-value=8000
+     * @since 1.0
      */
     private int yuiJsLineBreak;
 
     /**
+     *
+     * Passed to YUI Compressor when processing javascript files.
+     * From the <a href="http://www.julienlecomte.net/yuicompressor/README">YUI Compressor documentation</a>:
+     * <pre>
+     * Minify only. Do not obfuscate local symbols.
+     * </pre>
+     *
      * @parameter default-value=true
+     * @since 1.0
      */
     private boolean yuiJsMunge;
 
     /**
+     *
+     * Passed to YUI Compressor when processing javascript and css files.
+     * From the <a href="http://www.julienlecomte.net/yuicompressor/README">YUI Compressor documentation</a>:
+     * <pre>
+     * Display informational messages and warnings.
+     * </pre>
+     *
      * @parameter default-value=false
+     * @since 1.0
      */
     private boolean yuiJsVerbose;
 
     /**
+     *
+     * Passed to YUI Compressor when processing javascript files.
+     * From the <a href="http://www.julienlecomte.net/yuicompressor/README">YUI Compressor documentation</a>:
+     * <pre>
+     * Preserve unnecessary semicolons (such as right before a '}') This option
+     * is useful when compressed code has to be run through JSLint (which is the
+     * case of YUI for example)
+     * </pre>
+     *
      * @parameter default-value=false
+     * @since 1.0
      */
     private boolean yuiJsPreserveAllSemicolons;
 
     /**
+     *
+     * Passed to YUI Compressor when processing javascript files.
+     * From the <a href="http://www.julienlecomte.net/yuicompressor/README">YUI Compressor documentation</a>:
+     * <pre>
+     * Disable all the built-in micro optimizations.
+     * </pre>
+     *
      * @parameter default-value=false
+     * @since 1.0
      */
     private boolean yuiJsDisableOptimizations;
 
     /**
+     *
+     * Passed to YUI Compressor when processing css files.
+     * From the <a href="http://www.julienlecomte.net/yuicompressor/README">YUI Compressor documentation</a>:
+     * <pre>
+     * Preserve unnecessary semicolons (such as right before a '}') This option
+     * is useful when compressed code has to be run through JSLint (which is the
+     * case of YUI for example)
+     * </pre>
+     *
      * @parameter default-value=8000
+     * @since 1.0
      */
     private int yuiCssLineBreak;
 
     /**
+     *
+     * Indicates if processed files should be uploaded to an external location as part of build process.
+     *
      * @parameter default-value=false
+     * @since 1.0
      */
     private boolean uploadFiles;
 
     /**
+     *
+     * For really simple uploading to <a href="http://aws.amazon.com/s3/">Amazon S3</a>.
+     * This can be convenient when using <a href="http://aws.amazon.com/cloudfront/">Amazon CloudFront </a>.
+     *
+     * Should be a properties-file containting 3 properties: <b>bucket</b>, <b>accessKey</b> and <b>secretKey</b>
+     *
      * @parameter
+     * @since 1.0
      */
     private File s3SettingsFile;
 
     /**
+     *
+     * Specify the class used to generate versionnumber.
+     * If the project is configured to use Subversion the current rev.number
+     * in the basedir will be used. Otherwise the current time in millis will be used.
+     * You may implement your own  generator by extending
+     * org.kriand.warpdrive.versioning.AbstractVersionGenerator
+     *
      * @parameter
+     * @since 1.0
      */
     private String versionGeneratorClass;
 
+    /**
+     * Holds the current version to use.
+     */
     private String version;
 
+    /**
+     *
+     * The main entrypoint for the plugin.
+     *
+     * @throws MojoExecutionException If something goes wrong during execution of the plugin.
+     */
     public final void execute() throws MojoExecutionException {
         try {
             assertWarModule();
@@ -192,178 +325,232 @@ public class WarpDriveMojo extends AbstractMojo {
         }
     }
 
+    /**
+     *
+     * Getter for version
+     *
+     * @return version
+     */
     public final String getVersion() {
         return version;
     }
 
+     /**
+     *
+     * Getter for project
+     *
+     * @return project
+     */
     public final MavenProject getProject() {
         return project;
     }
 
-    public final void setProject(final MavenProject inProject) {
-        this.project = inProject;
-    }
-
+     /**
+     *
+     * Getter for webappSourceDir
+     *
+     * @return webappSourceDir
+     */
     public final String getWebappSourceDir() {
         return webappSourceDir;
     }
 
-    public final void setWebappSourceDir(final String inWebappSourceDir) {
-        this.webappSourceDir = inWebappSourceDir;
-    }
-
+     /**
+     *
+     * Getter for webappTargetDir
+     *
+     * @return webappTargetDir
+     */
     public final String getWebappTargetDir() {
         return webappTargetDir;
     }
 
-    public final void setWebappTargetDir(final String inWebappTargetDir) {
-        this.webappTargetDir = inWebappTargetDir;
-    }
-
+     /**
+     *
+     * Getter for developmentMode
+     *
+     * @return developmentMode
+     */
     public final boolean isDevelopmentMode() {
         return developmentMode;
     }
 
-    public final void setDevelopmentMode(final boolean inDevelopmentMode) {
-        this.developmentMode = inDevelopmentMode;
-    }
-
+     /**
+     *
+     * Getter for webXmlSource
+     *
+     * @return webXmlSource
+     */
     public final String getWebXmlSource() {
         return webXmlSource;
     }
 
-    public final void setWebXmlSource(final String inWebXmlSource) {
-        this.webXmlSource = inWebXmlSource;
-    }
-
+     /**
+     *
+     * Getter for jsDir
+     *
+     * @return jsDir
+     */
     public final String getJsDir() {
         return jsDir;
     }
 
-    public final void setJsDir(final String inJsDir) {
-        this.jsDir = inJsDir;
-    }
-
+    /**
+     *
+     * Getter for imageDir
+     *
+     * @return imageDir
+     */
     public final String getImageDir() {
         return imageDir;
     }
 
-    public final void setImageDir(final String inImageDir) {
-        this.imageDir = inImageDir;
-    }
-
+     /**
+     *
+     * Getter for cssDir
+     *
+     * @return cssDir
+     */
     public final String getCssDir() {
         return cssDir;
     }
 
-    public final void setCssDir(final String inCssDir) {
-        this.cssDir = inCssDir;
-    }
-
+     /**
+     *
+     * Getter for externalHosts
+     *
+     * @return externalHosts
+     */
     public final List<String> getExternalHosts() {
         return externalHosts;
     }
 
-    public final void setExternalHosts(final List<String> inExternalHosts) {
-        this.externalHosts = inExternalHosts;
-    }
-
+     /**
+     *
+     * Getter for jsBundles
+     *
+     * @return jsBundles
+     */
     public final Map<String, String> getJsBundles() {
         return jsBundles;
     }
 
-    public final void setJsBundles(final Map<String, String> inJsBundles) {
-        this.jsBundles = inJsBundles;
-    }
-
+     /**
+     *
+     * Getter for cssBundles
+     *
+     * @return cssBundles
+     */
     public final Map<String, String> getCssBundles() {
         return cssBundles;
     }
 
-    public final void setCssBundles(final Map<String, String> inCssBundles) {
-        this.cssBundles = inCssBundles;
-    }
-
+     /**
+     *
+     * Getter for generateWebXml
+     *
+     * @return generateWebXml
+     */
     public final boolean isGenerateWebXml() {
         return generateWebXml;
     }
 
-    public final void setGenerateWebXml(final boolean inGenerateWebXml) {
-        this.generateWebXml = inGenerateWebXml;
-    }
-
+     /**
+     *
+     * Getter for yuiJsLineBreak
+     *
+     * @return yuiJsLineBreak
+     */
     public final int getYuiJsLineBreak() {
         return yuiJsLineBreak;
     }
 
-    public final void setYuiJsLineBreak(final int inYuiJsLineBreak) {
-        this.yuiJsLineBreak = inYuiJsLineBreak;
-    }
-
+     /**
+     *
+     * Getter for yuiJsMunge
+     *
+     * @return yuiJsMunge
+     */
     public final boolean isYuiJsMunge() {
         return yuiJsMunge;
     }
 
-    public final void setYuiJsMunge(final boolean inYuiJsMunge) {
-        this.yuiJsMunge = inYuiJsMunge;
-    }
-
+    /**
+     *
+     * Getter for yuiJsVerbose
+     *
+     * @return yuiJsVerbose
+     */
     public final boolean isYuiJsVerbose() {
         return yuiJsVerbose;
     }
 
-    public final void setYuiJsVerbose(final boolean inyuiJsVerbose) {
-        this.yuiJsVerbose = inyuiJsVerbose;
-    }
-
+     /**
+     *
+     * Getter for yuiJsPreserveAllSemicolons
+     *
+     * @return yuiJsPreserveAllSemicolons
+     */
     public final boolean isYuiJsPreserveAllSemicolons() {
         return yuiJsPreserveAllSemicolons;
     }
 
-    public final void setYuiJsPreserveAllSemicolons(final boolean inYuiJsPreserveAllSemicolons) {
-        this.yuiJsPreserveAllSemicolons = inYuiJsPreserveAllSemicolons;
-    }
-
+     /**
+     *
+     * Getter for yuiJsDisableOptimizations
+     *
+     * @return yuiJsDisableOptimizations
+     */
     public final boolean isYuiJsDisableOptimizations() {
         return yuiJsDisableOptimizations;
     }
 
-    public final void setYuiJsDisableOptimizations(final boolean inYuiJsDisableOptimizations) {
-        this.yuiJsDisableOptimizations = inYuiJsDisableOptimizations;
-    }
-
+    /**
+     *
+     * Getter for yuiCssLineBreak
+     *
+     * @return yuiCssLineBreak
+     */
     public final int getYuiCssLineBreak() {
         return yuiCssLineBreak;
     }
 
-    public final void setYuiCssLineBreak(final int inYuiCssLineBreak) {
-        this.yuiCssLineBreak = inYuiCssLineBreak;
-    }
-
+   /**
+     *
+     * Getter for uploadFiles
+     *
+     * @return uploadFiles
+     */
     public final boolean isUploadFiles() {
         return uploadFiles;
     }
 
-    public final void setUploadFiles(final boolean inUploadFiles) {
-        this.uploadFiles = inUploadFiles;
-    }
-
+    /**
+     *
+     * Getter for s3SettingsFile
+     *
+     * @return s3SettingsFile
+     */
     public final File getS3SettingsFile() {
         return s3SettingsFile;
     }
 
-    public final void setS3SettingsFile(final File inS3SettingsFile) {
-        this.s3SettingsFile = inS3SettingsFile;
-    }
-
+    /**
+     *
+     * Getter for versionGeneratorClass
+     *
+     * @return versionGeneratorClass
+     */
     public final String getVersionGeneratorClass() {
         return versionGeneratorClass;
     }
 
-    public final void setVersionGeneratorClass(final String inVersionGeneratorClass) {
-        this.versionGeneratorClass = inVersionGeneratorClass;
-    }
-
+    /**
+     *
+     * Setup the required processors for the current configuration.
+     *
+     * @return A list of processors that will be invoked in the order they appear in the list.
+     */
     private List<AbstractProcessor> setupProcessors() {
         List<AbstractProcessor> processors = new ArrayList<AbstractProcessor>();
         processors.add(new YuiJsProcessor(this));
@@ -381,37 +568,62 @@ public class WarpDriveMojo extends AbstractMojo {
         return processors;
     }
 
+    /**
+     *
+     * Checks if there are any bundles configured in the curent configuration.
+     *
+     * @return True if atleast one bundle is configured, false otherwise.
+     */
     private boolean bundlesAreConfigured() {
         return (getCssBundles() != null && getCssBundles().size() > 0) || (getJsBundles() != null && getJsBundles().size() > 0);
     }
 
+    /**
+     *
+     * Asserts that we are in a war module. This is the only place it makes sence to invoke
+     * this plugin.
+     *
+     * TODO: Is there a better way (Maven-way) of doing this?
+     *
+     * @throws MojoExecutionException If we are not in a war-module.
+     */
     private void assertWarModule() throws MojoExecutionException {
         if (!"war".equals(project.getPackaging())) {
             throw new MojoExecutionException("maven-warpdrive-plugin can only be used with war modules");
         }
     }
 
+    /**
+     *  Make sure the directories provided in the configuration starts
+     *  and ends with a slash.
+     */
     private void normalizeDirectories() {
         if (!getCssDir().endsWith("/")) {
-            setCssDir(getCssDir() + "/");
+            cssDir = getCssDir() + "/";
         }
         if (!getJsDir().endsWith("/")) {
-            setJsDir(jsDir + "/");
+            jsDir = jsDir + "/";
         }
         if (!getImageDir().endsWith("/")) {
-            setImageDir(getImageDir() + "/");
+            imageDir = getImageDir() + "/";
         }
         if (!getCssDir().startsWith("/")) {
-            setCssDir("/" + getCssDir());
+            cssDir = "/" + getCssDir();
         }
         if (!getJsDir().startsWith("/")) {
-            setJsDir("/" + getJsDir());
+            jsDir = "/" + getJsDir();
         }
         if (!getImageDir().startsWith("/")) {
-            setImageDir("/" + imageDir);
+            imageDir = "/" + imageDir;
         }
     }
 
+    /**
+     *
+     * Writes the configuration file to be used by WarpDrive at runtime.
+     *
+     * @throws IOException If the file could not be written.
+     */
     private void writeWarpDriveConfigFile() throws IOException {
         File file = new File(project.getBuild().getOutputDirectory(), Runtime.RUNTIME_CONFIG_FILE);
 
@@ -440,6 +652,15 @@ public class WarpDriveMojo extends AbstractMojo {
         }
     }
 
+    /**
+     *
+     * Utilitymethod for writing a string property to a writer.
+     *
+     * @param key The config key.
+     * @param value The string value.
+     * @param writer The writer of write to.
+     * @throws IOException If the value could not be written.
+     */
     private void writeStringValue(final String key, final String value, final Writer writer) throws IOException {
         writer.write(key);
         writer.write('=');
@@ -447,6 +668,15 @@ public class WarpDriveMojo extends AbstractMojo {
         writer.write('\n');
     }
 
+    /**
+     *
+     * Utilitymethod for writing a boolean property to a writer.
+     *
+     * @param key The config key.
+     * @param value The boolean value.
+     * @param writer The writer of write to.
+     * @throws IOException If the value could not be written.
+     */
     private void writeBooleanValue(final String key, final boolean value, final Writer writer) throws IOException {
         writer.write(key);
         writer.write('=');
@@ -454,6 +684,13 @@ public class WarpDriveMojo extends AbstractMojo {
         writer.write('\n');
     }
 
+    /**
+     *
+     * Utilitymethod for writing external hosts config to a writer.
+     *
+     * @param writer The writer of write to.
+     * @throws IOException If the value could not be written.
+     */
     private void writeExternalHostsConfig(final Writer writer) throws IOException {
         if (getExternalHosts() == null || getExternalHosts().isEmpty()) {
             return;
@@ -468,6 +705,14 @@ public class WarpDriveMojo extends AbstractMojo {
         writer.write('\n');
     }
 
+    /**
+     *
+     * Utilitymethod for writing a bundle config to a writer.
+     *
+     * @param bundle The configured bundle to write to config.
+     * @param writer The writer of write to.
+     * @throws IOException If the value could not be written.
+     */
     private void writeBundleConfig(final Map<String, String> bundle, final Writer writer) throws IOException {
         if (bundle == null || bundle.isEmpty()) {
             return;
@@ -487,6 +732,9 @@ public class WarpDriveMojo extends AbstractMojo {
         }
     }
 
+    /**
+     * Simply prints an &quot;eyecatcher&quot; to the log so we can easily spot if WarpDrive is active.
+     */
     private void printEyeCatcher() {
         getLog().info("  +    .          .      +       .        *  .    .  . .. .........");
         getLog().info("             *        .                 .     .    . .  . .........");

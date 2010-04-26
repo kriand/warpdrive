@@ -27,7 +27,7 @@ import java.io.IOException;
  *
  * Utilityclass for rewriting URLs in css-files. Based on code from the excellent UI-Performance plugin for Grails.
  *
- * Created by IntelliJ IDEA.
+ *
  * @author kriand <a href="http://mailhide.recaptcha.net/d?k=01r9lbYEAtg9V5s1Ru_jtZ1g==&c=-aIoeZ0yU0yPn2kdog349bCmN-h1pe5Ed0LsyuWMbEc=">Show email</a>
  * Date: Mar 3, 2010
  * Time: 8:31:58 PM

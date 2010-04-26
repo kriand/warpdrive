@@ -42,7 +42,7 @@ import java.util.*;
  * Helperclass to upload files to Amazon S3, for use with CouldFront.
  * Also sets ridiculously long expires headers on uploaded files.  
  *
- * Created by IntelliJ IDEA.
+ *
  * @author kriand <a href="http://mailhide.recaptcha.net/d?k=01r9lbYEAtg9V5s1Ru_jtZ1g==&c=-aIoeZ0yU0yPn2kdog349bCmN-h1pe5Ed0LsyuWMbEc=">Show email</a>
  * Date: Mar 23, 2010
  * Time: 10:45:19 PM

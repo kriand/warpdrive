@@ -28,7 +28,7 @@ import java.util.Collection;
  *
  * Compresses Javascripts using <a href="http://developer.yahoo.com/yui/compressor/">YUI Compressor</a>.
  *
- * Created by IntelliJ IDEA.
+ *
  * @author kriand <a href="http://mailhide.recaptcha.net/d?k=01r9lbYEAtg9V5s1Ru_jtZ1g==&c=-aIoeZ0yU0yPn2kdog349bCmN-h1pe5Ed0LsyuWMbEc=">Show email</a>
  * Date: Mar 2, 2010
  * Time: 7:46:28 PM
@@ -47,7 +47,7 @@ public class YuiJsProcessor extends AbstractProcessor {
 
     /**
      *
-     * Runs all .js files in the configured js-directory through the YUI Compressor
+     * Runs all .js files in the configured js-directory through the YUI Compressor.
      *
      * @throws Exception If an error occurs during compression or while writing files.
      * @see org.kriand.warpdrive.processors.AbstractProcessor#process()

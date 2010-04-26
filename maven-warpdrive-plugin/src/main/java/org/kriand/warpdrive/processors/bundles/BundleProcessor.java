@@ -30,7 +30,7 @@ import java.util.zip.GZIPOutputStream;
  * Bundles configured scripts or stylesheets together, reducing the number
  * of files and consequently the number of requests from each page.
  *
- * Created by IntelliJ IDEA.
+ * 
  * @author kriand <a href="http://mailhide.recaptcha.net/d?k=01r9lbYEAtg9V5s1Ru_jtZ1g==&c=-aIoeZ0yU0yPn2kdog349bCmN-h1pe5Ed0LsyuWMbEc=">Show email</a>
  * Date: Apr 1, 2010
  * Time: 1:20:38 AM
