@@ -1,1 +1,7 @@
-TODO: Write
+WarpDrive is a Maven plugin with an accompanying J2EE taglib and servlet-filter. Together they can
+help optimize your site and make it display more quickly by employing well-known techniques such as
+far-future expires headers, smart script placement, content minification and more.
+It aims to by easy to use and non-intrusive during development.
+
+WarpDrive was inspired by the UI Performance plugin for the Grails framework.
+
