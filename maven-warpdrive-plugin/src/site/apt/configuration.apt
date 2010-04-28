@@ -22,3 +22,42 @@
 ~~
 ~~   NOTE: For help with the syntax of this file, see:
 ~~   http://maven.apache.org/doxia/references/apt-format.html
+-------------------------------------------------------------------
+(..)
+<plugin>
+    <groupId>org.kriand.warpdrive</groupId>
+    <artifactId>maven-warpdrive-plugin</artifactId>
+    <executions>
+        <execution>
+            <goals>
+                <goal>warpspeed</goal>
+            </goals>
+            <configuration>
+                <jsBundles>
+                    <scriptbundle_a.js>
+                        script1.js,
+                        script2.js,
+                        script3.js
+                    </scriptbundle_a.js>
+                    <scriptbundle_b.js>
+                        script4.js,
+                        script5.js
+                    </scriptbundle_b.js>
+                </jsBundles>
+                <cssBundles>
+                    <stylesheetbundle.css>
+                        stylesheet1.css,
+                        stylesheet2.css
+                    </stylesheetbundle.css>
+                </cssBundles>
+                <generateWebXml>true</generateWebXml>
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
+(...)
+-------------------------------------------------------------------
+
+
+
+

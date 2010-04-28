@@ -32,25 +32,18 @@ WarpDrive Maven Plugin
 
   The WarpDrive Maven plugin has only one goal:
 
-  * {{{warpspeed-mojo.html}warpdrive:warpspeed}} This goal will perform all necessary build-time processing.
-    This includes:
-     * Versioning files with a unique versionnumber for each build. 
-     * Adding cachefilter to web.xml, providing far-future expires headers for static resources.
-     * Bundling of files multiple files into one, reducing the overall number of requests.
-     * Compression of javascript- and css-files using {{{http://developer.yahoo.com/yui/compressor/}YUI Compressor}}.
-    This plugin must be used in combination with the WarpDrive Runtime components.
+  * {{{warpspeed-mojo.html}warpdrive:warpspeed}} This goal will perform all necessary build-time processing. This includes:
+    * Versioning files with a unique versionnumber for each build.
+    * Adding cachefilter to web.xml, providing far-future expires headers for static resources.
+    * Bundling of files multiple files into one, reducing the overall number of requests.
+    * Compression of javascript- and css-files using {{{http://developer.yahoo.com/yui/compressor/}YUI Compressor}}.
+    
+  This plugin must be used in combination with the WarpDrive Runtime components.
 
 * Usage
 
   General instructions on how to use the Plugin Name can be found on the {{{usage.html}usage page}}. Some more
-  specific use cases are described in the examples given below. Last but not least, users occasionally contribute
-  additional examples, tips or errata to the
-  {{{https://github.com/kriand/warpdrive/wikis}plugin's wiki page}}.
-
-  In case you still have questions regarding the plugin's usage, please have a look at the {{{faq.html}FAQ}} and feel
-  free to contact the {{{mail-lists.html}user mailing list}}. The posts to the mailing list are archived and could
-  already contain the answer to your question as part of an older thread. Hence, it is also worth browsing/searching
-  the {{{mail-lists.html}mail archive}}.
+  specific use cases are described in the examples given below. .
 
   If you feel like the plugin is missing a feature or has a defect, you can fill a feature request or bug report in our
   {{{issue-tracking.html}issue tracker}}. When creating a new issue, please provide a comprehensive description of your
@@ -62,10 +55,10 @@ WarpDrive Maven Plugin
 
 * Examples
 
-  To provide you with better understanding of some usages of the Plugin Name,
+  To provide you with better understanding of some usages the WarpDrive plugin,
   you can take a look into the following examples:
 
-  * {{{examples/example-one.html}Example Description One}}
+  * {{{examples/config-with-jetty.html}Using WarpDrive with the Jetty plugin}}
 
-  * {{{examples/example-two.html}Example Description Two}}
+
  
