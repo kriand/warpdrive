@@ -116,24 +116,7 @@
                             <goal>warpspeed</goal>
                         </goals>
                         <configuration>
-                            <jsBundles>
-                                <scriptbundle_a.js>
-                                    script1.js,
-                                    script2.js,
-                                    script3.js
-                                </scriptbundle_a.js>
-                                <scriptbundle_b.js>
-                                    script4.js,
-                                    script5.js
-                                </scriptbundle_b.js>
-                            </jsBundles>
-                            <cssBundles>
-                                <stylesheetbundle.css>
-                                    stylesheet1.css,
-                                    stylesheet2.css
-                                </stylesheetbundle.css>
-                            </cssBundles>
-                            <generateWebXml>true</generateWebXml>
+                            CONFIGURATION GOES HERE!
                         </configuration>
                     </execution>
                 </executions>

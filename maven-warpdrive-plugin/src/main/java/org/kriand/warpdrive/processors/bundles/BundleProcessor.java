@@ -74,6 +74,7 @@ public class BundleProcessor extends AbstractProcessor {
      */
     private void createBundlesInDir(final Map<String, String> bundles, final String bundleDir) throws IOException {
         assert bundleDir == null : "Bundledir was null";
+        
         if (bundles == null || bundles.size() == 0) {
             getLog().info(String.format("No bundles configured in directory: %s", bundleDir));
             return;

@@ -126,7 +126,7 @@ public class WarpDriveMojo extends AbstractMojo {
      *
      * If static resources are served from a separate domain, specify a comma-separated
      * list of URLs pointing to it. This wil be prepended to alle resources in page.
-     * For example <code>http://cdn1.example.com, http://cdn1.example.com</code>
+     * For example <code>http://cdn1.example.com, http://cdn2.example.com</code>
      *
      *
      * @parameter
@@ -285,11 +285,10 @@ public class WarpDriveMojo extends AbstractMojo {
     /**
      *
      * Specify the class used to generate versionnumber.
-     * If the project is configured to use Subversion the current rev.number
-     * in the basedir will be used. Otherwise the current time in millis will be used.
-     * You may implement your own  generator by extending
-     * org.kriand.warpdrive.versioning.AbstractVersionGenerator
-     *
+     * If a versiongenerator is not specified, the current rev.number
+     * in the basedir will be used for projects using SVN. For projects not using SVN, the current time in millis is used.
+     * You may implement your own version generator by extending org.kriand.warpdrive.versioning.AbstractVersionGenerator
+     * 
      * @parameter
      * @since 1.0
      */

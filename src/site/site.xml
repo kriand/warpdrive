@@ -28,8 +28,7 @@
     <bannerRight>
         <src>/images/fast.png</src>
     </bannerRight>
-    <body>
-        <menu ref="parent"/>
+    <body>        
         <menu ref="modules"/>
         <menu ref="reports"/>
     </body>

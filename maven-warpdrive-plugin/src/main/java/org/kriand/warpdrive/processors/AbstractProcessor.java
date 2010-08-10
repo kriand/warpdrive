@@ -15,36 +15,30 @@
  */
 package org.kriand.warpdrive.processors;
 
-import org.kriand.warpdrive.mojo.WarpDriveMojo;
-import org.kriand.warpdrive.utils.FilenameUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.logging.Log;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
+import org.kriand.warpdrive.mojo.WarpDriveMojo;
+import org.kriand.warpdrive.utils.FilenameUtils;
+
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.zip.GZIPOutputStream;
 
 /**
- *
  * Baseclass with common functionality for all WarpDrive processors.
  *
- * 
  * @author kriand <a href="http://mailhide.recaptcha.net/d?k=01r9lbYEAtg9V5s1Ru_jtZ1g==&c=-aIoeZ0yU0yPn2kdog349bCmN-h1pe5Ed0LsyuWMbEc=">Show email</a>
- * Date: Mar 2, 2010
- * Time: 8:44:20 PM
+ *         Date: Mar 2, 2010
+ *         Time: 8:44:20 PM
  */
 public abstract class AbstractProcessor {
 
     /**
      * A list of fileextensions that this processors will use
      * when searching for files to process. Only files with an extension
-     * contained in this array will be processed. 
+     * contained in this array will be processed.
      */
     private String[] fileExtensions;
 
@@ -60,22 +54,20 @@ public abstract class AbstractProcessor {
     private final WarpDriveMojo mojo;
 
     /**
-     *
      * Default constructor, for processors that do not operate
      * versioned resources.
      *
      * @param inMojo Maven plugin, for config.
      */
     protected AbstractProcessor(final WarpDriveMojo inMojo) {
-        this(inMojo, (File[]) null);
+        this(inMojo, new File[]{});
     }
 
     /**
-     *
      * Construtor for processors operating on a single workdir.
      *
-     * @param inMojo Maven plugin, for config.
-     * @param inWorkDir A workdir where the processor will look for files to process.
+     * @param inMojo           Maven plugin, for config.
+     * @param inWorkDir        A workdir where the processor will look for files to process.
      * @param inFileExtensions A list of fileextensions that this processors will process.
      */
     protected AbstractProcessor(final WarpDriveMojo inMojo, final File inWorkDir, final String... inFileExtensions) {
@@ -83,21 +75,27 @@ public abstract class AbstractProcessor {
     }
 
     /**
-     *
      * Construtor for processors operating on multiple workdirs.
      *
-     * @param inMojo Maven plugin, for config.
-     * @param inWorkDirs A list of workdirs where the processor will look for files to process.
+     * @param inMojo           Maven plugin, for config.
+     * @param inWorkDirs       A list of workdirs where the processor will look for files to process.
      * @param inFileExtensions A list of fileextensions that this processors will process.
      */
     protected AbstractProcessor(final WarpDriveMojo inMojo, final File[] inWorkDirs, final String... inFileExtensions) {
+        for (File f : inWorkDirs) {
+            if (!f.exists()) {
+                throw new IllegalArgumentException("Directory does not exist: " + f.getAbsolutePath());
+            }
+            if (!f.isDirectory()) {
+                throw new IllegalArgumentException("Not a directory: " + f.getAbsolutePath());
+            }
+        }
         this.mojo = inMojo;
         this.workDirs = inWorkDirs;
         this.fileExtensions = inFileExtensions;
     }
 
     /**
-     *
      * The main entrypoint for processors, this method is called from the WarpDrive plugin.
      *
      * @throws Exception If Processing can not continue.
@@ -105,21 +103,19 @@ public abstract class AbstractProcessor {
     public abstract void process() throws Exception;
 
     /**
-     *
      * Enables processors to easily log to the Maven log.
      *
-     * @return  A reference to the Maven Log.
+     * @return A reference to the Maven Log.
      */
     protected final Log getLog() {
         return getMojo().getLog();
     }
 
     /**
-     *
      * Gets the set of files that the processor should process, based on
      * the provided workdir(s) and fileextensions.
      *
-      * @return A collection of files that the processor should process.
+     * @return A collection of files that the processor should process.
      */
     protected final Collection<File> getFileset() {
         final List<File> result = new ArrayList<File>();
@@ -130,11 +126,10 @@ public abstract class AbstractProcessor {
     }
 
     /**
-     *
      * Writes the provided data to a versioned file.
      *
      * @param originalFile The original file, used to derive the filename of the new file.
-     * @param data The contents of the file.
+     * @param data         The contents of the file.
      * @throws IOException If the file could not be written.
      */
     protected final void writeVersionedFile(final File originalFile, final String data) throws IOException {
@@ -165,7 +160,6 @@ public abstract class AbstractProcessor {
     }
 
     /**
-     *
      * Writes the contents of a file to a new file with the same name, except with added version.
      *
      * @param originalFile The original file, with the contents to be written to the new file.
@@ -200,7 +194,6 @@ public abstract class AbstractProcessor {
     }
 
     /**
-     *
      * Gives subclasses access to the Maven plugin.
      *
      * @return The Maven plugin
@@ -210,10 +203,9 @@ public abstract class AbstractProcessor {
     }
 
     /**
-     *
      * Calculates a filename relative to a basedir.
      *
-     * @param file Zhe file
+     * @param file    Zhe file
      * @param basedir The basedir.
      * @return Path to the file, relative to the basedir.
      */

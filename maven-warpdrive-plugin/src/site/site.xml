@@ -25,8 +25,9 @@
       <item name="FAQ" href="faq.html"/>
     </menu>
     <menu name="Examples">
-      <item name="description1" href="examples/example-one.html"/>
-      <item name="description2" href="examples/example-two.html"/>
+      <item name="WarpDrive with Jetty Plugin" href="examples/config-with-jetty.html"/>
+      <item name="Bundling files" href="examples/bundling-files.html"/>
+      <item name="Specifying custom directories" href="examples/custom-dirs.html"/>
     </menu>
     <menu ref="reports"/>
   </body>

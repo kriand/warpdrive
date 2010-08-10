@@ -32,11 +32,19 @@ WarpDrive Maven Plugin
 
   The WarpDrive Maven plugin has only one goal:
 
-  * {{{warpspeed-mojo.html}warpdrive:warpspeed}} This goal will perform all necessary build-time processing. This includes:
+  * {{{warpspeed-mojo.html}warpdrive:warpspeed}} This goal will perform build-time processing according to the configuration. This may include:
+
     * Versioning files with a unique versionnumber for each build.
-    * Adding cachefilter to web.xml, providing far-future expires headers for static resources.
-    * Bundling of files multiple files into one, reducing the overall number of requests.
+
+    * Adding a cachefilter to web.xml, automatically providing far-future expires headers for static resources.
+
+    * Bundling files toghether, reducing the overall number of requests to your application.
+
     * Compression of javascript- and css-files using {{{http://developer.yahoo.com/yui/compressor/}YUI Compressor}}.
+
+    * Creating gzipped version of files at build-time, removing need for on-the-fly gzipping.
+
+    * Uploading files to external CDN (currently {{{http://aws.amazon.com/cloudfront/}Amazon Cloudfront}} is supported)
     
   This plugin must be used in combination with the WarpDrive Runtime components.
 
@@ -59,6 +67,10 @@ WarpDrive Maven Plugin
   you can take a look into the following examples:
 
   * {{{examples/config-with-jetty.html}Using WarpDrive with the Jetty plugin}}
+
+  * {{{examples/bundling-files.html}Bundling files}}
+
+  * {{{examples/custom-dirs.html}Specifying custom directories}}
 
 
  
