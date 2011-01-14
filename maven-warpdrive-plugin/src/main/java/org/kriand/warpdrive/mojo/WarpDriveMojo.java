@@ -18,6 +18,7 @@ package org.kriand.warpdrive.mojo;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
+import org.apache.commons.io.IOUtils;
 import org.kriand.warpdrive.Runtime;
 import org.kriand.warpdrive.processors.AbstractProcessor;
 import org.kriand.warpdrive.processors.bundles.BundleProcessor;
@@ -268,11 +269,11 @@ public class WarpDriveMojo extends AbstractMojo {
      * @parameter default-value=false
      * @since 1.0
      */
-    private boolean uploadFiles;
+    private boolean uploadResourcesToExternal;
 
     /**
      *
-     * For really simple uploading to <a href="http://aws.amazon.com/s3/">Amazon S3</a>.
+     * For really simple uploading of static resources to <a href="http://aws.amazon.com/s3/">Amazon S3</a>.
      * This can be convenient when using <a href="http://aws.amazon.com/cloudfront/">Amazon CloudFront </a>.
      *
      * Should be a properties-file containting 3 properties: <b>bucket</b>, <b>accessKey</b> and <b>secretKey</b>
@@ -516,12 +517,12 @@ public class WarpDriveMojo extends AbstractMojo {
 
    /**
      *
-     * Getter for uploadFiles
+     * Getter for uploadResourcesToExternal
      *
-     * @return uploadFiles
+     * @return uploadResourcesToExternal
      */
-    public final boolean isUploadFiles() {
-        return uploadFiles;
+    public final boolean isUploadResourcesToExternal() {
+        return uploadResourcesToExternal;
     }
 
     /**
@@ -561,7 +562,7 @@ public class WarpDriveMojo extends AbstractMojo {
         if (isGenerateWebXml()) {
             processors.add(new WebXmlProcessor(this));
         }
-        if (isUploadFiles()) {
+        if (isUploadResourcesToExternal()) {
             processors.add(new ExternalUploadProcessor(this));
         }
         return processors;
@@ -645,9 +646,7 @@ public class WarpDriveMojo extends AbstractMojo {
             writeBundleConfig(getJsBundles(), writer);
 
         } finally {
-            if (writer != null) {
-                writer.close();
-            }
+            IOUtils.closeQuietly(writer);            
         }
     }
 

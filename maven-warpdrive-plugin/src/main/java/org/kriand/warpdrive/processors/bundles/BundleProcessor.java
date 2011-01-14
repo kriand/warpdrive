@@ -18,6 +18,7 @@ package org.kriand.warpdrive.processors.bundles;
 import org.kriand.warpdrive.mojo.WarpDriveMojo;
 import org.kriand.warpdrive.processors.AbstractProcessor;
 import org.kriand.warpdrive.utils.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -108,18 +109,12 @@ public class BundleProcessor extends AbstractProcessor {
                             zippedOutput.write(buf, 0, read);
                         }
                     } finally {
-                        if (fis != null) {
-                            fis.close();
-                        }
+                        IOUtils.closeQuietly(fis);
                     }
                 }
             } finally {
-                if (output != null) {
-                    output.close();
-                }
-                if (zippedOutput != null) {
-                    zippedOutput.close();
-                }
+                IOUtils.closeQuietly(output);
+                IOUtils.closeQuietly(zippedOutput);
             }
         }
     }

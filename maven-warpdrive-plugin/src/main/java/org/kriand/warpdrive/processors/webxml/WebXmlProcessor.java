@@ -25,6 +25,7 @@ import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.jdom.xpath.XPath;
+import org.apache.commons.io.IOUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -70,7 +71,7 @@ public class WebXmlProcessor extends AbstractProcessor {
         try {
             out.output(doc, os);
         } finally {
-            os.close();
+            IOUtils.closeQuietly(os);
         }
     }
 

@@ -95,9 +95,9 @@ class S3Uploader {
         grantReadAccessForAllUsersForBucket(s3Service, s3Bucket);
         S3Object[] s3Objects = createS3Objects(s3Bucket, files);
         S3ServiceSimpleMulti multithreadedService = createMultithreadedS3Service(s3Service);
-        log.debug("Uploading to S3...");
+        log.info("Uploading to S3...");
         multithreadedService.putObjects(s3Bucket, s3Objects);
-        log.debug("...done!");
+        log.info("...done!");
     }
 
     private S3Service createS3Service(final String accessKey, final String secretKey) throws S3ServiceException {

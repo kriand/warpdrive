@@ -138,7 +138,7 @@ public final class Runtime {
 
     /**
      * Initializes the Runtime by reading the configfile from classpath.
-     * TODO: Get rid of this. 
+     * TODO: Get rid of this.
      */
     static {
         InputStream is = null;

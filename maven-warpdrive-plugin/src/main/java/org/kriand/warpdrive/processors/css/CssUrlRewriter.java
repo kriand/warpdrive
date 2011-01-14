@@ -17,6 +17,7 @@ package org.kriand.warpdrive.processors.css;
 
 import org.kriand.warpdrive.mojo.WarpDriveMojo;
 import org.kriand.warpdrive.utils.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -88,7 +89,7 @@ class CssUrlRewriter {
             }
             return css.toString();
         } finally {
-            reader.close();
+            IOUtils.closeQuietly(reader);
         }
     }
 }
