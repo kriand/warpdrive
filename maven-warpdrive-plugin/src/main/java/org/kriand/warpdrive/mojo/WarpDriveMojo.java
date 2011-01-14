@@ -125,9 +125,9 @@ public class WarpDriveMojo extends AbstractMojo {
 
     /**
      *
-     * If static resources are served from a separate domain, specify a comma-separated
+     * If static resources are served from a separate domain, specify a list
      * list of URLs pointing to it. This wil be prepended to alle resources in page.
-     * For example <code>http://cdn1.example.com, http://cdn2.example.com</code>
+     * For example <code>&lt;externalhost&gt;http://cdn1.example.com&lt;/externalhost&gt;&lt;externalhost&gt;http://cdn2.example.com&lt;/externalhost&gt;</code>
      *
      *
      * @parameter
