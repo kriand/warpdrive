@@ -16,6 +16,7 @@
 package org.kriand.warpdrive.processors;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.maven.plugin.logging.Log;
 import org.kriand.warpdrive.mojo.WarpDriveMojo;
 import org.kriand.warpdrive.utils.FilenameUtils;
@@ -81,15 +82,7 @@ public abstract class AbstractProcessor {
      * @param inWorkDirs       A list of workdirs where the processor will look for files to process.
      * @param inFileExtensions A list of fileextensions that this processors will process.
      */
-    protected AbstractProcessor(final WarpDriveMojo inMojo, final File[] inWorkDirs, final String... inFileExtensions) {
-        for (File f : inWorkDirs) {
-            if (!f.exists()) {
-                throw new IllegalArgumentException("Directory does not exist: " + f.getAbsolutePath());
-            }
-            if (!f.isDirectory()) {
-                throw new IllegalArgumentException("Not a directory: " + f.getAbsolutePath());
-            }
-        }
+    protected AbstractProcessor(final WarpDriveMojo inMojo, final File[] inWorkDirs, final String... inFileExtensions) {       
         this.mojo = inMojo;
         this.workDirs = inWorkDirs;
         this.fileExtensions = inFileExtensions;
@@ -150,12 +143,8 @@ public abstract class AbstractProcessor {
             writer.write(data);
             zipWriter.write(data);
         } finally {
-            if (writer != null) {
-                writer.close();
-            }
-            if (zipWriter != null) {
-                zipWriter.close();
-            }
+            IOUtils.closeQuietly(writer);
+            IOUtils.closeQuietly(zipWriter);
         }
     }
 
@@ -184,12 +173,8 @@ public abstract class AbstractProcessor {
                 fos.write(b, 0, i);
             }
         } finally {
-            if (fis != null) {
-                fis.close();
-            }
-            if (fos != null) {
-                fos.close();
-            }
+            IOUtils.closeQuietly(fis);
+            IOUtils.closeQuietly(fos);
         }
     }
 
