@@ -24,7 +24,7 @@
     <artifactId>warpdrive</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
-    <name>WarpDrive</name>
+    <name>WarpDrive Parent</name>
     <parent>
 		<groupId>org.kriand</groupId>
 		<artifactId>kriand-org-parent</artifactId>
@@ -42,6 +42,19 @@
         <jaxen.version>1.1.1</jaxen.version>
         <junit.version>4.8.1</junit.version>
         <mockito.version>1.8.4</mockito.version>
+        <cobertura.plugin.version>2.3</cobertura.plugin.version>
+        <projectinfo.plugin.version>2.2</projectinfo.plugin.version>
+        <checkstyle.plugin.version>2.5</checkstyle.plugin.version>
+        <xjr.plugin.version>2.1</xjr.plugin.version>
+        <findbugs.plugin.version>2.3.1</findbugs.plugin.version>
+        <pmd.plugin.version>2.4</pmd.plugin.version>
+        <javadoc.plugin.version>2.6.1</javadoc.plugin.version>
+        <taglist.plugin.version>2.4</taglist.plugin.version>
+        <plugin.plugin.version>2.4.3</plugin.plugin.version>
+        <resources.plugin.version>2.3</resources.plugin.version>
+        <compiler.plugin.version>2.0.2</compiler.plugin.version>
+        <site.plugin.version>2.1</site.plugin.version>
+        <release.plugin.version>2.1</release.plugin.version>
     </properties>
     <modules>
         <module>maven-warpdrive-plugin</module>
@@ -90,62 +103,67 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-site-plugin</artifactId>
-                    <version>2.1</version>
+                    <version>${site.plugin.version}</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>2.0.2</version>
+                    <version>${compiler.plugin.version}</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-resources-plugin</artifactId>
-                    <version>2.3</version>
+                    <version>${resources.plugin.version}</version>
                 </plugin>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>cobertura-maven-plugin</artifactId>
-                    <version>2.3</version>
+                    <version>${cobertura.plugin.version}</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-project-info-reports-plugin</artifactId>
-                    <version>2.2</version>
+                    <version>${projectinfo.plugin.version}</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-checkstyle-plugin</artifactId>
-                    <version>2.5</version>
+                    <version>${checkstyle.plugin.version}</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jxr-plugin</artifactId>
-                    <version>2.1</version>
+                    <version>${xjr.plugin.version}</version>
                 </plugin>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>findbugs-maven-plugin</artifactId>
-                    <version>2.3.1</version>
+                    <version>${findbugs.plugin.version}</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-pmd-plugin</artifactId>
-                    <version>2.4</version>
+                    <version>${pmd.plugin.version}</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>2.6.1</version>
+                    <version>${javadoc.plugin.version}</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-plugin-plugin</artifactId>
-                    <version>2.4.3</version>
+                    <version>${plugin.plugin.version}</version>
                 </plugin>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>taglist-maven-plugin</artifactId>
-                    <version>2.4</version>
+                    <version>${taglist.plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>${release.plugin.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -175,6 +193,10 @@
                         <version>1.0</version>
                     </dependency>
                 </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
             </plugin>
         </plugins>
     </build>    
@@ -242,14 +264,17 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>cobertura-maven-plugin</artifactId>
+                <version>${cobertura.plugin.version}</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-project-info-reports-plugin</artifactId>                
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>${projectinfo.plugin.version}</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>${checkstyle.plugin.version}</version>
                 <configuration>
                     <configLocation>org/kriand/checkstyle.xml</configLocation>
                 </configuration>
@@ -257,10 +282,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jxr-plugin</artifactId>
+                 <version>${xjr.plugin.version}</version>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>findbugs-maven-plugin</artifactId>
+                <version>${findbugs.plugin.version}</version>
                 <configuration>
                     <effort>Max</effort>
                     <threshold>Low</threshold>
@@ -269,6 +296,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
+                <version>${pmd.plugin.version}</version>
                 <configuration>
                     <linkXref>true</linkXref>
                     <sourceEncoding>utf-8</sourceEncoding>
@@ -279,6 +307,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${javadoc.plugin.version}</version>
                 <configuration>
                     <links>
                         <link>http://java.sun.com/javase/6/docs/api/</link>
@@ -293,6 +322,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>taglist-maven-plugin</artifactId>
+                <version>${taglist.plugin.version}</version>
             </plugin>            
         </plugins>
     </reporting>
