@@ -409,9 +409,11 @@ public final class Runtime {
             if (hashCode == Integer.MIN_VALUE) {
                 hashCode++;
             }
-            buffer.append(externalHosts[Math.abs(hashCode) % externalHosts.length]);
+            buffer.append(externalHosts[Math.abs(hashCode) % externalHosts.length]).append(topLevelDir);
         }
-        buffer.append(request.getContextPath()).append(topLevelDir);
+        else {
+            buffer.append(request.getContextPath()).append(topLevelDir);
+        }
         String versionedSrc;
         if (isTextResource && isGzipAccepted(request)) {
             versionedSrc = FilenameUtils.insertVersionAndGzipExtension(filename, version);
